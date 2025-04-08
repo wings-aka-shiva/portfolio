@@ -1,12 +1,12 @@
 import { BrowserRouter as Router } from "react-router-dom"
 
-import AppRoutes from "./routes/appRoutes"
+import AppRoutes from "./routes/AppRoutes"
 
 function App() {
 
   return (
     <>
-      <Router basename="/portfolio">
+      <Router>
         <AppRoutes />
       </Router>
     </>

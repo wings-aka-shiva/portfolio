@@ -1,9 +1,9 @@
 import React from 'react'
 
-function blogs() {
+function MyWorld() {
     return (
         <div>blogs</div>
     )
 }
 
-export default blogs
+export default MyWorld
