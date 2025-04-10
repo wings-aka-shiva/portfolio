@@ -1,10 +1,14 @@
+import { BrowserRouter as Router } from "react-router-dom"
+
+import AppRoutes from "./routes/AppRoutes"
+
 function App() {
 
   return (
     <>
-      <div>
-        <p className="mt-10 ml-10">Coming Soon ...</p>
-      </div>
+      <Router>
+        <AppRoutes />
+      </Router>
     </>
   )
 }
