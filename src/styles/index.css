@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+.box-shadow-leet-code-orange {
+    box-shadow: 1px 1px 3px 1px #e7a41f;
+}   
+
+.box-shadow-white-ffffff {
+    box-shadow: 1px 1px 3px 1px #ffffff;
+}   
+
+.box-shadow-hacker-rank-green {
+    box-shadow: 1px 1px 3px 1px #2fc363;
+}   
