@@ -1,14 +1,12 @@
-import Navbar from "../components/navbar"
 import { Outlet } from "react-router-dom"
+
+import Header from "../components/header"
 
 function Layout() {
     return (
         <>
-            <div className="bg-[#0d47a1]">
-                <h2>Shiva Kumar Tirupathi</h2>
-                <Navbar />
-            </div>
-            <main>
+            <Header />
+            <main className="p-4 bg-[#e3f2fd] min-w-[407px]">
                 <Outlet />
             </main>
         </>
