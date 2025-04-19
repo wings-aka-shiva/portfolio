@@ -4,10 +4,12 @@ function RepoProfile() {
     return (
         <>
             <div className="rounded-3xl border border-[#508de8] overflow-hidden box-shadow-blue-4081e3 min-w-[175px]">
-                <h3 className="font-poppins-1 font-medium p-4 bg-[#75a8f5] text-[#ffffff]">Repositories</h3>
+                <h3 className="rounded-t-3xl font-poppins-1 font-medium p-4 bg-[#75a8f5] text-[#ffffff] tracking-widest text-center sm:text-left">REPOSITORIES</h3>
 
-                {/* Card for GitHub */}
-                <div className="flex gap-4 bg-[#d8e7ff] p-4">
+                <div className="flex flex-col sm:flex-row gap-4 bg-[#d8e7ff] rounded-b-3xl p-4 overflow-auto items-center">
+
+                    {/* Card for GitHub */}
+
                     <div className="h-46 w-36 p-4 flex flex-col gap-2 border rounded-3xl bg-[#ffffff] min-w-[144px]">
                         <div className="h-1/3">
                             <img className="w-full h-full" src={githubSvg}></img>
