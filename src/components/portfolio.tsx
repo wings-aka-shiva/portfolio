@@ -1,6 +1,5 @@
 import CodingProfile from "./codingProfile";
 import RepoProfile from "./repoProfile";
-import WorkExperience from "./work-experience";
 
 function Portfolio() {
     return (
