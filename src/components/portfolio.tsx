@@ -10,7 +10,6 @@ function Portfolio() {
                     <CodingProfile />
                     <RepoProfile />
                 </div>
-                {/* <WorkExperience /> */}
             </div>
         </>
     )
