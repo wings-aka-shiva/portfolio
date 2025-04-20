@@ -47,7 +47,7 @@ function CodingProfile() {
             <div className="flex flex-grow flex-col justify-between">
               <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-code-chef-red-ef5350">Code Chef</h6>
               <p className="p-2 leading-none text-sm">I contest here</p>
-              <button onClick={() => { }} className="transition ease-in-out duration-300 bg-[#ef5350] box-shadow-black-000000 cursor-pointer rounded-xl text-[#FFFFFF] text-sm pb-[3px]">Coming Soon</button>
+              <button onClick={() => { }} className="transition ease-in-out duration-300 bg-[#ef5350] cursor-wait rounded-xl text-[#FFFFFF] text-sm pb-[3px]">Coming Soon</button>
             </div>
           </div>
         </div>
