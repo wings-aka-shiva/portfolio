@@ -21,7 +21,7 @@ function CodingProfile() {
             <div className="flex flex-grow flex-col justify-between">
               <h6 className="bg-[#000000] text-[#FFFFFF] text-center box-shadow-hacker-rank-green">HackerRank</h6>
               <p className="p-2 leading-none text-sm">It all started here</p>
-              <button onClick={() => { window.open('https://www.hackerrank.com/profile/wingsAkaShiva', '_blank') }} className="box-shadow-black-000000 transition ease-in-out duration-300 bg-[#2fc363] cursor-pointer rounded-xl text-sm text-[#ffffff] pt-[0px] pb-[2.5px]">To profile</button>
+              <button onClick={() => { window.open('https://www.hackerrank.com/profile/wingsAkaShiva', '_blank') }} className="box-shadow-black-000000 transition ease-in-out duration-300 bg-[#2fc363] cursor-pointer rounded-xl text-sm text-[#ffffff] py-[2px]">To profile</button>
             </div>
           </div>
 
@@ -34,7 +34,7 @@ function CodingProfile() {
             <div className="flex flex-grow flex-col justify-between">
               <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-leet-code-orange">Leet Code</h6>
               <p className="p-2 leading-none text-sm">I often practise here</p>
-              <button onClick={() => { window.open('https://leetcode.com/u/shiva_flyin/', '_blank') }} className="box-shadow-black-000000 transition ease-in-out duration-300 bg-[#e7a41f] cursor-pointer rounded-xl text-[#FFFFFF] text-sm pt-[0px] pb-[2.5px]">To profile</button>
+              <button onClick={() => { window.open('https://leetcode.com/u/shiva_flyin/', '_blank') }} className="box-shadow-black-000000 transition ease-in-out duration-300 bg-[#e7a41f] cursor-pointer rounded-xl text-[#FFFFFF] text-sm py-[2px]">To profile</button>
             </div>
           </div>
 
@@ -47,7 +47,7 @@ function CodingProfile() {
             <div className="flex flex-grow flex-col justify-between">
               <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-code-chef-red-ef5350">Code Chef</h6>
               <p className="p-2 leading-none text-sm">I contest here</p>
-              <button onClick={() => { }} className="transition ease-in-out duration-300 bg-[#ef5350] cursor-wait rounded-xl text-[#FFFFFF] text-sm pt-[0px] pb-[2.5px]">Coming Soon</button>
+              <button onClick={() => { }} className="transition ease-in-out duration-300 bg-[#ef5350] cursor-wait rounded-xl text-[#FFFFFF] text-sm py-[2px]">Coming Soon</button>
             </div>
           </div>
         </div>
