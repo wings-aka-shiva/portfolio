@@ -17,7 +17,7 @@ function RepoProfile() {
                         <div className="flex flex-grow flex-col justify-between">
                             <h6 className="bg-[#000000] text-[#FFFFFF] text-center">GitHub</h6>
                             <p className="p-2 leading-none text-sm">Projects and contributions</p>
-                            <button onClick={() => { window.open("https://github.com/wings-aka-shiva", '_blank') }} className="box-shadow-black-000000 bg-[#ffffff] cursor-pointer rounded-xl text-sm border-[#000000] border-2">To profile</button>
+                            <button onClick={() => { window.open("https://github.com/wings-aka-shiva", '_blank') }} className="transition ease-in-out duration-300 box-shadow-black-000000 bg-[#ffffff] cursor-pointer rounded-xl text-sm border-[1.5px] pt-[0px] pb-[2px]">To profile</button>
                         </div>
                     </div>
                 </div>
