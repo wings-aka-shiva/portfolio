@@ -6,7 +6,7 @@ function Layout() {
     return (
         <>
             <Header />
-            <main className="p-4 bg-[#e3f2fd] min-w-[407px]">
+            <main className="p-8 bg-[#e3f2fd] min-w-[360px]">
                 <Outlet />
             </main>
         </>

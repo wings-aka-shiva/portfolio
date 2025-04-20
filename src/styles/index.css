@@ -6,16 +6,32 @@
     box-shadow: 1px 1px 3px 1px #e7a41f;
 }   
 
-.box-shadow-white-ffffff {
-    box-shadow: 1px 1px 3px 1px #ffffff;
+.box-shadow-leet-code-orange-hover:hover {
+    box-shadow: 1px 1px 3px 1px #e7a41f;
 }   
+
+.box-shadow-code-chef-red-ef5350 {
+    box-shadow: 1px 1px 3px 1px #ef5350;
+}   
+
+.box-shadow-code-chef-red-ef5350-hover:hover {
+    box-shadow: 1px 1px 3px 1px #ef5350;
+}
 
 .box-shadow-hacker-rank-green {
     box-shadow: 1px 1px 3px 1px #2fc363;
 }   
 
+.box-shadow-hacker-rank-green-hover:hover {
+    box-shadow: 1px 1px 3px 1px #2fc363;
+}
+
 .box-shadow-blue-4081e3 {
     box-shadow: 1px 1px 3px 1px #4081e3;
+}   
+
+.box-shadow-black-000000:hover {
+    box-shadow: 1px 1px 3px 1px #000000;
 }   
 
 .font-montserrat-1 {
