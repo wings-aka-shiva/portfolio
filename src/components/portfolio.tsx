@@ -1,5 +1,6 @@
 import CodingProfile from "./codingProfile";
 import RepoProfile from "./repoProfile";
+import TeachingProfile from "./teaching-profile";
 
 function Portfolio() {
     return (
@@ -8,6 +9,7 @@ function Portfolio() {
                 <div className="bg-[#e3f2fd] flex flex-col sm:flex-row gap-8">
                     <CodingProfile />
                     <RepoProfile />
+                    <TeachingProfile />
                 </div>
             </div>
         </>
