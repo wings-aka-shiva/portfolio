@@ -33,7 +33,7 @@ function CodingProfile() {
             </div>
             <div className="flex flex-grow flex-col justify-between">
               <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-leet-code-orange">Leet Code</h6>
-              <p className="p-2 leading-none text-sm">I often practise here</p>
+              <p className="p-2 leading-none text-sm">I often practice here</p>
               <button onClick={() => { window.open('https://leetcode.com/u/shiva_flyin/', '_blank') }} className="box-shadow-black-000000 transition ease-in-out duration-300 bg-[#e7a41f] cursor-pointer rounded-xl text-[#FFFFFF] text-sm py-[2px]">To profile</button>
             </div>
           </div>
