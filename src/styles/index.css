@@ -26,6 +26,13 @@
     box-shadow: 1px 1px 3px 1px #2fc363;
 }
 
+.box-shadow-superprof-orange {
+    box-shadow: 1px 1px 3px 1px #ff6363;
+}
+
+.box-shadow-superprof-orange-hover:hover {
+    box-shadow: 1px 1px 3px 1px #ff6363;
+}
 .box-shadow-blue-4081e3 {
     box-shadow: 1px 1px 3px 1px #4081e3;
 }   
