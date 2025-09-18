@@ -1,6 +1,7 @@
-import CodingProfile from "./codingProfile";
-import RepoProfile from "./repoProfile";
-import TeachingProfile from "./teaching-profile";
+import CodingProfile from "../components/codingProfile";
+import RepoProfile from "../components/repoProfile";
+import TeachingProfile from "../components/teaching-profile";
+import WorkExperience from "../components/work-experience";
 
 function Portfolio() {
     return (
@@ -11,6 +12,9 @@ function Portfolio() {
                     <RepoProfile />
                     <TeachingProfile />
                 </div>
+            </div>
+            <div>
+                <WorkExperience />
             </div>
         </>
     )

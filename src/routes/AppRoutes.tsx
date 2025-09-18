@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Portfolio from "../components/portfolio";
+import Portfolio from "../pages/portfolio";
 import MyWorld from "../pages/my-world";
 import Layout from "../pages/layout";
 
