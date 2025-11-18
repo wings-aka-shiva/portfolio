@@ -13,7 +13,7 @@ function Portfolio() {
                     <TeachingProfile />
                 </div>
             </div>
-            <div>
+            <div className="mt-10">
                 <WorkExperience />
             </div>
         </>
