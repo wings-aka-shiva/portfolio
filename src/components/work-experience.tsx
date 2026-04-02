@@ -1,4 +1,4 @@
-import iffaPng from './../assets/iffaAwards.png';
+import iffaPng from './../assets/iffaawards.png';
 import kekaSvg from './../assets/keka.svg';
 
 function WorkExperience() {
