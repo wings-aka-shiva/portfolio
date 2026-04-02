@@ -25,29 +25,42 @@ function CodingProfile() {
             </div>
           </div>
 
-          {/* Card for Leet code */}
+          {/* Card for LeetCode */}
 
           <div className="box-shadow-leet-code-orange-hover transition ease-in-out duration-300 h-46 w-36 p-4 flex flex-col gap-2 border border-[#e7a41f] rounded-3xl bg-[#ffffff] min-w-[144px]">
             <div className="h-1/3">
               <img className="w-full h-full" src={leetcodeSvg}></img>
             </div>
             <div className="flex flex-grow flex-col justify-between">
-              <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-leet-code-orange">Leet Code</h6>
+              <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-leet-code-orange">LeetCode</h6>
               <p className="p-2 leading-none text-sm">I often practise here</p>
               <button onClick={() => { window.open('https://leetcode.com/u/shiva_flyin/', '_blank') }} className="box-shadow-black-000000 transition ease-in-out duration-300 bg-[#e7a41f] cursor-pointer rounded-xl text-[#FFFFFF] text-sm py-[2px]">To profile</button>
             </div>
           </div>
 
-          {/* Card for Code Chef */}
+          {/* Card for CodeChef */}
 
           <div className="box-shadow-code-chef-red-ef5350-hover transition ease-in-out duration-300 h-46 w-36 p-4 flex flex-col gap-2 border border-[#ef5350] rounded-3xl bg-[#ffffff] min-w-[144px]">
             <div className="h-1/3">
               <img className="w-full h-full" src={codechefSvg}></img>
             </div>
             <div className="flex flex-grow flex-col justify-between">
-              <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-code-chef-red-ef5350">Code Chef</h6>
+              <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-code-chef-red-ef5350">CodeChef</h6>
               <p className="p-2 leading-none text-sm">I contest here</p>
               <button onClick={() => { }} className="transition ease-in-out duration-300 bg-[#ef5350] cursor-wait rounded-xl text-[#FFFFFF] text-sm py-[2px]">Coming Soon</button>
+            </div>
+          </div>
+
+          {/* Card for Codeforces */}
+
+          <div className="box-shadow-blue-2196f3-hover transition ease-in-out duration-300 h-46 w-36 p-4 flex flex-col gap-2 border border-[#2196f3] rounded-3xl bg-[#ffffff] min-w-[144px]">
+            <div className="h-1/3">
+              <img className="w-full h-full" src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/24/external-codeforces-programming-competitions-and-contests-programming-community-logo-color-tal-revivo.png" alt="external-codeforces-programming-competitions-and-contests-programming-community-logo-color-tal-revivo" />
+            </div>
+            <div className="flex flex-grow flex-col justify-between">
+              <h6 className="bg-[#070706] text-[#FFFFFF] text-center box-shadow-blue-2196f3">Codeforces</h6>
+              <p className="p-2 leading-none text-sm">I'm kinda, here too  &gt; __ &lt;</p>
+              <button onClick={() => { window.open('https://codeforces.com/profile/wings_tales', '_blank') }} className="box-shadow-black-000000 transition ease-in-out duration-300 bg-[#2196f3] cursor-pointer rounded-xl text-[#FFFFFF] text-sm py-[2px]">To profile</button>
             </div>
           </div>
         </div>
