@@ -1,6 +1,6 @@
 import CodingProfile from "../components/codingProfile";
 import RepoProfile from "../components/repoProfile";
-import TeachingProfile from "../components/teaching-profile";
+// import TeachingProfile from "../components/teaching-profile";
 import WorkExperience from "../components/work-experience";
 
 function Portfolio() {
@@ -10,7 +10,7 @@ function Portfolio() {
                 <div className="bg-[#e3f2fd] flex flex-col sm:flex-row gap-8">
                     <CodingProfile />
                     <RepoProfile />
-                    <TeachingProfile />
+                    {/* <TeachingProfile /> */}
                 </div>
             </div>
             <div className="mt-10">
