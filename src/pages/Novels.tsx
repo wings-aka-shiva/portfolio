@@ -276,7 +276,7 @@ function ShelfRow({ books, showAuthor, large = false, onCardClick }: ShelfRowPro
         onMouseDown={drag.onMouseDown}
         onMouseMove={drag.onMouseMove}
         onMouseUp={drag.onMouseUp}
-        onMouseLeave={(e) => { drag.onMouseLeave(e); setHoveredIdx(null); }}
+        onMouseLeave={() => { drag.onMouseLeave(); setHoveredIdx(null); }}
       >
         <div className="inline-flex gap-4">
           {books.map((book, i) => (
