@@ -29,6 +29,7 @@ function Layout() {
 
   // Show full name in nav when hero name heading scrolls off screen
   useEffect(() => {
+    setHeroVisible(true); // reset on each route change
     const heroName = document.getElementById("hero-name");
     if (!heroName) return;
     const obs = new IntersectionObserver(
@@ -37,7 +38,7 @@ function Layout() {
     );
     obs.observe(heroName);
     return () => obs.disconnect();
-  }, []);
+  }, [location.pathname]);
 
   // Highlight whichever section is mid-screen
   useEffect(() => {
@@ -109,7 +110,7 @@ function Layout() {
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           {/* Monogram / full name */}
           {(() => {
-            const showFullName = !heroVisible;
+            const showFullName = !heroVisible || location.pathname.startsWith("/blog");
             return (
               <button
                 onClick={() => handleNavClick("hero")}

@@ -18,6 +18,7 @@ function AppRoutes() {
         {/* Blog routes */}
         <Route path="/blog"          element={<BlogLanding />} />
         <Route path="/blog/neetcode" element={<NeetCodeMap />} />
+        <Route path="/blog/neetcode/:slug" element={<NeetCodeMap />} />
         <Route path="/blog/travel"   element={<ComingSoon emoji="✈️" category="Travelling" />} />
         <Route path="/blog/food"     element={<ComingSoon emoji="🍜" category="Food" />} />
         <Route path="/blog/liminal"  element={<ComingSoon emoji="🌌" category="Liminal" />} />
