@@ -1,0 +1,5 @@
+Gmail
+Service ID: service_oh5xi1c
+
+Public Key: xam96ssZKHCU2wseW
+Private Key: 0D5g-QGMfZN8XAnLg8A9V
