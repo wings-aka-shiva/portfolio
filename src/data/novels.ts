@@ -46,6 +46,11 @@ export const novels: Novel[] = [
   { id: "it-ends-with-us",     title: "It Ends With Us",             author: "Colleen Hoover",  cover: "ItEndsWithUs",                      status: "read",     slug: "it-ends-with-us"                  },
   { id: "it-starts-with-us",   title: "It Starts With Us",           author: "Colleen Hoover",  cover: "ItStartsWithUs",                    status: "read",     slug: "it-starts-with-us"                },
 
+  // Read — Durjoy Datta
+  { id: "if-not-forever-dd",     title: "If It's Not Forever, It's Not Love", author: "Durjoy Datta",    cover: "IfItsNotForeverItsNotLove",         status: "read",     slug: "if-its-not-forever-its-not-love-dd"   },
+  { id: "someone-like-you-dd",   title: "Someone Like You",              author: "Durjoy Datta",    cover: "SomeoneLikeYou",                    status: "read",     slug: "someone-like-you-dd"                  },
+  { id: "worlds-best-boyfriend", title: "World's Best Boyfriend",        author: "Durjoy Datta",    cover: "TheWorldsBestBoyfriend",            status: "read",     slug: "worlds-best-boyfriend"                },
+
   // Read — J.K. Rowling
   { id: "hp-1",                title: "Harry Potter and the Philosopher's Stone",    author: "J.K. Rowling", cover: "HarryPotterAndThePhilosophersStone",   status: "read", slug: "hp-philosophers-stone"    },
   { id: "hp-2",                title: "Harry Potter and the Chamber of Secrets",     author: "J.K. Rowling", cover: "HarryPotterAndTheChamberOfSecrets",    status: "read", slug: "hp-chamber-of-secrets"    },
@@ -62,6 +67,10 @@ export const novels: Novel[] = [
   { id: "dear-john",           title: "Dear John",                   author: "Nicholas Sparks", cover: "DearJohn",                          status: "read",     slug: "dear-john"                        },
   { id: "message-in-bottle",   title: "Message in a Bottle",         author: "Nicholas Sparks", cover: "MessageInABottle",                  status: "read",     slug: "message-in-a-bottle"              },
 
+  // Read — Nikita Singh
+  { id: "if-not-forever-ns",     title: "If It's Not Forever, It's Not Love", author: "Nikita Singh",    cover: "IfItsNotForeverItsNotLove",         status: "read",     slug: "if-its-not-forever-its-not-love-ns"   },
+  { id: "someone-like-you-ns",   title: "Someone Like You",              author: "Nikita Singh",    cover: "SomeoneLikeYou",                    status: "read",     slug: "someone-like-you-ns"                  },
+
   // Read — Polly Horvath
   { id: "everything-waffle",   title: "Everything on a Waffle",      author: "Polly Horvath",   cover: "EverythingOnAWaffle",               status: "read",     slug: "everything-on-a-waffle"           },
 
@@ -71,6 +80,10 @@ export const novels: Novel[] = [
   { id: "titans-curse",        title: "The Titan's Curse",           author: "Rick Riordan",    cover: "TheTitansCurse",                    status: "read",     slug: "the-titans-curse"                 },
   { id: "battle-labyrinth",    title: "The Battle of the Labyrinth", author: "Rick Riordan",    cover: "TheBattleOfTheLabyrinth",           status: "read",     slug: "the-battle-of-the-labyrinth"      },
   { id: "last-olympian",       title: "The Last Olympian",           author: "Rick Riordan",    cover: "TheLastOlympian",                   status: "read",     slug: "the-last-olympian"                },
+
+  // Read — Ravinder Singh
+  { id: "i-too-had-a-love-story", title: "I Too Had a Love Story",      author: "Ravinder Singh",  cover: "ITooHadALoveStory",                 status: "read",     slug: "i-too-had-a-love-story"               },
+  { id: "can-love-happen-twice",  title: "Can Love Happen Twice?",      author: "Ravinder Singh",  cover: "CanLoveHappenTwice",                status: "read",     slug: "can-love-happen-twice"                },
 
   // Read — Spencer Johnson
   { id: "who-moved-cheese",    title: "Who Moved My Cheese",         author: "Spencer Johnson", cover: "WhoMovedMyCheese",                  status: "read",     slug: "who-moved-my-cheese"              },
