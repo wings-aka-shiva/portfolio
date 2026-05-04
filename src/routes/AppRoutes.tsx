@@ -7,6 +7,7 @@ import BlogLanding from "../pages/BlogLanding";
 import ComingSoon  from "../pages/ComingSoon";
 import NeetCodeMap from "../pages/NeetCodeMap";
 import Novels      from "../pages/Novels";
+import AIBlog      from "../pages/AIBlog";
 
 function AppRoutes() {
   return (
@@ -23,7 +24,8 @@ function AppRoutes() {
         <Route path="/blog/food"     element={<ComingSoon emoji="🍜" category="Food" />} />
         <Route path="/blog/liminal"  element={<ComingSoon emoji="🌌" category="Liminal" />} />
         <Route path="/blog/novels"   element={<Novels />} />
-        <Route path="/blog/ai"       element={<ComingSoon emoji="🤖" category="AI Journey" />} />
+        <Route path="/blog/ai"         element={<AIBlog />} />
+        <Route path="/blog/ai/:slug"   element={<AIBlog />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

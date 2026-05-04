@@ -4,7 +4,7 @@ import { Section } from "../ui/Section";
 import { blogCategories, type BlogCategory } from "../../data/blog-categories";
 
 // Show 4 categories on the homepage (Liminal is a /blog discovery)
-const PREVIEW_IDS = ["neetcode", "novels", "food", "ai"];
+const PREVIEW_IDS = ["neetcode", "novels", "ai", "food"];
 const previewCategories = blogCategories.filter((c) =>
   PREVIEW_IDS.includes(c.id)
 );

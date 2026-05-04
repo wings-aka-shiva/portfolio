@@ -32,6 +32,16 @@ export const blogCategories: BlogCategory[] = [
     style: "default",
   },
   {
+    id: "ai",
+    emoji: "🤖",
+    name: "AI Journey",
+    caption: "building, breaking, and learning — one model at a time",
+    slug: "ai",
+    live: true,
+    postCount: 1,
+    style: "default",
+  },
+  {
     id: "novels",
     emoji: "📖",
     name: "Novels",
@@ -58,14 +68,5 @@ export const blogCategories: BlogCategory[] = [
     slug: "liminal",
     live: false,
     style: "liminal",
-  },
-  {
-    id: "ai",
-    emoji: "🤖",
-    name: "AI Journey",
-    caption: "building, breaking, and learning — one model at a time",
-    slug: "ai",
-    live: false,
-    style: "default",
   },
 ];
