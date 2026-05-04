@@ -50,7 +50,60 @@ function HeroTile({ category }: { category: BlogCategory }) {
   );
 }
 
-// ─── Novels secondary hero tile ───────────────────────────────────────────────
+// ─── AI Journey secondary hero tile ──────────────────────────────────────────
+
+function AIHeroTile({ category }: { category: BlogCategory }) {
+  return (
+    <Link to="/blog/ai" className="block group">
+      <div
+        className={[
+          "border border-border rounded-2xl p-8",
+          "flex flex-col md:flex-row md:items-center gap-6 md:gap-10",
+          "transition-all duration-300",
+          "group-hover:border-accent/40 group-hover:shadow-glow group-hover:-translate-y-0.5",
+        ].join(" ")}
+        style={{
+          background:
+            "radial-gradient(ellipse at 0% 50%, rgba(79,70,229,0.1) 0%, #111118 60%)",
+        }}
+      >
+        {/* Emoji */}
+        <span
+          className="text-6xl leading-none shrink-0 select-none"
+          role="img"
+          aria-label={category.name}
+        >
+          {category.emoji}
+        </span>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2.5 mb-2">
+            <h2 className="font-display font-bold text-xl text-text">
+              {category.name}
+            </h2>
+            <span className="font-body text-[11px] tracking-wide px-2.5 py-0.5 rounded-full bg-accent/12 text-accent border border-accent/25">
+              Live
+            </span>
+          </div>
+          <p className="font-body text-sm text-muted leading-relaxed mb-4">
+            {category.caption}
+          </p>
+          <div className="flex items-center justify-between gap-4">
+            <span className="font-body text-xs text-faint">
+              {category.postCount} {category.postCount === 1 ? "post" : "posts"} published
+            </span>
+            <span className="font-body text-sm text-accent group-hover:underline underline-offset-2 transition-all duration-200">
+              Explore the black box →
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+// ─── Novels third hero tile ───────────────────────────────────────────────────
 
 function NovelsHeroTile({ category }: { category: BlogCategory }) {
   return (
@@ -67,7 +120,6 @@ function NovelsHeroTile({ category }: { category: BlogCategory }) {
             "radial-gradient(ellipse at 0% 50%, rgba(180,120,30,0.08) 0%, #111118 60%)",
         }}
       >
-        {/* Emoji */}
         <span
           className="text-6xl leading-none shrink-0 select-none"
           role="img"
@@ -76,7 +128,6 @@ function NovelsHeroTile({ category }: { category: BlogCategory }) {
           {category.emoji}
         </span>
 
-        {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2.5 mb-2">
             <h2 className="font-display font-bold text-xl text-text">
@@ -217,19 +268,23 @@ function BlogLanding() {
 
         {/* Category grid */}
         {(() => {
-          const novels  = rest.find((c) => c.id === "novels")!;
-          const others  = rest.filter((c) => c.id !== "novels");
+          const ai     = rest.find((c) => c.id === "ai")!;
+          const novels = rest.find((c) => c.id === "novels")!;
+          const grid   = rest.filter((c) => c.id !== "ai" && c.id !== "novels");
           return (
             <div className="flex flex-col gap-4">
               {/* NeetCode — full-width hero */}
               <HeroTile category={hero} />
 
-              {/* Novels — secondary hero */}
+              {/* AI Journey — secondary hero */}
+              <AIHeroTile category={ai} />
+
+              {/* Novels — third hero */}
               <NovelsHeroTile category={novels} />
 
-              {/* Remaining 4 — 2×2 grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {others.map((cat) => (
+              {/* Travelling, Food, Liminal — 3-tile grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {grid.map((cat) => (
                   <RegularTile key={cat.id} category={cat} />
                 ))}
               </div>
