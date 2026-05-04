@@ -3,6 +3,13 @@ import kekaLogo from "../assets/keka.svg";
 
 export type EmploymentType = "Full Time" | "Internship" | "Contract";
 
+export interface WorkAward {
+  title: string;
+  praisedBy: string;
+  date: string;
+  description: string;
+}
+
 export interface WorkEntry {
   id: string;
   company: string;
@@ -15,6 +22,7 @@ export interface WorkEntry {
   websiteUrl: string;
   highlights: string[];
   tags: string[];
+  award?: WorkAward;
 }
 
 export const workExperience: WorkEntry[] = [
@@ -51,5 +59,11 @@ export const workExperience: WorkEntry[] = [
       "Implemented rigorous code review processes, reducing post-deployment bugs by 30% through proactive testing, refactoring, and quality assurance measures.",
     ],
     tags: ["React", "TypeScript", "Architecture", "Code Review"],
+    award: {
+      title: "Above & Beyond",
+      praisedBy: "Shubham Shukla, Product Manager (Marketplace, Platform)",
+      date: "19 Feb 2024",
+      description: "To the person who is beyond the expectations.",
+    },
   },
 ];
