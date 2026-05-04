@@ -4,6 +4,7 @@ import { Outlet, useNavigate, useLocation } from "react-router-dom";
 const NAV_ITEMS = [
   { label: "Experience", sectionId: "experience" },
   { label: "Education",  sectionId: "education"  },
+  { label: "Skills",     sectionId: "skills"     },
   { label: "Coding",     sectionId: "coding"     },
   { label: "Repos",      sectionId: "repos"      },
   { label: "Blog",       sectionId: "blog"       },

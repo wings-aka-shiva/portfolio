@@ -90,6 +90,20 @@ function TimelineEntry({ entry, index, isLast }: TimelineEntryProps) {
           ))}
         </ul>
 
+        {/* Award callout */}
+        {entry.award && (
+          <div className="mx-6 mb-4 bg-accent/8 border border-accent/20 rounded-lg px-3 py-2">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <span aria-hidden>🏆</span>
+              <span className="font-display font-semibold text-sm text-accent">{entry.award.title}</span>
+            </div>
+            <p className="font-body text-xs text-faint mb-0.5">
+              Praised by {entry.award.praisedBy} · {entry.award.date}
+            </p>
+            <p className="font-body text-xs text-muted italic">{entry.award.description}</p>
+          </div>
+        )}
+
         {/* Tags */}
         <div className="px-6 pb-5 flex flex-wrap gap-2">
           {entry.tags.map((tag) => (
