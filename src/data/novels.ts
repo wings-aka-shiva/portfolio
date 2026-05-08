@@ -3,7 +3,7 @@ export interface Novel {
   title: string;
   author: string;
   cover: string;
-  status: "reading" | "waitlist" | "read";
+  status: "reading" | "waitlist" | "dreamshelf" | "read";
   slug: string;
 }
 
@@ -24,8 +24,20 @@ export function getCover(stem: string): string {
 
 export const novels: Novel[] = [
   // Currently Reading
-  { id: "twisted-games",       title: "Twisted Games",               author: "Ana Huang",       cover: "TwistedGames",                      status: "reading",  slug: "twisted-games"                    },
+  { id: "twisted-games",       title: "Twisted Games",               author: "Ana Huang",       cover: "TwistedGames",                      status: "read",  slug: "twisted-games"                    },
   { id: "oath-of-vayuputras",  title: "The Oath of the Vayuputras",  author: "Amish Tripathi",  cover: "TheOathOfTheVayuputras",             status: "reading",  slug: "the-oath-of-the-vayuputras"       },
+
+  // Dream Shelf
+  { id: "mahabharata-v1",  title: "The Mahabharata: Volume 1",  author: "Bibek Debroy", cover: "MahabharataVol1",  status: "dreamshelf", slug: "mahabharata-vol-1"  },
+  { id: "mahabharata-v2",  title: "The Mahabharata: Volume 2",  author: "Bibek Debroy", cover: "MahabharataVol2",  status: "dreamshelf", slug: "mahabharata-vol-2"  },
+  { id: "mahabharata-v3",  title: "The Mahabharata: Volume 3",  author: "Bibek Debroy", cover: "MahabharataVol3",  status: "dreamshelf", slug: "mahabharata-vol-3"  },
+  { id: "mahabharata-v4",  title: "The Mahabharata: Volume 4",  author: "Bibek Debroy", cover: "MahabharataVol4",  status: "dreamshelf", slug: "mahabharata-vol-4"  },
+  { id: "mahabharata-v5",  title: "The Mahabharata: Volume 5",  author: "Bibek Debroy", cover: "MahabharataVol5",  status: "dreamshelf", slug: "mahabharata-vol-5"  },
+  { id: "mahabharata-v6",  title: "The Mahabharata: Volume 6",  author: "Bibek Debroy", cover: "MahabharataVol6",  status: "dreamshelf", slug: "mahabharata-vol-6"  },
+  { id: "mahabharata-v7",  title: "The Mahabharata: Volume 7",  author: "Bibek Debroy", cover: "MahabharataVol7",  status: "dreamshelf", slug: "mahabharata-vol-7"  },
+  { id: "mahabharata-v8",  title: "The Mahabharata: Volume 8",  author: "Bibek Debroy", cover: "MahabharataVol8",  status: "dreamshelf", slug: "mahabharata-vol-8"  },
+  { id: "mahabharata-v9",  title: "The Mahabharata: Volume 9",  author: "Bibek Debroy", cover: "MahabharataVol9",  status: "dreamshelf", slug: "mahabharata-vol-9"  },
+  { id: "mahabharata-v10", title: "The Mahabharata: Volume 10", author: "Bibek Debroy", cover: "MahabharataVol10", status: "dreamshelf", slug: "mahabharata-vol-10" },
 
   // Waitlist
   { id: "twisted-lies",        title: "Twisted Lies",                author: "Ana Huang",       cover: "TwistedLies",                       status: "waitlist", slug: "twisted-lies"                     },
