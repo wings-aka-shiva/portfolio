@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { novels, getCover, type Novel } from "../data/novels";
 
@@ -6,6 +6,7 @@ import { novels, getCover, type Novel } from "../data/novels";
 
 const currentlyReading = novels.filter((n) => n.status === "reading");
 const waitlist         = novels.filter((n) => n.status === "waitlist");
+const dreamShelf       = novels.filter((n) => n.status === "dreamshelf");
 const readNovels       = novels.filter((n) => n.status === "read");
 
 const readByAuthor = readNovels.reduce<Record<string, Novel[]>>((acc, n) => {
@@ -236,6 +237,10 @@ function ShelfRow({ books, showAuthor, large = false, onCardClick }: ShelfRowPro
   const [rowHovered, setRowHovered] = useState(false);
   const drag = useDragScroll<HTMLDivElement>();
 
+  useEffect(() => {
+    if (drag.ref.current) drag.ref.current.scrollLeft = 0;
+  }, []);
+
   const handleCardClick = (idx: number) => {
     void idx;
     if (drag.didDrag()) return;
@@ -272,13 +277,13 @@ function ShelfRow({ books, showAuthor, large = false, onCardClick }: ShelfRowPro
       {/* Scrollable shelf */}
       <div
         ref={drag.ref}
-        className="overflow-x-auto no-scrollbar cursor-grab flex justify-center py-6 px-6"
+        className="overflow-x-auto no-scrollbar cursor-grab py-6"
         onMouseDown={drag.onMouseDown}
         onMouseMove={drag.onMouseMove}
         onMouseUp={drag.onMouseUp}
         onMouseLeave={() => { drag.onMouseLeave(); setHoveredIdx(null); }}
       >
-        <div className="inline-flex gap-4">
+        <div className="flex gap-4" style={{ paddingLeft: '24px', paddingRight: '24px', margin: '0 auto', width: 'fit-content' }}>
           {books.map((book, i) => (
             <BookCard
               key={book.id}
@@ -353,68 +358,93 @@ export default function Novels() {
         <p className="font-body text-sm italic" style={{ color: L.muted }}>
           I forgot a lot of them — but here are a few I remember.
         </p>
+        <p className="font-body text-sm leading-relaxed max-w-2xl mx-auto text-center mt-4 mb-10" style={{ color: `${L.muted}cc` }}>
+          Growing up in boarding schools, novels were our way out — a window into life beyond the walls.
+          I remember dreaming about having a cupboard full of them, once I had a home of my own.
+          Still out here living the adventure. So I thought — why not simulate the cupboard digitally first. 😄
+        </p>
       </div>
 
-      {/* Currently Reading */}
-      <section className="mb-4">
+      {/* ── Cupboard 1: On My Desk ── */}
+      <section className="mb-8">
         <div className="max-w-6xl mx-auto px-6 mb-3 text-center">
-          <BrassLabel>Currently Reading</BrassLabel>
+          <BrassLabel>On My Desk</BrassLabel>
         </div>
-        <div className="max-w-6xl mx-auto">
+        <div
+          className="max-w-6xl mx-auto"
+          style={{
+            border:       "12px solid #2a1c0a",
+            borderBottom: "none",
+            borderRadius: "8px 8px 0 0",
+            boxShadow:    "inset 4px 0 12px rgba(0,0,0,0.5), inset -4px 0 12px rgba(0,0,0,0.5), inset 0 4px 16px rgba(0,0,0,0.6)",
+          }}
+        >
+          <p
+            className="font-body text-xs uppercase tracking-wider text-center pt-4 pb-1"
+            style={{ color: L.faint }}
+          >
+            Currently Reading
+          </p>
           <div className="wood-shelf relative">
-            {/* Warm spotlight behind books */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
                 background: "radial-gradient(ellipse at 50% 85%, rgba(180,120,30,0.18) 0%, transparent 60%)",
               }}
             />
-            <ShelfRow
-              books={currentlyReading}
-              showAuthor
-              large
+            <ShelfRow books={currentlyReading} showAuthor large onCardClick={handleCardClick} />
+            <div className="wood-shelf-edge" />
+          </div>
 
-              onCardClick={handleCardClick}
-            />
+          <p
+            className="font-body text-xs uppercase tracking-wider text-center pt-4 pb-1"
+            style={{ color: L.faint }}
+          >
+            Up Next
+          </p>
+          <div className="wood-shelf relative">
+            <ShelfRow books={waitlist} showAuthor onCardClick={handleCardClick} />
             <div className="wood-shelf-edge" />
           </div>
         </div>
       </section>
 
-      {/* Up Next */}
-      <section className="mb-6">
+      {/* ── Cupboard 2: The Dream Shelf ── */}
+      <section className="mb-8">
         <div className="max-w-6xl mx-auto px-6 mb-3 text-center">
           <BrassLabel textColor={L.brassDim} borderColor={L.plateBorderLo}>
-            Up Next
+            The Dream Shelf
           </BrassLabel>
+          <p className="font-body text-xs italic mt-2" style={{ color: L.faint }}>
+            someday
+          </p>
         </div>
-        <div className="max-w-6xl mx-auto">
+        <div
+          className="max-w-6xl mx-auto"
+          style={{
+            border:       "12px solid #2a1c0a",
+            borderBottom: "none",
+            borderRadius: "8px 8px 0 0",
+            boxShadow:    "inset 4px 0 12px rgba(0,0,0,0.5), inset -4px 0 12px rgba(0,0,0,0.5), inset 0 4px 16px rgba(0,0,0,0.6)",
+          }}
+        >
           <div className="wood-shelf relative">
-            <ShelfRow
-              books={waitlist}
-              showAuthor
-
-              onCardClick={handleCardClick}
-            />
+            <ShelfRow books={dreamShelf} showAuthor onCardClick={handleCardClick} />
             <div className="wood-shelf-edge" />
           </div>
         </div>
       </section>
 
-      {/* Read */}
+      {/* ── Cupboard 3: The Collection ── */}
       <section>
-        <div className="max-w-6xl mx-auto px-6 mb-6 text-center">
-          <span
-            className="font-body text-xs font-semibold uppercase tracking-widest"
-            style={{ color: L.muted }}
-          >
-            Read
-          </span>
+        <div className="max-w-6xl mx-auto px-6 mb-3 text-center">
+          <BrassLabel textColor={L.brassDim} borderColor={L.plateBorderLo}>
+            Books I've Lived Through
+          </BrassLabel>
           <p className="font-body text-xs mt-1" style={{ color: L.faint }}>
             — by author
           </p>
         </div>
-
         <div
           className="max-w-6xl mx-auto [&>div:last-child]:mb-0"
           style={{
