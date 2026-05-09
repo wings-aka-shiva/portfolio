@@ -14,8 +14,7 @@ export const interests: Interest[] = [
     emoji: "🌏",
     category: "Travel & Adventure",
     headline: "Chasing beaches, conquering trails.",
-    detail:
-      "Vietnam this year. Mt Sturgeon last weekend. Working through every beach around Melbourne.",
+    detail: "",
     glowColor: "#06b6d4",
   },
   {
@@ -23,7 +22,7 @@ export const interests: Interest[] = [
     emoji: "📚",
     category: "Reading",
     headline: "Always mid-novel.",
-    detail: "Currently: Twisted Games by Ana Huang.",
+    detail: "",
     glowColor: "#4f46e5",
   },
   {
@@ -42,5 +41,22 @@ export const interests: Interest[] = [
     detail:
       "Learning guitar when life allows. The strings aren't going anywhere.",
     glowColor: "#f59e0b",
+  },
+  {
+    id: "food-cultures",
+    emoji: "🍜",
+    category: "Food & Cultures",
+    headline: "One cuisine at a time.",
+    detail: "Embracing cultures through food — every new dish is a new world.",
+    glowColor: "#f59e0b",
+  },
+  {
+    id: "language",
+    emoji: "🌸",
+    category: "Language Learning",
+    headline: "Some things are worth learning from scratch.",
+    detail:
+      "They say the best way to understand a culture is to speak its language. I'm starting from こんにちは.",
+    glowColor: "#f43f5e",
   },
 ];

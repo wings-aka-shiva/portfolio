@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useInView } from "../../hooks/useInView";
 import { Section } from "../ui/Section";
 import { interests, type Interest } from "../../data/interests";
+import { travels } from "../../data/travel";
+import { novels } from "../../data/novels";
 
 interface TileProps {
   interest: Interest;
@@ -73,6 +75,25 @@ function InterestTile({ interest, index, inView }: TileProps) {
 function BeyondTheCode() {
   const { ref, inView } = useInView(0.1);
 
+  const travelDetail = travels
+    .slice(0, 3)
+    .map((e) => {
+      const text = e.highlight ?? e.place;
+      return text.charAt(0).toUpperCase() + text.slice(1);
+    })
+    .join(" · ");
+
+  const readingDetail = novels
+    .filter((n) => n.status === "reading")
+    .map((n) => `Currently: ${n.title} by ${n.author}`)
+    .join(" · ");
+
+  const enriched = interests.map((i) => {
+    if (i.id === "travel")  return { ...i, detail: travelDetail };
+    if (i.id === "reading") return { ...i, detail: readingDetail || i.detail };
+    return i;
+  });
+
   return (
     <Section
       id="about"
@@ -83,7 +104,7 @@ function BeyondTheCode() {
         ref={ref}
         className="grid grid-cols-1 sm:grid-cols-2 gap-4"
       >
-        {interests.map((interest, index) => (
+        {enriched.map((interest, index) => (
           <InterestTile
             key={interest.id}
             interest={interest}
