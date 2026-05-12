@@ -491,7 +491,82 @@ function DetailPanel({
       <div className="h-px bg-border mb-6" />
 
       <div className="flex flex-col gap-5">
-        {problem.solved && problem.id === 3 ? (
+        {problem.solved && problem.id === 4 ? (
+          <>
+            {/* Problem Summary */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Problem Summary</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                Given an array of strings, group the strings that are anagrams
+                of each other and return them as a list of groups.
+              </p>
+            </div>
+
+            {/* Approach */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Approach</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                The key insight is that all anagrams of a word share the same
+                characters — just in different order. If I sort the characters
+                of each word alphabetically, all anagrams produce the same sorted
+                key. So I iterate through every word, sort its characters to get
+                the key, and use a HashMap to group words by that key. Words that
+                produce the same sorted key are anagrams of each other and get
+                grouped together.
+              </p>
+            </div>
+
+            {/* The Insight */}
+            <div className="border-l-2 border-accent pl-3">
+              <p className="font-body text-sm text-accent italic leading-relaxed">
+                Sorting a word's characters gives a canonical fingerprint — all
+                anagrams share the same fingerprint, making grouping a single
+                HashMap pass.
+              </p>
+            </div>
+
+            {/* Code */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution — Java</p>
+              <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, List<String>> map = new HashMap<>();
+        for (String s : strs) {
+            char[] chars = s.toCharArray();
+            Arrays.sort(chars);
+            String key = new String(chars);
+            map.computeIfAbsent(key, k -> new ArrayList<>()).add(s);
+        }
+        return new ArrayList<>(map.values());
+    }
+}`}</pre>
+            </div>
+
+            {/* What I Learned */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                Sorted character arrays as HashMap keys is a recurring pattern
+                for grouping anagrams — clean, O(n·k·log k) where k is max
+                word length. computeIfAbsent is cleaner than checking containsKey
+                and putting manually — worth knowing this HashMap shortcut.
+              </p>
+            </div>
+
+            {/* Gotchas */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                The sorted key approach works but isn't the only way — you could
+                also use a character frequency array of size 26 as the key,
+                which avoids the sort cost (O(k) instead of O(k·log k)) but
+                makes the key construction slightly more complex.
+              </p>
+            </div>
+
+            <KofiPanel firstLine="Enjoyed the breakdown?" />
+          </>
+        ) : problem.solved && problem.id === 3 ? (
           <>
             {/* Problem Summary */}
             <div className="flex flex-col gap-1.5">
