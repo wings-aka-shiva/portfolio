@@ -1,5 +1,14 @@
 import { Link } from "react-router-dom";
 import { blogCategories, type BlogCategory } from "../data/blog-categories";
+import { neetcodeProblems } from "../data/neetcode-problems";
+import { aiPosts } from "../data/ai-posts";
+import { novels } from "../data/novels";
+
+const neetcodeSolvedCount = neetcodeProblems.filter((p) => p.solved).length;
+const aiPostCount = aiPosts.length;
+const novelsTrackedCount = novels.filter(
+  (n) => n.status === "read" || n.status === "reading"
+).length;
 
 // ─── NeetCode hero tile (full-width, live) ────────────────────────────────────
 
@@ -38,7 +47,7 @@ function HeroTile({ category }: { category: BlogCategory }) {
           </p>
           <div className="flex items-center justify-between gap-4">
             <span className="font-body text-xs text-faint">
-              {category.postCount} solved so far
+              {neetcodeSolvedCount} solved so far
             </span>
             <span className="font-body text-sm text-accent group-hover:underline underline-offset-2 transition-all duration-200">
               Explore the map →
@@ -91,7 +100,7 @@ function AIHeroTile({ category }: { category: BlogCategory }) {
           </p>
           <div className="flex items-center justify-between gap-4">
             <span className="font-body text-xs text-faint">
-              {category.postCount} {category.postCount === 1 ? "post" : "posts"} published
+              {aiPostCount} {aiPostCount !== 1 ? "posts" : "post"} published
             </span>
             <span className="font-body text-sm text-accent group-hover:underline underline-offset-2 transition-all duration-200">
               Explore the black box →
@@ -142,7 +151,7 @@ function NovelsHeroTile({ category }: { category: BlogCategory }) {
           </p>
           <div className="flex items-center justify-between gap-4">
             <span className="font-body text-xs text-faint">
-              {category.postCount} books tracked
+              {novelsTrackedCount} books tracked
             </span>
             <span className="font-body text-sm text-accent group-hover:underline underline-offset-2 transition-all duration-200">
               Explore the shelves →
