@@ -144,4 +144,145 @@ An AI like ChatGPT is a pile of numbers that's been trained to predict the next 
 
 Once you have those four ideas — base training, behavior tuning, retrieval, and the cost of context — most things you read about AI products start to make sense.`,
   },
+  {
+    id: "2",
+    title: "What's Actually Inside ChatGPT?",
+    slug: "whats-inside-chatgpt",
+    date: "May 2026",
+    tags: ["LLM", "Neural Networks", "Deep Learning", "Plain English", "AI Engineering"],
+    content: `
+## The short version
+
+Last time I wrote about what AI knows — pretraining, fine-tuning, and RAG. This time I want to go one level deeper: what is an AI, structurally? What's actually inside the box when you send a message to ChatGPT or Claude?
+
+Short answer: a giant pile of numbers, multiplied together in a specific way, billions of times per second.
+
+That sounds like a non-answer. Let me unpack what it actually means, and why it matters once you start building with AI yourself.
+
+## The pile of numbers
+
+An AI like ChatGPT is, at its core, a file. Somewhere between 100GB and a few terabytes depending on the model. If you opened it, you'd find a long list of numbers — typically billions of them — called parameters (or weights).
+
+That's the AI. No hidden code. No special "intelligence module." Just the numbers, plus a small program that knows how to multiply them in the right order.
+
+When you send a message, this is roughly what happens:
+
+1. Your text gets converted into numbers (one number per word-piece, roughly)
+2. Those numbers get multiplied through the pile in a specific pattern
+3. The output is another set of numbers, interpreted as probabilities for the next word
+4. The system picks one of the likely words and appends it to the response
+5. Repeat for the next word, and the next, and the next
+
+That's the whole show. Multiply, add, squash, repeat — faster than you can read.
+
+## What a neural network actually is
+
+A "neural network" is just a structured way to organize the pile of numbers, and the rules for how they get multiplied.
+
+Picture three vertical columns of dots:
+
+\`\`\`
+Input layer     Hidden layer     Output layer
+    ●               ●                ●
+    ●               ●                ●
+    ●               ●                ●
+    ●               ●                ●
+\`\`\`
+
+Each dot is a neuron — really just a slot that holds a number between 0 and 1. Every neuron in one layer is connected to every neuron in the next layer. Each connection has a weight: a single number that says "how strongly does this left-neuron influence this right-neuron?"
+
+For one neuron in the hidden layer, the calculation is:
+
+\`\`\`typescript
+function computeNeuron(
+  inputs: number[],     // activations from the previous layer
+  weights: number[],    // one weight per incoming connection
+  bias: number          // a constant offset for this neuron
+): number {
+  const weightedSum = inputs.reduce(
+    (sum, input, i) => sum + input * weights[i],
+    0
+  );
+  return sigmoid(weightedSum + bias);  // squash to (0, 1)
+}
+\`\`\`
+
+That's it. Multiply each input by its weight, add them up, add a bias, squash the result. Repeat for every neuron in every layer. The output layer's highest-scoring neuron is the network's answer.
+
+Two practical notes worth flagging:
+
+The bias shifts a neuron's "default" output. A high bias makes the neuron eager to fire; a low one makes it skeptical, requiring strong incoming signals.
+
+The squash function (sigmoid here, more commonly ReLU in modern networks) keeps values in a useful range and introduces non-linearity — without it, the entire stack of layers would collapse mathematically into a single linear function, and the network couldn't learn anything interesting.
+
+## Where the "intelligence" lives
+
+Pull any single weight out of a trained network and inspect it. Maybe it's 0.34. Maybe it's -1.7. What does it mean on its own?
+
+Nothing.
+
+The intelligence isn't in any single weight. It's in the pattern of all of them together — billions of tiny "votes" that, combined, somehow encode how to recognize a cat, write code, or summarize a legal document. There's no specific piece of the network you can point to and say "this is where it knows about cats." The knowledge is distributed across every weight, smeared throughout the structure.
+
+This has real consequences for how you work with these models. You can't surgically edit what a model knows. You can't delete a specific fact. The "knowing" is too entangled. That's why companies use RAG to handle private data rather than trying to bake it into the weights.
+
+## How the weights get set
+
+So where do the billions of numbers come from? Nobody types them in.
+
+The network learns them. Roughly:
+
+1. Start with all weights set to random numbers. The network is useless — it gives nonsense.
+2. Show it a training example with a known correct answer.
+3. Compare its output to the correct answer. Compute how wrong it was — a number called loss.
+4. For each weight, work out (with calculus) whether nudging it slightly up or slightly down would reduce the loss. Nudge accordingly.
+5. Repeat with the next example. And the next. Millions or billions of times.
+
+This process is training, and the math behind step 4 is called gradient descent — literally "walking gradually downhill toward lower loss." Each individual nudge is tiny. The pattern emerges only across billions of nudges, on billions of examples.
+
+The cost matters here. Training a frontier model like GPT-4 or Claude reportedly costs tens of millions of dollars in compute alone. That's why nobody trains from scratch — you build on top of someone else's pretrained model.
+
+## The wild part: we design the shape, not the content
+
+When building a neural network, the engineers choose:
+
+- How many layers
+- How many neurons per layer
+- What activation function to use (sigmoid, ReLU, etc.)
+- What kind of architecture (a feedforward MLP, a CNN for images, a transformer for language)
+
+They do not choose:
+
+- What any neuron represents
+- What pattern any weight encodes
+- What features the middle layers will pay attention to
+
+We provide the structure. Training fills in the meaning.
+
+## The part we still can't fully explain
+
+The middle layers — where most of the actual reasoning happens — are a black box.
+
+We can see the inputs. We can see the outputs. We can read every single weight, every neuron's activation, every multiplication. We still can't fully explain how the network gets from one to the other.
+
+This isn't laziness. It's one of the biggest open problems in the field, and an entire research area — interpretability — exists to chip away at it. Companies like Anthropic and DeepMind have teams whose job is to look inside trained networks and figure out what they've actually learned.
+
+This matters for engineers because it affects how you build:
+
+- You can't ship an AI system without testing it heavily, because you can't verify it from the inside.
+- You can't fully trust a model on novel inputs, because you don't know how it generalizes.
+- "Why did the model output X?" is often a question with no clean answer.
+
+Production AI engineering is, in large part, designing around this opacity — evaluation harnesses, guardrails, monitoring, fallback paths.
+
+## Why this matters when you're building with AI
+
+**Model size has real tradeoffs.** Bigger models have more weights, which means more capacity to encode patterns — but also more cost per query, more latency, and more environmental impact. Choosing the smallest model that handles your task is a real engineering skill.
+
+**You can't reliably "teach" a model new facts.** The weights are too entangled. Knowledge that wasn't in pretraining should be supplied at query time through RAG, not stuffed in via fine-tuning.
+
+**Evaluation matters more than intuition.** Because the inside of the model is opaque, the only honest way to know if a change works is to test it on a held-out set of examples. Building eval harnesses is a non-glamorous skill that separates production AI engineers from people who ship demos.
+
+**The hardware story matters more than people realize.** Neural networks took off in the early 2010s mainly because GPUs — originally designed for video games — turned out to be excellent at the kind of bulk number-multiplication that training requires. It's also why GPU access is a real bottleneck for AI startups today.
+  `
+  },
 ];
