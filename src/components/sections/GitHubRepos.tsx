@@ -52,7 +52,7 @@ function ErrorState() {
         Couldn't load repositories right now.
       </p>
       <a
-        href="https://github.com/wings-aka-shiva"
+        href="https://github.com/wings-aka-shiva?tab=repositories"
         target="_blank"
         rel="noreferrer"
         className="font-body text-xs text-accent hover:underline underline-offset-2"
@@ -188,7 +188,7 @@ function GitHubRepos() {
       {!loading && !error && (
         <div className="mt-8 text-center">
           <a
-            href="https://github.com/wings-aka-shiva"
+            href="https://github.com/wings-aka-shiva?tab=repositories"
             target="_blank"
             rel="noreferrer"
             className="font-body text-xs text-muted hover:text-accent transition-colors duration-200 underline-offset-2 hover:underline"

@@ -27,7 +27,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
   { id: 6,   topic: "Arrays & Hashing",          title: "Encode and Decode Strings",                       difficulty: "Medium", slug: "encode-and-decode-strings",                       solved: false, leetcodeUrl: lc("encode-and-decode-strings") },
   { id: 7,   topic: "Arrays & Hashing",          title: "Product of Array Except Self",                    difficulty: "Medium", slug: "product-of-array-except-self",                    solved: true, leetcodeUrl: lc("product-of-array-except-self") },
   { id: 8,   topic: "Arrays & Hashing",          title: "Valid Sudoku",                                    difficulty: "Medium", slug: "valid-sudoku",                                    solved: true, leetcodeUrl: lc("valid-sudoku") },
-  { id: 9,   topic: "Arrays & Hashing",          title: "Longest Consecutive Sequence",                    difficulty: "Medium", slug: "longest-consecutive-sequence",                    solved: false, leetcodeUrl: lc("longest-consecutive-sequence") },
+  { id: 9,   topic: "Arrays & Hashing",          title: "Longest Consecutive Sequence",                    difficulty: "Medium", slug: "longest-consecutive-sequence",                    solved: true, leetcodeUrl: lc("longest-consecutive-sequence") },
 
   // Two Pointers
   { id: 10,  topic: "Two Pointers",              title: "Valid Palindrome",                                difficulty: "Easy",   slug: "valid-palindrome",                                solved: false, leetcodeUrl: lc("valid-palindrome") },
