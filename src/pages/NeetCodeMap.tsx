@@ -597,7 +597,86 @@ function DetailPanel({
       <div className="h-px bg-border mb-6" />
 
       <div className="flex flex-col gap-5">
-        {problem.solved && problem.id === 12 ? (
+        {problem.solved && problem.id === 13 ? (
+          <>
+            {/* Problem Summary */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Problem Summary</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                Given an array of line heights, find the two lines that form a
+                container holding the most water. Area is determined by the shorter
+                line × the distance between them.
+              </p>
+            </div>
+
+            {/* Approach */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Approach</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                Start with pointers at both ends to maximise width. At each step,
+                compute the current area and update the max. Then move the pointer
+                on the shorter side inward - the shorter line is the bottleneck, so
+                there's no point keeping it while width is shrinking. Repeat until
+                the pointers meet.
+              </p>
+            </div>
+
+            {/* The Insight */}
+            <div className="border-l-2 border-accent pl-3">
+              <p className="font-body text-sm text-accent italic leading-relaxed">
+                Always move the shorter pointer - moving the taller one can never
+                increase area, because width shrinks and height is still capped by
+                the shorter side anyway.
+              </p>
+            </div>
+
+            {/* Code */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+              <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int maxWater = 0;
+        while (left < right) {
+            maxWater = Math.max(maxWater, (right - left) * Math.min(height[left], height[right]));
+            if (height[left] < height[right])
+                left++;
+            else
+                right--;
+        }
+        return maxWater;
+    }
+}`}</pre>
+            </div>
+
+            {/* What I Learned */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                The greedy argument is worth sitting with: starting wide and contracting
+                inward is provably correct because any inner pair with the same short
+                side will have strictly less area (same height cap, smaller width).
+                Recognising that pattern - "one variable strictly worsens, so greedily
+                eliminate it" - recurs across many two-pointer problems.
+              </p>
+            </div>
+
+            {/* Gotchas */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                When both heights are equal it doesn't matter which pointer moves -
+                the else branch handles it fine since moving either is valid. The
+                temptation is to add skipping optimisations (advance past shorter
+                lines), but the plain version is already O(n) and the simpler code
+                is easier to reason about correctly.
+              </p>
+            </div>
+
+            <KofiPanel firstLine="Enjoyed the breakdown?" />
+          </>
+        ) : problem.solved && problem.id === 12 ? (
           <>
             {/* Problem Summary */}
             <div className="flex flex-col gap-1.5">
@@ -612,7 +691,7 @@ function DetailPanel({
             <div className="flex flex-col gap-1.5">
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Approach</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                Sort the array first — this is the key enabler for everything else.
+                  Sort the array first - this is the key enabler for everything else.
                 Iterate through each element as the fixed anchor of the triplet, then
                 use a classic two-pointer sweep on the remaining subarray to find pairs
                 that sum to the negative of the anchor. Skip duplicate anchors with an
@@ -633,7 +712,7 @@ function DetailPanel({
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution — Java</p>
+                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
@@ -668,8 +747,8 @@ function DetailPanel({
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 The sort-then-two-pointer pattern is the canonical approach for k-sum
                 problems. Once you have it for 3Sum, 4Sum just wraps it in another loop.
-                The deduplication logic — skipping equal neighbours for both the anchor
-                and the two pointers — is the fiddly part worth internalising.
+                  The deduplication logic - skipping equal neighbours for both the anchor
+                  and the two pointers - is the fiddly part worth internalising.
               </p>
             </div>
 
@@ -678,11 +757,11 @@ function DetailPanel({
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 The if (nums[i] &gt; 0) break early exit only works because the array
-                is sorted — don't add that optimisation before the sort. Duplicate
+                  is sorted - don't add that optimisation before the sort. Duplicate
                 skipping for the inner pointers must happen before the final left++;
                 right--, not after, otherwise you step past the duplicates and then
                 step one more time. The duplicate-skip while loops use
-                nums[left] == nums[left+1] not nums[left] == nums[i] — make sure
+                  nums[left] == nums[left+1] not nums[left] == nums[i] - make sure
                 the indices are right.
               </p>
             </div>
@@ -706,11 +785,11 @@ function DetailPanel({
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 Constant space ruled out a HashMap, and the sorted order was a strong
                 hint. I considered sliding window but wasn't sure which pointer to move
-                when the sum was off. Two pointers felt more natural — lowest values on
+                    when the sum was off. Two pointers felt more natural - lowest values on
                 the left, highest on the right. Sum both ends: if the sum is less than
                 target move the left pointer right to increase it, if more move the right
                 pointer left to decrease it. At any point you're making the most informed
-                move possible — either getting closer to the target from below or above.
+                    move possible - either getting closer to the target from below or above.
                 Since a solution is guaranteed to exist, the pointers will always meet it
                 before crossing.
               </p>
@@ -720,13 +799,13 @@ function DetailPanel({
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
                 By moving only the pointer that pushes the sum towards the target,
-                you're always making progress — never moving away from the answer.
+                    you're always making progress - never moving away from the answer.
               </p>
             </div>
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution — Java</p>
+                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int[] twoSum(int[] numbers, int target) {
         int left = 0, right = numbers.length-1;
@@ -744,7 +823,7 @@ function DetailPanel({
             <div className="flex flex-col gap-1.5">
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                A sorted array gives you directional certainty — you know exactly
+                    A sorted array gives you directional certainty - you know exactly
                 which way to move to get closer to your target, which is what makes
                 two pointers so clean here compared to the HashMap approach in the
                 unsorted version.
@@ -756,7 +835,7 @@ function DetailPanel({
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 The problem guarantees exactly one solution, so the empty array return
-                at the end is just a compiler formality — the loop will always find
+                    at the end is just a compiler formality - the loop will always find
                 the answer. Return indices are 1-indexed, so both left and right
                 get +1 before returning.
               </p>
@@ -781,10 +860,10 @@ function DetailPanel({
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 My first instinct was to build a filtered char array by checking
                 ASCII ranges, then use two pointers to compare. A cleaner variation
-                was to build a filtered string and use a reverse method to compare —
+                      was to build a filtered string and use a reverse method to compare -
                 but both approaches involve creating new data structures. I wanted to
-                avoid that entirely. Thinking about what a palindrome actually is —
-                equal when read from both sides — I realised I just needed two pointers
+                      avoid that entirely. Thinking about what a palindrome actually is -
+                      equal when read from both sides - I realised I just needed two pointers
                 moving inward, skipping non-alphanumeric characters on the fly using
                 isLetterOrDigit. At each valid pair, convert both characters to lowercase
                 and compare. If they don't match, return false immediately for early exit.
@@ -803,7 +882,7 @@ function DetailPanel({
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution — Java</p>
+                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public boolean isPalindrome(String s) {
         int left = 0, right = s.length() - 1;
@@ -824,7 +903,7 @@ function DetailPanel({
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 Working with both char primitives and the Character wrapper class in
-                Java requires staying in sync — isLetterOrDigit and toLowerCase live
+                      Java requires staying in sync - isLetterOrDigit and toLowerCase live
                 on Character, not on char directly. Also a good reminder that skipping
                 unwanted elements with a pointer is often cleaner than filtering them
                 out upfront.
@@ -835,7 +914,7 @@ function DetailPanel({
             <div className="flex flex-col gap-1.5">
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                Character.toLowerCase works safely on digits and symbols too — it just
+                      Character.toLowerCase works safely on digits and symbols too - it just
                 returns them unchanged, so no need to guard against non-letter characters
                 before calling it. The inner while loops use left &lt; right not
                 left &lt;= right to avoid the pointers crossing inside the skip loop
@@ -863,11 +942,11 @@ function DetailPanel({
                 Since the array is unsorted, sorting was off the table as it would
                 cost O(n log n). The challenge is that consecutive elements could be
                 anywhere in the array, so we need a way to check for neighbours without
-                caring about position — that's a HashSet. First, dump the entire array
+                        caring about position - that's a HashSet. First, dump the entire array
                 into a HashSet so every number is accessible in O(1). Then iterate over
                 the array and for each value, check if val+1 exists and keep counting
                 upward. The key optimisation is the val-1 check: if val-1 exists in the
-                set, the current number is in the middle of a sequence, not the start —
+                        set, the current number is in the middle of a sequence, not the start -
                 so skip it. This ensures each sequence is only counted once from its
                 true starting point, keeping the overall complexity at O(n).
               </p>
@@ -876,7 +955,7 @@ function DetailPanel({
             {/* The Insight */}
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
-                Checking val-1 before counting is what makes it O(n) — it guarantees
+                        Checking val-1 before counting is what makes it O(n) - it guarantees
                 you only start counting from the beginning of a sequence, never from
                 the middle.
               </p>
@@ -884,7 +963,7 @@ function DetailPanel({
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution — Java</p>
+                      <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int longestConsecutive(int[] nums) {
         if(nums.length == 0)
@@ -916,7 +995,7 @@ function DetailPanel({
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 The smart val-1 lookup is what collapses the complexity from O(n²)
-                to O(n) — without it you'd recount sequences from every element
+                        to O(n) - without it you'd recount sequences from every element
                 within them. A simple check that makes a huge difference.
               </p>
             </div>
@@ -927,7 +1006,7 @@ function DetailPanel({
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 Empty array and single element are handled upfront as early returns.
                 Iterating over the HashSet rather than the original array avoids
-                processing duplicates — if the same number appears twice in nums,
+                        processing duplicates - if the same number appears twice in nums,
                 the HashSet naturally deduplicates it.
               </p>
             </div>
@@ -950,13 +1029,13 @@ function DetailPanel({
             <div className="flex flex-col gap-1.5">
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Approach</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                Since we're validating, HashSet is the right tool — O(1) lookup
+                          Since we're validating, HashSet is the right tool - O(1) lookup
                 for duplicate detection. A valid Sudoku has exactly 9 rows, 9 columns,
-                and 9 quadrants, so I created three arrays of 9 HashSets each — one
+                          and 9 quadrants, so I created three arrays of 9 HashSets each - one
                 array per constraint. Rows and columns map cleanly to indices i and j.
                 The tricky part was mapping any cell [i][j] to its quadrant index.
                 It took some experimentation and working through examples on paper,
-                but the formula (i/3)*3 + (j/3) does it — integer division narrows
+                          but the formula (i/3)*3 + (j/3) does it - integer division narrows
                 i and j to their 3x3 block coordinates, and the formula collapses
                 them into a single index from 0 to 8. For each cell, if adding its
                 value to any of the three sets returns false, a duplicate exists and
@@ -967,7 +1046,7 @@ function DetailPanel({
             {/* The Insight */}
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
-                9 rows, 9 columns, 9 quadrants — three arrays of 9 HashSets map
+                          9 rows, 9 columns, 9 quadrants - three arrays of 9 HashSets map
                 directly to all three constraints, and (i/3)*3 + (j/3) is the
                 formula that links any cell to its quadrant index.
               </p>
@@ -975,7 +1054,7 @@ function DetailPanel({
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution — Java</p>
+                        <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public boolean isValidSudoku(char[][] board) {
         Set<Character>[] rowSet = new HashSet[9];
@@ -1004,10 +1083,10 @@ function DetailPanel({
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 Approaching a problem from first principles rather than prior knowledge
-                of the game helped here — breaking it down to rows, columns and quadrants
+                          of the game helped here - breaking it down to rows, columns and quadrants
                 as separate constraints made the structure clear. Also a good reminder
                 that you can derive your own index mapping formulas through
-                experimentation — (i/3)*3 + (j/3) wasn't obvious upfront but fell
+                          experimentation - (i/3)*3 + (j/3) wasn't obvious upfront but fell
                 into place through working examples.
               </p>
             </div>
@@ -1016,10 +1095,10 @@ function DetailPanel({
             <div className="flex flex-col gap-1.5">
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                HashSet.add() returns false if the element already exists — using
+                          HashSet.add() returns false if the element already exists - using
                 that return value directly as the duplicate check is clean and avoids
                 a separate contains() call. Empty cells marked as '.' must be skipped
-                — including them would incorrectly flag multiple empty cells in the
+                          - including them would incorrectly flag multiple empty cells in the
                 same row as duplicates.
               </p>
             </div>
@@ -1049,7 +1128,7 @@ function DetailPanel({
                 Since division is off the table, I had to think purely in terms
                 of multiplication. For any index i the answer is everything to
                 its left multiplied by everything to its right. That leads to
-                two separate passes — one building a leftProduct array where
+                            two separate passes - one building a leftProduct array where
                 each index holds the product of all elements before it, and
                 another building a rightProduct array where each index holds the
                 product of all elements after it. The final answer at each index
@@ -1061,7 +1140,7 @@ function DetailPanel({
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
                 Without division, product except self is just all-left times
-                all-right — precompute both sides and the answer is a single
+                            all-right - precompute both sides and the answer is a single
                 multiplication per index.
               </p>
             </div>
@@ -1069,7 +1148,7 @@ function DetailPanel({
             {/* Code */}
             <div className="flex flex-col gap-1.5">
               <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                Solution — Java
+                            Solution - Java
               </p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int[] productExceptSelf(int[] nums) {
@@ -1114,7 +1193,7 @@ function DetailPanel({
                 Gotchas
               </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                leftProduct[0] and rightProduct[n-1] are both initialised to 1 —
+                            leftProduct[0] and rightProduct[n-1] are both initialised to 1 -
                 there are no elements to the left of the first or to the right
                 of the last, so the neutral element for multiplication is 1. The
                 first and last elements of the result only need one side each,
@@ -1144,25 +1223,25 @@ function DetailPanel({
               </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 Frequencies immediately suggested a HashMap. A count array could
-                            work for tracking frequencies but retrieving multiple elements
-                            in order of frequency is clunky with it — HashMaps are cleaner
-                            for key-value frequency tracking. Populating the map is O(n),
-                            then sorting by values would give a working solution at O(n log
-                            n). But there was a follow-up challenge to do better than O(n
-                            log n), so I didn't commit to sorting. That led me to Bucket
-                            Sort — create a list of lists where the index represents
-                            frequency. For each entry in the HashMap, use its frequency as
-                            the index into the bucket array and place the key there. The
-                            highest frequency elements naturally end up towards the right
-                            end. Then just iterate from right to left and collect k
-                            elements.
+                              work for tracking frequencies but retrieving multiple elements
+                              in order of frequency is clunky with it - HashMaps are cleaner
+                              for key-value frequency tracking. Populating the map is O(n),
+                              then sorting by values would give a working solution at O(n log
+                              n). But there was a follow-up challenge to do better than O(n
+                              log n), so I didn't commit to sorting. That led me to Bucket
+                              Sort - create a list of lists where the index represents
+                              frequency. For each entry in the HashMap, use its frequency as
+                              the index into the bucket array and place the key there. The
+                              highest frequency elements naturally end up towards the right
+                              end. Then just iterate from right to left and collect k
+                              elements.
               </p>
             </div>
 
             {/* The Insight */}
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
-                Frequencies are bounded by n — so they can be used directly as
+                              Frequencies are bounded by n - so they can be used directly as
                 indices into a bucket array, giving you a sorted-by-frequency
                 structure in O(n) without ever calling sort.
               </p>
@@ -1170,9 +1249,9 @@ function DetailPanel({
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                            Solution — Java
-                          </p>
+                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                              Solution - Java
+                            </p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int[] topKFrequent(int[] nums, int k) {
         HashMap<Integer, Integer> frequencyElements = new HashMap<>();
@@ -1205,27 +1284,27 @@ function DetailPanel({
 
             {/* What I Learned */}
             <div className="flex flex-col gap-1.5">
-                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                            What I Learned
-                          </p>
+                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                              What I Learned
+                            </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 Bucket Sort is a powerful technique when the range of values is
-                bounded and known — here frequencies can only be 1 to n, making
-                            them perfect as indices. Also getOrDefault is a clean way to
-                            handle the count increment without an explicit null check.
+                              bounded and known - here frequencies can only be 1 to n, making
+                              them perfect as indices. Also getOrDefault is a clean way to
+                              handle the count increment without an explicit null check.
               </p>
             </div>
 
             {/* Gotchas */}
             <div className="flex flex-col gap-1.5">
-                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                            Gotchas
-                          </p>
+                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                              Gotchas
+                            </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                            The bucket array size is n+1 (not n) because a single element
-                            could appear n times, so index n must be valid. The early return
-                            when --k == 0 avoids unnecessary iteration once k elements are
-                            collected.
+                              The bucket array size is n+1 (not n) because a single element
+                              could appear n times, so index n must be valid. The early return
+                              when --k == 0 avoids unnecessary iteration once k elements are
+                              collected.
               </p>
             </div>
 
@@ -1235,9 +1314,9 @@ function DetailPanel({
           <>
             {/* Problem Summary */}
             <div className="flex flex-col gap-1.5">
-                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                              Problem Summary
-                            </p>
+                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                Problem Summary
+                              </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 Given an array of strings, group the strings that are anagrams
                 of each other and return them as a list of groups.
@@ -1246,24 +1325,24 @@ function DetailPanel({
 
             {/* Approach */}
             <div className="flex flex-col gap-1.5">
-                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                              Approach
-                            </p>
+                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                Approach
+                              </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 The key insight is that all anagrams of a word share the same
-                characters — just in different order. If I sort the characters
-                              of each word alphabetically, all anagrams produce the same
-                              sorted key. So I iterate through every word, sort its characters
-                              to get the key, and use a HashMap to group words by that key.
-                              Words that produce the same sorted key are anagrams of each
-                              other and get grouped together.
+                                characters - just in different order. If I sort the characters
+                                of each word alphabetically, all anagrams produce the same
+                                sorted key. So I iterate through every word, sort its characters
+                                to get the key, and use a HashMap to group words by that key.
+                                Words that produce the same sorted key are anagrams of each
+                                other and get grouped together.
               </p>
             </div>
 
             {/* The Insight */}
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
-                Sorting a word's characters gives a canonical fingerprint — all
+                                Sorting a word's characters gives a canonical fingerprint - all
                 anagrams share the same fingerprint, making grouping a single
                 HashMap pass.
               </p>
@@ -1271,9 +1350,9 @@ function DetailPanel({
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                              Solution — Java
-                            </p>
+                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                Solution - Java
+                              </p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         HashMap<String, List<String>> map = new HashMap<>();
@@ -1290,24 +1369,24 @@ function DetailPanel({
 
             {/* What I Learned */}
             <div className="flex flex-col gap-1.5">
-                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                              What I Learned
-                            </p>
+                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                What I Learned
+                              </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
                 Sorted character arrays as HashMap keys is a recurring pattern
-                              for grouping anagrams — clean, O(n·k·log k) where k is max word
-                              length. computeIfAbsent is cleaner than checking containsKey and
-                              putting manually — worth knowing this HashMap shortcut.
+                                for grouping anagrams - clean, O(n·k·log k) where k is max word
+                                length. computeIfAbsent is cleaner than checking containsKey and
+                                putting manually - worth knowing this HashMap shortcut.
               </p>
             </div>
 
             {/* Gotchas */}
             <div className="flex flex-col gap-1.5">
-                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                              Gotchas
-                            </p>
+                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                Gotchas
+                              </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                The sorted key approach works but isn't the only way — you could
+                                The sorted key approach works but isn't the only way - you could
                 also use a character frequency array of size 26 as the key,
                 which avoids the sort cost (O(k) instead of O(k·log k)) but
                 makes the key construction slightly more complex.
@@ -1320,50 +1399,50 @@ function DetailPanel({
           <>
             {/* Problem Summary */}
             <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                Problem Summary
-                              </p>
+                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                  Problem Summary
+                                </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                Given an array of integers and a target, return the indices of
-                                the two numbers that add up to the target. Exactly one valid
-                                pair is guaranteed.
+                                  Given an array of integers and a target, return the indices of
+                                  the two numbers that add up to the target. Exactly one valid
+                                  pair is guaranteed.
               </p>
             </div>
 
             {/* Approach */}
             <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                Approach
-                              </p>
+                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                  Approach
+                                </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                The brute force is obvious — for each number, scan the rest of
-                                the array for its partner. That's O(n²). The smarter move comes
-                                from rearranging num1 + num2 = target into num1 = target - num2.
-                                So for every number I look at, I already know exactly what its
-                                partner needs to be. I need a data structure that can answer
-                                "have I seen this value before, and what was its index?" in O(1)
-                                — that's a HashMap with the number as key and its index as
-                                value. As I iterate, I check if target - current number already
-                                exists in the map. If it does, I've found the pair and return
-                                both indices immediately. If not, I store the current number and
-                                its index for future iterations.
+                                  The brute force is obvious - for each number, scan the rest of
+                                  the array for its partner. That's O(n²). The smarter move comes
+                                  from rearranging num1 + num2 = target into num1 = target - num2.
+                                  So for every number I look at, I already know exactly what its
+                                  partner needs to be. I need a data structure that can answer
+                                  "have I seen this value before, and what was its index?" in O(1)
+                                  - that's a HashMap with the number as key and its index as
+                                  value. As I iterate, I check if target - current number already
+                                  exists in the map. If it does, I've found the pair and return
+                                  both indices immediately. If not, I store the current number and
+                                  its index for future iterations.
               </p>
             </div>
 
             {/* The Insight */}
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
-                                Rearranging num1 + num2 = target tells you exactly what you're
-                                looking for at every step — HashMap then lets you check for it
-                                in O(1), turning a search problem into a lookup problem.
+                                  Rearranging num1 + num2 = target tells you exactly what you're
+                                  looking for at every step - HashMap then lets you check for it
+                                  in O(1), turning a search problem into a lookup problem.
               </p>
             </div>
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                Solution — Java
-                              </p>
+                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                  Solution - Java
+                                </p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int[] twoSum(int[] nums, int target) {
         HashMap<Integer, Integer> numsIndices = new HashMap<>();
@@ -1382,28 +1461,28 @@ function DetailPanel({
 
             {/* What I Learned */}
             <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                What I Learned
-                              </p>
+                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                  What I Learned
+                                </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                When you need both a value and its index, HashMap is the tool —
-                                HashSet won't cut it. Also, algebraic rearrangement (num1 =
-                                target - num2) is a recurring trick that converts "find a pair"
-                                problems into single-pass lookups.
+                                  When you need both a value and its index, HashMap is the tool -
+                                  HashSet won't cut it. Also, algebraic rearrangement (num1 =
+                                  target - num2) is a recurring trick that converts "find a pair"
+                                  problems into single-pass lookups.
               </p>
             </div>
 
             {/* Gotchas */}
             <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                Gotchas
-                              </p>
+                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                  Gotchas
+                                </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                Inserting after checking (not before) is crucial — it prevents a
-                                number from matching with itself when the same index appears
-                                twice in the array. The problem guarantees exactly one solution,
-                                so the empty array return at the end is just a compiler
-                                formality.
+                                  Inserting after checking (not before) is crucial - it prevents a
+                                  number from matching with itself when the same index appears
+                                  twice in the array. The problem guarantees exactly one solution,
+                                  so the empty array return at the end is just a compiler
+                                  formality.
               </p>
             </div>
 
@@ -1413,51 +1492,51 @@ function DetailPanel({
           <>
             {/* Problem Summary */}
             <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                  Problem Summary
-                                </p>
+                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                    Problem Summary
+                                  </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                  Given two strings, return true if they are anagrams of each
-                                  other — meaning both strings contain the same characters with
-                                  the same frequencies.
+                                    Given two strings, return true if they are anagrams of each
+                                    other - meaning both strings contain the same characters with
+                                    the same frequencies.
               </p>
             </div>
 
             {/* Approach */}
             <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                  Approach
-                                </p>
+                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                    Approach
+                                  </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                  Two strings are anagrams when their character counts match
-                                  exactly. My first thought was two HashMaps — one per string —
-                                  but comparing them felt tedious since HashMaps don't preserve
-                                  order and the code got long. The problem constraints mentioned
-                                  lowercase letters only, so just 26 possible characters. That
-                                  meant I could use a fixed-size int array of 26 instead. I
-                                  iterate both strings simultaneously: for each index I increment
-                                  the counter for the character in s and decrement for the
-                                  character in t. If the strings are true anagrams, every slot
-                                  cancels out to zero. A final pass checks for any non-zero value
-                                  — if found, the counts were unbalanced and it's not an anagram.
+                                    Two strings are anagrams when their character counts match
+                                    exactly. My first thought was two HashMaps - one per string -
+                                    but comparing them felt tedious since HashMaps don't preserve
+                                    order and the code got long. The problem constraints mentioned
+                                    lowercase letters only, so just 26 possible characters. That
+                                    meant I could use a fixed-size int array of 26 instead. I
+                                    iterate both strings simultaneously: for each index I increment
+                                    the counter for the character in s and decrement for the
+                                    character in t. If the strings are true anagrams, every slot
+                                    cancels out to zero. A final pass checks for any non-zero value
+                                    - if found, the counts were unbalanced and it's not an anagram.
               </p>
             </div>
 
             {/* The Insight */}
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
-                                  Imagine writing out all letters of s, then crossing them off one
-                                  by one as you read t — a true anagram leaves nothing uncrossed.
-                                  The +1/-1 counter array mimics exactly that striking-off
-                                  process.
+                                    Imagine writing out all letters of s, then crossing them off one
+                                    by one as you read t - a true anagram leaves nothing uncrossed.
+                                    The +1/-1 counter array mimics exactly that striking-off
+                                    process.
               </p>
             </div>
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                  Solution — Java
-                                </p>
+                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                    Solution - Java
+                                  </p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public boolean isAnagram(String s, String t) {
         if(s.length() != t.length())
@@ -1477,29 +1556,29 @@ function DetailPanel({
 
             {/* What I Learned */}
             <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                  What I Learned
-                                </p>
+                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                    What I Learned
+                                  </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                  When the input is constrained to a known alphabet (e.g. 26
-                                  lowercase letters), a fixed-size count array is cleaner and
-                                  faster than a HashMap — O(1) space effectively, no hashing
-                                  overhead.
+                                    When the input is constrained to a known alphabet (e.g. 26
+                                    lowercase letters), a fixed-size count array is cleaner and
+                                    faster than a HashMap - O(1) space effectively, no hashing
+                                    overhead.
               </p>
             </div>
 
             {/* Gotchas */}
             <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                  Gotchas
-                                </p>
+                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                    Gotchas
+                                  </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                  The early length check is a smart short-circuit — different
-                                  lengths can never be anagrams, no need to even build the
-                                  counter. Making it work for mixed characters or Unicode is
-                                  straightforward — resize the array to cover the full character
-                                  range and replace the 'a' offset with the actual char value to
-                                  calculate the index. Same logic, wider alphabet.
+                                    The early length check is a smart short-circuit - different
+                                    lengths can never be anagrams, no need to even build the
+                                    counter. Making it work for mixed characters or Unicode is
+                                    straightforward - resize the array to cover the full character
+                                    range and replace the 'a' offset with the actual char value to
+                                    calculate the index. Same logic, wider alphabet.
               </p>
             </div>
 
@@ -1509,44 +1588,44 @@ function DetailPanel({
           <>
             {/* Problem Summary */}
             <div className="flex flex-col gap-1.5">
-                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                    Problem Summary
-                                  </p>
+                                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                      Problem Summary
+                                    </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                    Given an integer array, return true if any value appears at
-                                    least twice, and false if every element is distinct.
+                                      Given an integer array, return true if any value appears at
+                                      least twice, and false if every element is distinct.
               </p>
             </div>
 
             {/* Approach */}
             <div className="flex flex-col gap-1.5">
-                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                    Approach
-                                  </p>
+                                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                      Approach
+                                    </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                    My first instinct was to pick each number and scan the rest of
-                                    the array for a match — but that's O(n²). To get it down to
-                                    O(n), I needed a data structure where membership checks are
-                                    O(1). A HashSet fits perfectly: before inserting each number I
-                                    check whether it already exists. If it does, I've found a
-                                    duplicate and return true immediately.
+                                      My first instinct was to pick each number and scan the rest of
+                                      the array for a match - but that's O(n²). To get it down to
+                                      O(n), I needed a data structure where membership checks are
+                                      O(1). A HashSet fits perfectly: before inserting each number I
+                                      check whether it already exists. If it does, I've found a
+                                      duplicate and return true immediately.
               </p>
             </div>
 
             {/* The Insight */}
             <div className="border-l-2 border-accent pl-3">
               <p className="font-body text-sm text-accent italic leading-relaxed">
-                                    A HashSet enforces uniqueness for free — checking membership
-                                    before insert gives you early-exit duplicate detection in a
-                                    single linear pass.
+                                      A HashSet enforces uniqueness for free - checking membership
+                                      before insert gives you early-exit duplicate detection in a
+                                      single linear pass.
               </p>
             </div>
 
             {/* Code */}
             <div className="flex flex-col gap-1.5">
-                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                    Solution — Java
-                                  </p>
+                                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                      Solution - Java
+                                    </p>
               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public boolean containsDuplicate(int[] nums) {
         if(nums.length == 1)
@@ -1564,26 +1643,26 @@ function DetailPanel({
 
             {/* What I Learned */}
             <div className="flex flex-col gap-1.5">
-                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                    What I Learned
-                                  </p>
+                                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                      What I Learned
+                                    </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                    HashSet is the go-to when you need O(1) average-case lookup and
-                                    only care about existence, not counts or order. It's the
-                                    building block for a huge number of "have I seen this before?"
-                                    problems.
+                                      HashSet is the go-to when you need O(1) average-case lookup and
+                                      only care about existence, not counts or order. It's the
+                                      building block for a huge number of "have I seen this before?"
+                                      problems.
               </p>
             </div>
 
             {/* Gotchas */}
             <div className="flex flex-col gap-1.5">
-                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                    Gotchas
-                                  </p>
+                                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
+                                      Gotchas
+                                    </p>
               <p className="font-body text-sm text-text/80 leading-relaxed">
-                                    An alternative is comparing nums.length vs the size of a HashSet
-                                    built from the array, but the early-exit loop is faster in
-                                    practice when duplicates appear early.
+                                      An alternative is comparing nums.length vs the size of a HashSet
+                                      built from the array, but the early-exit loop is faster in
+                                      practice when duplicates appear early.
               </p>
             </div>
 
@@ -1604,8 +1683,8 @@ function DetailPanel({
         ) : (
           <>
             <p className="font-body text-sm text-muted/60 italic leading-relaxed">
-                                      Still locked. Working through these one at a time — check back
-                                      soon. 🔒
+                                        Still locked. Working through these one at a time - check back
+                                        soon. 🔒
             </p>
           </>
         )}
@@ -2058,7 +2137,7 @@ function NeetCodeMap() {
       aria-live="polite"
     >
       <span className="font-body text-sm text-text">
-        Still locked. Working through these one at a time — check back soon. 🔒
+        Still locked. Working through these one at a time - check back soon. 🔒
       </span>
       <button
         onClick={() => setLockedToast(false)}
@@ -2125,7 +2204,7 @@ function NeetCodeMap() {
       {isMobile ? (
         /* ── Mobile layout ─────────────────────────────────────── */
         <div style={{ height: `calc(100vh - ${NAV_H + TOPBAR_H}px)` }}>
-          {/* SVG map — full area minus peek strip, with pinch-to-zoom and pan */}
+          {/* SVG map - full area minus peek strip, with pinch-to-zoom and pan */}
           <div
             className="overflow-hidden"
             style={{
@@ -2154,7 +2233,7 @@ function NeetCodeMap() {
             </div>
           </div>
 
-          {/* Mobile detail panel — slides up from bottom */}
+          {/* Mobile detail panel - slides up from bottom */}
           <div
             className={`fixed inset-x-0 z-30 bg-bg overflow-y-auto ${SCROLLBAR_CLASSES}`}
             style={{
@@ -2233,7 +2312,7 @@ function NeetCodeMap() {
                           <span className="text-text/80 font-medium">
                             {expandedTopic}
                           </span>
-                      {" — click a problem node to view it"}
+                          {" - click a problem node to view it"}
                     </p>
                   ) : (
                     <p className="font-body text-xs text-faint">
