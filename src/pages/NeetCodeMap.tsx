@@ -597,7 +597,98 @@ function DetailPanel({
       <div className="h-px bg-border mb-6" />
 
       <div className="flex flex-col gap-5">
-        {problem.solved && problem.id === 13 ? (
+        {problem.solved && problem.id === 14 ? (
+          <>
+            {/* Problem Summary */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Problem Summary</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                Given an elevation map as an array of bar heights, calculate the
+                total volume of rainwater that gets trapped between the bars
+                after it rains.
+              </p>
+            </div>
+
+            {/* Approach */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Approach</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                For each position, the water it can hold is determined by the shorter
+                of the tallest bar to its left and the tallest bar to its right, minus
+                the height of the bar itself. I precomputed two arrays - maxLeftHeight
+                and maxRightHeight - by scanning left-to-right and right-to-left
+                respectively, tracking the running maximum at each index. Then a final
+                pass combines them: water at i = min(maxLeft[i], maxRight[i]) - height[i],
+                summed across all positions.
+              </p>
+            </div>
+
+            {/* The Insight */}
+            <div className="border-l-2 border-accent pl-3">
+              <p className="font-body text-sm text-accent italic leading-relaxed">
+                Water at any column is bounded by the shorter surrounding wall -
+                you can't fill higher than the lowest escape route on either side.
+              </p>
+            </div>
+
+            {/* Code */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+              <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+    public int trap(int[] height) {
+        int max = 0;
+        int hLength = height.length;
+        int totalRainWater = 0;
+        int[] maxLeftHeight = new int[hLength];
+        int[] maxRightHeight = new int[hLength];
+        for (int i = 0; i < hLength; ++i) {
+            max = Math.max(max, height[i]);
+            maxLeftHeight[i] = max;
+        }
+        max = 0;
+        for (int i = hLength - 1; i > -1; --i) {
+            max = Math.max(max, height[i]);
+            maxRightHeight[i] = max;
+        }
+        for (int i = 0; i < hLength; ++i) {
+            if (height[i] < maxLeftHeight[i] && height[i] < maxRightHeight[i]) {
+                totalRainWater += Math.min(maxLeftHeight[i], maxRightHeight[i]) - height[i];
+            }
+        }
+        return totalRainWater;
+    }
+}`}</pre>
+            </div>
+
+            {/* What I Learned */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                The "precompute prefix/suffix max" pattern appears often in array
+                problems where each position needs context from both sides. It converts
+                what feels like an O(n²) scan into three clean O(n) passes. The
+                two-pointer variant achieves O(1) space by maintaining running maxes
+                on the fly, but this array version is easier to reason about initially.
+              </p>
+            </div>
+
+            {/* Gotchas */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                The guard condition (height[i] &lt; both maxes) is technically redundant -
+                when height[i] equals its surrounding max, min(maxLeft, maxRight) - height[i]
+                = 0 anyway - but it makes intent clear. maxLeftHeight[i] and maxRightHeight[i]
+                always include the current bar itself, so the subtraction can never go
+                negative. The two-pointer O(1) space optimisation is worth knowing for
+                follow-up questions: whichever side has the smaller running max is the
+                constraining wall, so you can process that side and advance inward.
+              </p>
+            </div>
+
+            <KofiPanel firstLine="Enjoyed the breakdown?" />
+          </>
+        ) : problem.solved && problem.id === 13 ? (
           <>
             {/* Problem Summary */}
             <div className="flex flex-col gap-1.5">
