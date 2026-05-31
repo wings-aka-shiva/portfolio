@@ -34,7 +34,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
   { id: 11,  topic: "Two Pointers",              title: "Two Sum II - Input Array Is Sorted",              difficulty: "Medium", slug: "two-sum-ii-input-array-is-sorted",                solved: true, leetcodeUrl: lc("two-sum-ii-input-array-is-sorted") },
   { id: 12,  topic: "Two Pointers",              title: "3Sum",                                            difficulty: "Medium", slug: "3sum",                                            solved: true, leetcodeUrl: lc("3sum") },
   { id: 13,  topic: "Two Pointers",              title: "Container With Most Water",                       difficulty: "Medium", slug: "container-with-most-water",                       solved: true, leetcodeUrl: lc("container-with-most-water") },
-  { id: 14,  topic: "Two Pointers",              title: "Trapping Rain Water",                             difficulty: "Hard",   slug: "trapping-rain-water",                             solved: false, leetcodeUrl: lc("trapping-rain-water") },
+  { id: 14,  topic: "Two Pointers",              title: "Trapping Rain Water",                             difficulty: "Hard",   slug: "trapping-rain-water",                             solved: true, leetcodeUrl: lc("trapping-rain-water") },
 
   // Sliding Window
   { id: 15,  topic: "Sliding Window",            title: "Best Time to Buy and Sell Stock",                 difficulty: "Easy",   slug: "best-time-to-buy-and-sell-stock",                 solved: false, leetcodeUrl: lc("best-time-to-buy-and-sell-stock") },
