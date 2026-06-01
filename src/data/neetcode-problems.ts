@@ -37,7 +37,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
   { id: 14,  topic: "Two Pointers",              title: "Trapping Rain Water",                             difficulty: "Hard",   slug: "trapping-rain-water",                             solved: true, leetcodeUrl: lc("trapping-rain-water") },
 
   // Sliding Window
-  { id: 15,  topic: "Sliding Window",            title: "Best Time to Buy and Sell Stock",                 difficulty: "Easy",   slug: "best-time-to-buy-and-sell-stock",                 solved: false, leetcodeUrl: lc("best-time-to-buy-and-sell-stock") },
+  { id: 15,  topic: "Sliding Window",            title: "Best Time to Buy and Sell Stock",                 difficulty: "Easy",   slug: "best-time-to-buy-and-sell-stock",                 solved: true, leetcodeUrl: lc("best-time-to-buy-and-sell-stock") },
   { id: 16,  topic: "Sliding Window",            title: "Longest Substring Without Repeating Characters",  difficulty: "Medium", slug: "longest-substring-without-repeating-characters",  solved: false, leetcodeUrl: lc("longest-substring-without-repeating-characters") },
   { id: 17,  topic: "Sliding Window",            title: "Longest Repeating Character Replacement",         difficulty: "Medium", slug: "longest-repeating-character-replacement",         solved: false, leetcodeUrl: lc("longest-repeating-character-replacement") },
   { id: 18,  topic: "Sliding Window",            title: "Permutation in String",                           difficulty: "Medium", slug: "permutation-in-string",                           solved: false, leetcodeUrl: lc("permutation-in-string") },

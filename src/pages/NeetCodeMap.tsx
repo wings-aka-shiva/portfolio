@@ -597,7 +597,92 @@ function DetailPanel({
       <div className="h-px bg-border mb-6" />
 
       <div className="flex flex-col gap-5">
-        {problem.solved && problem.id === 14 ? (
+        {problem.solved && problem.id === 15 ? (
+          <>
+            {/* Problem Summary */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Problem Summary</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                Given an array of stock prices by day, find the maximum profit from
+                a single buy-then-sell transaction. You must buy before you sell.
+              </p>
+            </div>
+
+            {/* Approach */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Approach</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                My first instinct was to precompute a "max to the right" array — for
+                every index, store the best price I could sell at from that point
+                forward. It works, but it's O(n) extra space and you're computing the
+                best future price for every position, most of which you never actually
+                need. The shift came when I stopped asking "what's the best I can do
+                from this position?" and started asking "what's the cheapest I could
+                have bought before now?" Scanning left to right, tracking the minimum
+                price seen so far, and at each step computing prices[i] - minLeft —
+                that's all you need.
+              </p>
+            </div>
+
+            {/* The Insight */}
+            <div className="border-l-2 border-accent pl-3">
+              <p className="font-body text-sm text-accent italic leading-relaxed">
+                You're not finding the optimal profit at every i — you're trusting
+                that at the one moment when i lands on the global maximum after the
+                global minimum, prices[i] - minLeft quietly delivers the true answer.
+                Every other step is just a throwaway comparison.
+              </p>
+            </div>
+
+            {/* Code */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution — Java</p>
+              <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+    public int maxProfit(int[] prices) {
+        int maxProfit = 0;
+        int minLeft = prices[0];
+
+        for (int i = 0; i < prices.length; ++i) {
+            maxProfit = Math.max(maxProfit, prices[i] - minLeft);
+            minLeft = Math.min(minLeft, prices[i]);
+        }
+
+        return maxProfit;
+    }
+}`}</pre>
+            </div>
+
+            {/* What I Learned */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                The O(n) space → O(1) space reduction wasn't just an optimisation —
+                it came from a genuine reframe of the problem. The greedy framing
+                obscures what's really happening. The running-min framing is more
+                honest: most steps are throwaway comparisons, and one step quietly
+                delivers the answer. Recognising that looking left with a single
+                variable is equivalent to looking right with a full array is the
+                real lesson here.
+              </p>
+            </div>
+
+            {/* Gotchas */}
+            <div className="flex flex-col gap-1.5">
+              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
+              <p className="font-body text-sm text-text/80 leading-relaxed">
+                A strictly decreasing array like [7,6,4,3,1] should return 0, not
+                a negative — initialising maxProfit = 0 handles this automatically.
+                The update order matters conceptually: calculate profit first, then
+                update minLeft. Otherwise you risk comparing a price against itself
+                (harmless here since prices[i] - prices[i] == 0, but bad habit).
+                The first instinct of a max-right array is valid and worth knowing —
+                it's the same idea, just from the other direction, and costs O(n) space.
+              </p>
+            </div>
+
+            <KofiPanel firstLine="Enjoyed the breakdown?" />
+          </>
+        ) : problem.solved && problem.id === 14 ? (
           <>
             {/* Problem Summary */}
             <div className="flex flex-col gap-1.5">
