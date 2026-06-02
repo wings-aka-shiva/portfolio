@@ -98,7 +98,7 @@ export default function BeKind() {
           Yay! 🌿
         </p>
         <p style={{ fontSize: "1.3rem", fontWeight: 400, color: "rgba(255,255,255,0.9)" }}>
-          Now you know where to find me. 😊
+          Can't wait — ping me and let's make it happen 💬
         </p>
       </div>
     );
@@ -152,7 +152,7 @@ export default function BeKind() {
             fontSize: "2.6rem", fontWeight: 700, color: "#3d1a1a",
             marginBottom: "1.2rem", lineHeight: 1.15,
           }}>
-            Hey Shreya,
+            Hey Ms NOYB,
           </h1>
           <p style={{
             fontSize: "1.05rem", fontWeight: 400, color: "#7c4a4a",
@@ -177,7 +177,7 @@ export default function BeKind() {
                     import.meta.env.VITE_EMAILJS_SERVICE_ID,
                     import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
                     {
-                      name: "Shreya",
+                      name: "Ms NOYB",
                       email: "shivatirupathi10@gmail.com",
                       message: `Shreya clicked: "${pill.label}" 🌿`,
                     },
