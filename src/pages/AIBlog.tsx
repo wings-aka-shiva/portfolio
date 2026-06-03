@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { aiPosts, type AIPost } from "../data/ai-posts";
 import { Badge } from "../components/ui/Badge";
 import KofiPanel from "../components/ui/KofiPanel";
+import ThoughtButton from "../components/ui/ThoughtButton";
 
 // ── Content parser ────────────────────────────────────────────────────────────
 
@@ -350,6 +351,8 @@ function AIBlog() {
           </div>
         </>
       )}
+
+      {selectedPost && <ThoughtButton />}
     </div>
   );
 }

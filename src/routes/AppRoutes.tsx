@@ -8,6 +8,7 @@ import ComingSoon  from "../pages/ComingSoon";
 import NeetCodeMap from "../pages/NeetCodeMap";
 import Novels      from "../pages/Novels";
 import AIBlog      from "../pages/AIBlog";
+import Liminal     from "../pages/Liminal";
 
 function AppRoutes() {
   return (
@@ -22,7 +23,8 @@ function AppRoutes() {
         <Route path="/blog/neetcode/:slug" element={<NeetCodeMap />} />
         <Route path="/blog/travel"   element={<ComingSoon emoji="✈️" category="Travelling" />} />
         <Route path="/blog/food"     element={<ComingSoon emoji="🍜" category="Food" />} />
-        <Route path="/blog/liminal"  element={<ComingSoon emoji="🌌" category="Liminal" />} />
+        <Route path="/blog/liminal"         element={<Liminal />} />
+        <Route path="/blog/liminal/:slug"   element={<Liminal />} />
         <Route path="/blog/novels"   element={<Novels />} />
         <Route path="/blog/ai"         element={<AIBlog />} />
         <Route path="/blog/ai/:slug"   element={<AIBlog />} />
