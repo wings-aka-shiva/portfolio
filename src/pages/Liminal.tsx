@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { liminalPosts, type LiminalPost } from "../data/liminal-posts";
+import ThoughtButton from "../components/ui/ThoughtButton";
 
 // ─── colour tokens ────────────────────────────────────────────────────────────
 
@@ -170,6 +171,8 @@ function PostView({ post }: { post: LiminalPost }) {
             )
           )}
         </div>
+
+        <ThoughtButton ethereal />
       </div>
     </FadePage>
   );

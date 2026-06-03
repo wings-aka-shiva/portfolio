@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import KofiPanel from "../components/ui/KofiPanel";
+import ThoughtButton from "../components/ui/ThoughtButton";
 import {
   neetcodeProblems,
   getTopicGroups,
@@ -2520,6 +2521,8 @@ function NeetCodeMap() {
           </main>
         </div>
       )}
+
+      {selectedProblem?.solved && <ThoughtButton />}
     </div>
   );
 }
