@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { blogCategories, type BlogCategory } from "../data/blog-categories";
 import { neetcodeProblems } from "../data/neetcode-problems";
@@ -167,32 +168,35 @@ function NovelsHeroTile({ category }: { category: BlogCategory }) {
 
 function RegularTile({ category }: { category: BlogCategory }) {
   const isLiminal = category.style === "liminal";
+  const [hovered, setHovered] = useState(false);
 
   const inner = (
     <div
       className={[
-        "rounded-2xl p-8 flex flex-col gap-4 h-full",
-        category.live
-          ? "transition-all duration-300 group-hover:border-accent/40 group-hover:shadow-glow group-hover:-translate-y-0.5"
-          : "cursor-default select-none",
+        "rounded-2xl p-8 flex flex-col gap-4 h-full transition-all duration-300",
+        category.live ? "" : "cursor-default select-none",
         isLiminal ? "border" : "bg-surface border border-border",
+        !isLiminal && category.live
+          ? "group-hover:border-accent/40 group-hover:shadow-glow group-hover:-translate-y-0.5"
+          : "",
       ].join(" ")}
       style={
         isLiminal
           ? {
               background:
                 "radial-gradient(ellipse at 55% -20%, rgba(79,70,229,0.13) 0%, rgba(99,102,241,0.04) 45%, #09090f 72%)",
-              borderColor: "rgba(255,255,255,0.045)",
+              borderColor: hovered && category.live
+                ? "rgba(79,70,229,0.5)"
+                : "rgba(79,70,229,0.25)",
+              transform: hovered && category.live ? "translateY(-2px)" : "none",
             }
           : {}
       }
     >
       {/* Emoji */}
       <span
-        className={[
-          "text-5xl leading-none",
-          isLiminal ? "opacity-75" : "opacity-50",
-        ].join(" ")}
+        className="text-5xl leading-none"
+        style={{ opacity: isLiminal ? (hovered && category.live ? 0.9 : 0.75) : 0.5 }}
         role="img"
         aria-label={category.name}
       >
@@ -200,13 +204,15 @@ function RegularTile({ category }: { category: BlogCategory }) {
       </span>
 
       {/* Text */}
-      <div>
+      <div className="flex-1">
         <div className="flex flex-wrap items-center gap-2 mb-1.5">
           <h2
-            className={[
-              "font-display font-semibold text-base leading-tight",
-              isLiminal ? "text-text/65" : "text-text/60",
-            ].join(" ")}
+            className="font-display font-semibold text-base leading-tight transition-colors duration-300"
+            style={{
+              color: isLiminal
+                ? (hovered && category.live ? "rgba(221,216,208,0.85)" : "rgba(221,216,208,0.65)")
+                : "rgba(221,216,208,0.60)",
+            }}
           >
             {category.name}
           </h2>
@@ -222,20 +228,38 @@ function RegularTile({ category }: { category: BlogCategory }) {
           </span>
         </div>
         <p
-          className={[
-            "font-body text-sm leading-relaxed",
-            isLiminal ? "text-muted/55 italic" : "text-muted/60",
-          ].join(" ")}
+          className="font-body text-sm leading-relaxed"
+          style={{
+            color:      isLiminal ? "rgba(122,114,128,0.55)" : "rgba(122,114,128,0.60)",
+            fontStyle:  isLiminal ? "italic" : undefined,
+          }}
         >
           {category.caption}
         </p>
       </div>
+
+      {/* Live CTA for Liminal */}
+      {isLiminal && category.live && (
+        <p
+          className="font-body text-xs transition-all duration-300"
+          style={{
+            color: hovered ? "rgba(99,102,241,1.0)" : "rgba(99,102,241,0.70)",
+          }}
+        >
+          Explore →
+        </p>
+      )}
     </div>
   );
 
   if (category.live) {
     return (
-      <Link to={`/blog/${category.slug}`} className="block group h-full">
+      <Link
+        to={`/blog/${category.slug}`}
+        className="block group h-full"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
         {inner}
       </Link>
     );

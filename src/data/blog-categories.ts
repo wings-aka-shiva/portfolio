@@ -66,7 +66,7 @@ export const blogCategories: BlogCategory[] = [
     name: "Liminal",
     caption: "unmoored",
     slug: "liminal",
-    live: false,
+    live: true,
     style: "liminal",
   },
 ];
