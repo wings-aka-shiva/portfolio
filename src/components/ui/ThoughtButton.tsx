@@ -135,7 +135,7 @@ export default function ThoughtButton({ ethereal = false }: ThoughtButtonProps) 
 
                 {status === "error" && (
                   <p className="font-body text-xs text-red-400">
-                    Something went wrong — try again.
+                      Something went wrong - try again.
                   </p>
                 )}
 

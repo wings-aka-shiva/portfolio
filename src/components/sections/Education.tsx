@@ -40,7 +40,7 @@ function EducationCard({ entry, index }: EducationCardProps) {
             <span>📍 {entry.location}</span>
             <span className="text-border">·</span>
             <span>
-              {entry.startYear} — {entry.endYear}
+              {entry.startYear} - {entry.endYear}
             </span>
           </div>
         </div>

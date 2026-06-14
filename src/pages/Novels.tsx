@@ -197,7 +197,7 @@ function BookCard({
   );
 }
 
-// ─── AuthorBlock (Read section — single scrollable shelf plank) ──────────────
+// ─── AuthorBlock (Read section - single scrollable shelf plank) ──────────────
 
 interface AuthorBlockProps {
   author:      string;
@@ -356,12 +356,12 @@ export default function Novels() {
           Novels
         </h1>
         <p className="font-body text-sm italic" style={{ color: L.muted }}>
-          I forgot a lot of them — but here are a few I remember.
+          I forgot a lot of them - but here are a few I remember.
         </p>
         <p className="font-body text-sm leading-relaxed max-w-2xl mx-auto text-center mt-4 mb-10" style={{ color: `${L.muted}cc` }}>
-          Growing up in boarding schools, novels were our way out — a window into life beyond the walls.
+          Growing up in boarding schools, novels were our way out - a window into life beyond the walls.
           I remember dreaming about having a cupboard full of them, once I had a home of my own.
-          Still out here living the adventure. So I thought — why not simulate the cupboard digitally first. 😄
+          Still out here living the adventure. So I thought - why not simulate the cupboard digitally first. 😄
         </p>
       </div>
 
@@ -442,7 +442,7 @@ export default function Novels() {
             Books I've Lived Through
           </BrassLabel>
           <p className="font-body text-xs mt-1" style={{ color: L.faint }}>
-            — by author
+            - by author
           </p>
         </div>
         <div
@@ -484,7 +484,7 @@ export default function Novels() {
           boxShadow:       "0 4px 24px rgba(0,0,0,0.6)",
         }}
       >
-        Post coming soon — check back later ☕
+        Post coming soon - check back later ☕
       </div>
     </div>
   );

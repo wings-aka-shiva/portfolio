@@ -93,7 +93,7 @@ function RepoCard({ repo, index, visible }: RepoCardProps) {
         <h3 className="font-display font-semibold text-sm text-text leading-tight truncate">
           {repo.name}
         </h3>
-        {/* Arrow — only visible on hover */}
+        {/* Arrow - only visible on hover */}
         <svg
           className="shrink-0 w-3.5 h-3.5 text-faint group-hover:text-accent transition-colors duration-200 mt-0.5"
           viewBox="0 0 16 16"

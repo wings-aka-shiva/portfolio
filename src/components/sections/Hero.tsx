@@ -29,7 +29,7 @@ function Hero() {
       <div className="relative max-w-5xl mx-auto px-6 pt-28 pb-24 w-full">
         <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16">
 
-          {/* ── Image — top on mobile, right on desktop ─────────── */}
+          {/* ── Image - top on mobile, right on desktop ─────────── */}
           <div className="md:order-2 md:w-[42%] shrink-0">
             {/*
               Tilt wrapper: rotate-2 on desktop, flat on mobile.
@@ -66,7 +66,7 @@ function Hero() {
             </div>
           </div>
 
-          {/* ── Text — bottom on mobile, left on desktop ─────────── */}
+          {/* ── Text - bottom on mobile, left on desktop ─────────── */}
           <div className="md:order-1 md:flex-1">
             {/* Eyebrow */}
             <p className="font-body text-xs text-muted tracking-[0.3em] uppercase mb-6">

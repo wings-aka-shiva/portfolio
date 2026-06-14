@@ -306,16 +306,16 @@ function BlogLanding() {
           const grid   = rest.filter((c) => c.id !== "ai" && c.id !== "novels");
           return (
             <div className="flex flex-col gap-4">
-              {/* NeetCode — full-width hero */}
+              {/* NeetCode - full-width hero */}
               <HeroTile category={hero} />
 
-              {/* AI Journey — secondary hero */}
+              {/* AI Journey - secondary hero */}
               <AIHeroTile category={ai} />
 
-              {/* Novels — third hero */}
+              {/* Novels - third hero */}
               <NovelsHeroTile category={novels} />
 
-              {/* Travelling, Food, Liminal — 3-tile grid */}
+              {/* Travelling, Food, Liminal - 3-tile grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {grid.map((cat) => (
                   <RegularTile key={cat.id} category={cat} />

@@ -89,7 +89,7 @@ function ContactInfo() {
         </h3>
         <p className="font-body text-sm text-muted leading-relaxed">
           Whether it's a job opportunity, a project, or just a chat about
-          tech — my inbox is open.
+          tech - my inbox is open.
         </p>
       </div>
 
