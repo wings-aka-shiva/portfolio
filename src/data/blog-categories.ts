@@ -35,7 +35,7 @@ export const blogCategories: BlogCategory[] = [
     id: "ai",
     emoji: "🤖",
     name: "AI Journey",
-    caption: "building, breaking, and learning — one model at a time",
+    caption: "building, breaking, and learning - one model at a time",
     slug: "ai",
     live: true,
     postCount: 1,

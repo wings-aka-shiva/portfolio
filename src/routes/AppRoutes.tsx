@@ -9,6 +9,7 @@ import NeetCodeMap from "../pages/NeetCodeMap";
 import Novels      from "../pages/Novels";
 import AIBlog      from "../pages/AIBlog";
 import Liminal     from "../pages/Liminal";
+import Guitar      from "../pages/Guitar";
 
 function AppRoutes() {
   return (
@@ -28,6 +29,10 @@ function AppRoutes() {
         <Route path="/blog/novels"   element={<Novels />} />
         <Route path="/blog/ai"         element={<AIBlog />} />
         <Route path="/blog/ai/:slug"   element={<AIBlog />} />
+
+        <Route path="/guitar" element={<Navigate to="/guitar/metronome" replace />} />
+        <Route path="/guitar/metronome" element={<Guitar />} />
+        <Route path="/guitar/beginner-progression" element={<Guitar />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

@@ -141,9 +141,9 @@ export const awards: Award[] = [
   {
     id: "codechef-board",
     emoji: "📌",
-    title: "CodeChef Chapter SNIST — Board Member",
+    title: "CodeChef Chapter SNIST - Board Member",
     issuer: "Sreenidhi Institute of Science & Technology",
     date: "Jul 2021 – May 2023",
-    description: "Problem setter, tester and board member — promoted coding culture through workshops and competitions.",
+    description: "Problem setter, tester and board member - promoted coding culture through workshops and competitions.",
   },
 ];

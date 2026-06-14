@@ -10,7 +10,7 @@ export interface AIPost {
 export const aiPosts: AIPost[] = [
   {
     id: "1",
-    title: "Intro to LLMs — How AI Actually Works",
+    title: "Intro to LLMs - How AI Actually Works",
     slug: "intro-to-llms",
     date: "May 2026",
     tags: ["LLM", "RAG", "AI Engineering", "Beginner", "Embeddings", "Plain English"],
@@ -25,7 +25,7 @@ This is the explanation of the middle part. The version I wish someone had given
 
 It is a giant pile of numbers.
 
-That's it. That's the model. It's a file — somewhere between 100GB and a few terabytes — full of numbers called parameters. When you type a message, your text gets converted into numbers, those numbers get multiplied through the pile in a very specific way, and out the other end comes a list of probabilities for what word should come next. The system picks one of the likely words, adds it to the response, and runs the whole thing again to pick the next word. And the next. And the next.
+That's it. That's the model. It's a file - somewhere between 100GB and a few terabytes - full of numbers called parameters. When you type a message, your text gets converted into numbers, those numbers get multiplied through the pile in a very specific way, and out the other end comes a list of probabilities for what word should come next. The system picks one of the likely words, adds it to the response, and runs the whole thing again to pick the next word. And the next. And the next.
 
 That's what "the AI is generating a response" actually means. It's not thinking. It's not reasoning in any way you'd recognize. It's predicting the next word, over and over, faster than you can read.
 
@@ -35,15 +35,15 @@ The interesting question is: how does that pile of numbers know what word should
 
 There are basically three stages.
 
-### Stage 1 — Reading the entire internet (kind of)
+### Stage 1 - Reading the entire internet (kind of)
 
-A company like OpenAI or Anthropic takes an enormous amount of text — Wikipedia, books, forums, code from GitHub, news articles, scientific papers — and uses it to train a network. The network's only job during training is one task, repeated trillions of times:
+A company like OpenAI or Anthropic takes an enormous amount of text - Wikipedia, books, forums, code from GitHub, news articles, scientific papers - and uses it to train a network. The network's only job during training is one task, repeated trillions of times:
 
 Look at some text. Predict the next word.
 
 It sees "The capital of France is" and tries to guess "Paris." If it guesses wrong, the training algorithm slightly adjusts every number in the pile so it's a tiny bit more likely to guess right next time. Repeat trillions of times across thousands of high-end computers running for weeks. Cost: tens of millions of dollars.
 
-What you end up with is called a base model. It's brilliant — it's effectively absorbed an enormous chunk of recorded human knowledge — but it's also useless as a product.
+What you end up with is called a base model. It's brilliant - it's effectively absorbed an enormous chunk of recorded human knowledge - but it's also useless as a product.
 
 If you ask a base model "How do I make a paper airplane?" it might respond with:
 
@@ -59,11 +59,11 @@ This is also where the famous "AI hallucination" problem comes from. The base mo
 
 It's not lying. It genuinely cannot tell the difference between a fact it remembers clearly and one it's reconstructing from a blur. That's why grounding it in real documents (more on that below) matters so much.
 
-### Stage 2 — Teaching it how to be helpful
+### Stage 2 - Teaching it how to be helpful
 
 The base model knows everything but acts like nothing. Stage 2 fixes that.
 
-The company hires people — usually contractors — to write thousands of example conversations showing what a good, helpful response looks like. Things like:
+The company hires people - usually contractors - to write thousands of example conversations showing what a good, helpful response looks like. Things like:
 
 User: How do I sort an array in JavaScript?
 Assistant: You can use the .sort() method. By default it sorts as text, so for numbers you'll want to pass a compare function:
@@ -82,9 +82,9 @@ The crucial thing to understand:
 
 The model already knew everything from Stage 1. Stage 2 just taught it how to use what it knows, in a helpful conversational way.
 
-This is the single most useful idea in the whole field, and almost everyone gets it wrong on first contact. Your friend says "I'll fine-tune ChatGPT to know about my company's private documents." Sounds reasonable. It isn't. Fine-tuning shapes behavior. It doesn't reliably plug in new knowledge. There's a different tool for that — which is the next section.
+This is the single most useful idea in the whole field, and almost everyone gets it wrong on first contact. Your friend says "I'll fine-tune ChatGPT to know about my company's private documents." Sounds reasonable. It isn't. Fine-tuning shapes behavior. It doesn't reliably plug in new knowledge. There's a different tool for that - which is the next section.
 
-### Stage 3 — Polishing it (briefly)
+### Stage 3 - Polishing it (briefly)
 
 There's a third stage where the model is shown multiple possible responses to the same question and a human picks which one is better. The model gradually learns to prefer the kind of responses humans prefer. It's how you go from "an okay assistant" to "actually pleasant to talk to."
 
@@ -98,11 +98,11 @@ You have three tempting options. Two are wrong.
 
 **Wrong option 1:** Train your own AI from scratch. Costs tens of millions of dollars. Forget it.
 
-**Wrong option 2:** Fine-tune ChatGPT on your documents. This sounds right but isn't — fine-tuning shapes behavior, not knowledge. You'd spend money, get a model that might know your docs in some hazy way, and it would still hallucinate around the edges. And every time you updated a document, you'd have to retrain.
+**Wrong option 2:** Fine-tune ChatGPT on your documents. This sounds right but isn't - fine-tuning shapes behavior, not knowledge. You'd spend money, get a model that might know your docs in some hazy way, and it would still hallucinate around the edges. And every time you updated a document, you'd have to retrain.
 
 **Right option:** Don't try to put the documents into the model. Instead, give them to the model at the moment of the question.
 
-This trick is called RAG — Retrieval-Augmented Generation. And it's how almost every "AI that knows about your stuff" product works.
+This trick is called RAG - Retrieval-Augmented Generation. And it's how almost every "AI that knows about your stuff" product works.
 
 ## How RAG actually works (the magic part)
 
@@ -110,13 +110,13 @@ Here's the wild bit. The thing that finally made me understand what's going on u
 
 Computers can convert text into a position in space.
 
-Not physical space — a strange, abstract, multi-dimensional space. Imagine a graph, but instead of having two axes (X and Y), it has hundreds of them. Every piece of text gets mapped to a single point in that space.
+Not physical space - a strange, abstract, multi-dimensional space. Imagine a graph, but instead of having two axes (X and Y), it has hundreds of them. Every piece of text gets mapped to a single point in that space.
 
 The trick is: texts that mean similar things end up near each other in that space, even if they don't share any words.
 
 The phrase "annual leave entitlement" and the phrase "how many vacation days do I get?" share zero words in common. A normal keyword search would not match them. But in this strange multi-dimensional space, those two phrases end up sitting right next to each other, because the system that places them there has learned that they mean roughly the same thing.
 
-That mapping — text to a position in space — is called an embedding. The space is sometimes called semantic space (semantic = meaning).
+That mapping - text to a position in space - is called an embedding. The space is sometimes called semantic space (semantic = meaning).
 
 So a RAG system does this:
 
@@ -134,15 +134,15 @@ When you have a conversation with an AI, everything in that conversation sits in
 
 The context window has a hard limit, usually somewhere between a few thousand words and a few hundred thousand words depending on the model.
 
-Here's the surprising part: the AI works by having every word in the context "look at" every other word to figure out what's relevant. If you double the size of the context, you don't double the work — you quadruple it. Every word now has to consider twice as many other words, and there are twice as many words doing the considering. Two times two is four.
+Here's the surprising part: the AI works by having every word in the context "look at" every other word to figure out what's relevant. If you double the size of the context, you don't double the work - you quadruple it. Every word now has to consider twice as many other words, and there are twice as many words doing the considering. Two times two is four.
 
 This is why some questions cost pennies and others cost dollars. Long contexts are exponentially more expensive than short ones.
 
 ## Putting it all together
 
-An AI like ChatGPT is a pile of numbers that's been trained to predict the next word, on a massive amount of internet text. That training gives it general knowledge but also a fuzzy memory, which is why it sometimes makes things up. A second training stage teaches it how to be helpful and well-behaved, but doesn't really add new facts. To get an AI to use information it was never trained on — like your company's private documents — you don't try to put the information inside the AI. You set up a system that finds the right material at the moment of the question and hands it to the AI to read on the spot. And the size of any single conversation has a hard limit, because the math of how the AI processes context makes long conversations exponentially more expensive than short ones.
+An AI like ChatGPT is a pile of numbers that's been trained to predict the next word, on a massive amount of internet text. That training gives it general knowledge but also a fuzzy memory, which is why it sometimes makes things up. A second training stage teaches it how to be helpful and well-behaved, but doesn't really add new facts. To get an AI to use information it was never trained on - like your company's private documents - you don't try to put the information inside the AI. You set up a system that finds the right material at the moment of the question and hands it to the AI to read on the spot. And the size of any single conversation has a hard limit, because the math of how the AI processes context makes long conversations exponentially more expensive than short ones.
 
-Once you have those four ideas — base training, behavior tuning, retrieval, and the cost of context — most things you read about AI products start to make sense.`,
+Once you have those four ideas - base training, behavior tuning, retrieval, and the cost of context - most things you read about AI products start to make sense.`,
   },
   {
     id: "2",
@@ -153,7 +153,7 @@ Once you have those four ideas — base training, behavior tuning, retrieval, an
     content: `
 ## The short version
 
-Last time I wrote about what AI knows — pretraining, fine-tuning, and RAG. This time I want to go one level deeper: what is an AI, structurally? What's actually inside the box when you send a message to ChatGPT or Claude?
+Last time I wrote about what AI knows - pretraining, fine-tuning, and RAG. This time I want to go one level deeper: what is an AI, structurally? What's actually inside the box when you send a message to ChatGPT or Claude?
 
 Short answer: a giant pile of numbers, multiplied together in a specific way, billions of times per second.
 
@@ -161,7 +161,7 @@ That sounds like a non-answer. Let me unpack what it actually means, and why it 
 
 ## The pile of numbers
 
-An AI like ChatGPT is, at its core, a file. Somewhere between 100GB and a few terabytes depending on the model. If you opened it, you'd find a long list of numbers — typically billions of them — called parameters (or weights).
+An AI like ChatGPT is, at its core, a file. Somewhere between 100GB and a few terabytes depending on the model. If you opened it, you'd find a long list of numbers - typically billions of them - called parameters (or weights).
 
 That's the AI. No hidden code. No special "intelligence module." Just the numbers, plus a small program that knows how to multiply them in the right order.
 
@@ -173,7 +173,7 @@ When you send a message, this is roughly what happens:
 4. The system picks one of the likely words and appends it to the response
 5. Repeat for the next word, and the next, and the next
 
-That's the whole show. Multiply, add, squash, repeat — faster than you can read.
+That's the whole show. Multiply, add, squash, repeat - faster than you can read.
 
 ## What a neural network actually is
 
@@ -189,7 +189,7 @@ Input layer     Hidden layer     Output layer
     ●               ●                ●
 \`\`\`
 
-Each dot is a neuron — really just a slot that holds a number between 0 and 1. Every neuron in one layer is connected to every neuron in the next layer. Each connection has a weight: a single number that says "how strongly does this left-neuron influence this right-neuron?"
+Each dot is a neuron - really just a slot that holds a number between 0 and 1. Every neuron in one layer is connected to every neuron in the next layer. Each connection has a weight: a single number that says "how strongly does this left-neuron influence this right-neuron?"
 
 For one neuron in the hidden layer, the calculation is:
 
@@ -213,7 +213,7 @@ Two practical notes worth flagging:
 
 The bias shifts a neuron's "default" output. A high bias makes the neuron eager to fire; a low one makes it skeptical, requiring strong incoming signals.
 
-The squash function (sigmoid here, more commonly ReLU in modern networks) keeps values in a useful range and introduces non-linearity — without it, the entire stack of layers would collapse mathematically into a single linear function, and the network couldn't learn anything interesting.
+The squash function (sigmoid here, more commonly ReLU in modern networks) keeps values in a useful range and introduces non-linearity - without it, the entire stack of layers would collapse mathematically into a single linear function, and the network couldn't learn anything interesting.
 
 ## Where the "intelligence" lives
 
@@ -221,7 +221,7 @@ Pull any single weight out of a trained network and inspect it. Maybe it's 0.34.
 
 Nothing.
 
-The intelligence isn't in any single weight. It's in the pattern of all of them together — billions of tiny "votes" that, combined, somehow encode how to recognize a cat, write code, or summarize a legal document. There's no specific piece of the network you can point to and say "this is where it knows about cats." The knowledge is distributed across every weight, smeared throughout the structure.
+The intelligence isn't in any single weight. It's in the pattern of all of them together - billions of tiny "votes" that, combined, somehow encode how to recognize a cat, write code, or summarize a legal document. There's no specific piece of the network you can point to and say "this is where it knows about cats." The knowledge is distributed across every weight, smeared throughout the structure.
 
 This has real consequences for how you work with these models. You can't surgically edit what a model knows. You can't delete a specific fact. The "knowing" is too entangled. That's why companies use RAG to handle private data rather than trying to bake it into the weights.
 
@@ -231,15 +231,15 @@ So where do the billions of numbers come from? Nobody types them in.
 
 The network learns them. Roughly:
 
-1. Start with all weights set to random numbers. The network is useless — it gives nonsense.
+1. Start with all weights set to random numbers. The network is useless - it gives nonsense.
 2. Show it a training example with a known correct answer.
-3. Compare its output to the correct answer. Compute how wrong it was — a number called loss.
+3. Compare its output to the correct answer. Compute how wrong it was - a number called loss.
 4. For each weight, work out (with calculus) whether nudging it slightly up or slightly down would reduce the loss. Nudge accordingly.
 5. Repeat with the next example. And the next. Millions or billions of times.
 
-This process is training, and the math behind step 4 is called gradient descent — literally "walking gradually downhill toward lower loss." Each individual nudge is tiny. The pattern emerges only across billions of nudges, on billions of examples.
+This process is training, and the math behind step 4 is called gradient descent - literally "walking gradually downhill toward lower loss." Each individual nudge is tiny. The pattern emerges only across billions of nudges, on billions of examples.
 
-The cost matters here. Training a frontier model like GPT-4 or Claude reportedly costs tens of millions of dollars in compute alone. That's why nobody trains from scratch — you build on top of someone else's pretrained model.
+The cost matters here. Training a frontier model like GPT-4 or Claude reportedly costs tens of millions of dollars in compute alone. That's why nobody trains from scratch - you build on top of someone else's pretrained model.
 
 ## The wild part: we design the shape, not the content
 
@@ -260,11 +260,11 @@ We provide the structure. Training fills in the meaning.
 
 ## The part we still can't fully explain
 
-The middle layers — where most of the actual reasoning happens — are a black box.
+The middle layers - where most of the actual reasoning happens - are a black box.
 
 We can see the inputs. We can see the outputs. We can read every single weight, every neuron's activation, every multiplication. We still can't fully explain how the network gets from one to the other.
 
-This isn't laziness. It's one of the biggest open problems in the field, and an entire research area — interpretability — exists to chip away at it. Companies like Anthropic and DeepMind have teams whose job is to look inside trained networks and figure out what they've actually learned.
+This isn't laziness. It's one of the biggest open problems in the field, and an entire research area - interpretability - exists to chip away at it. Companies like Anthropic and DeepMind have teams whose job is to look inside trained networks and figure out what they've actually learned.
 
 This matters for engineers because it affects how you build:
 
@@ -272,17 +272,17 @@ This matters for engineers because it affects how you build:
 - You can't fully trust a model on novel inputs, because you don't know how it generalizes.
 - "Why did the model output X?" is often a question with no clean answer.
 
-Production AI engineering is, in large part, designing around this opacity — evaluation harnesses, guardrails, monitoring, fallback paths.
+Production AI engineering is, in large part, designing around this opacity - evaluation harnesses, guardrails, monitoring, fallback paths.
 
 ## Why this matters when you're building with AI
 
-**Model size has real tradeoffs.** Bigger models have more weights, which means more capacity to encode patterns — but also more cost per query, more latency, and more environmental impact. Choosing the smallest model that handles your task is a real engineering skill.
+**Model size has real tradeoffs.** Bigger models have more weights, which means more capacity to encode patterns - but also more cost per query, more latency, and more environmental impact. Choosing the smallest model that handles your task is a real engineering skill.
 
 **You can't reliably "teach" a model new facts.** The weights are too entangled. Knowledge that wasn't in pretraining should be supplied at query time through RAG, not stuffed in via fine-tuning.
 
 **Evaluation matters more than intuition.** Because the inside of the model is opaque, the only honest way to know if a change works is to test it on a held-out set of examples. Building eval harnesses is a non-glamorous skill that separates production AI engineers from people who ship demos.
 
-**The hardware story matters more than people realize.** Neural networks took off in the early 2010s mainly because GPUs — originally designed for video games — turned out to be excellent at the kind of bulk number-multiplication that training requires. It's also why GPU access is a real bottleneck for AI startups today.
+**The hardware story matters more than people realize.** Neural networks took off in the early 2010s mainly because GPUs - originally designed for video games - turned out to be excellent at the kind of bulk number-multiplication that training requires. It's also why GPU access is a real bottleneck for AI startups today.
   `
   },
 ];
