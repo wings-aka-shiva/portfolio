@@ -591,12 +591,11 @@ function ChordView() {
 
         <p className="font-body text-sm text-muted leading-relaxed">
           One of the biggest speed-ups in switching chords comes from noticing
-          which fingers don't need to move at all. Look at G and Em - two of
-          your fingers sit in almost the same spot for both chords. Instead of
-          lifting your whole hand and repositioning from scratch, keep those
-          fingers anchored on the fretboard and only move the fingers that
-          actually need to change. Your hand travels less, and the switch feels
-          instant once you spot it.
+          which fingers don't need to move at all. Look at G and Em — both use
+          a finger on the A string, 2nd fret. When switching between them, that
+          finger can stay anchored in place while the others reposition. It's a
+          small thing, but spotting these shared positions across chords is what
+          makes switches start to feel instant.
         </p>
 
         <ul className="space-y-2">
