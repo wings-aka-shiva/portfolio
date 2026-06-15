@@ -339,23 +339,58 @@ function MetronomeView() {
   );
 }
 
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+function shuffle<T>(arr: T[]): T[] {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 // ── ChordView ──────────────────────────────────────────────────────────────
 
 function ChordView() {
   const [selectedChords, setSelectedChords] = useState<string[]>(DEFAULT_SELECTED);
   const [currentChordIdx, setCurrentChordIdx] = useState(-1);
+  const [randomize, setRandomize] = useState(false);
+  const [practiceOrder, setPracticeOrder] = useState<string[]>([...DEFAULT_SELECTED]);
 
   const selectedChordsRef = useRef(selectedChords);
   const currentChordIdxRef = useRef(-1);
+  const randomizeRef = useRef(false);
+  const practiceOrderRef = useRef<string[]>([...DEFAULT_SELECTED]);
+  // Canonical order: selected chords in CHORD_DEFS definition order — never shuffled
+  const baseOrderRef = useRef<string[]>([...DEFAULT_SELECTED]);
 
   useEffect(() => {
     selectedChordsRef.current = selectedChords;
+    baseOrderRef.current = CHORD_DEFS.map((c) => c.name).filter((n) =>
+      selectedChords.includes(n)
+    );
   }, [selectedChords]);
+  useEffect(() => {
+    randomizeRef.current = randomize;
+    if (!randomize) {
+      // Turning OFF: restore practice order to the canonical unshuffled list
+      const order = [...baseOrderRef.current];
+      practiceOrderRef.current = order;
+      setPracticeOrder(order);
+    }
+  }, [randomize]);
 
   const handleTick = useCallback(() => {
-    const len = selectedChordsRef.current.length;
+    const order = practiceOrderRef.current;
+    const len = order.length;
     if (len === 0) return;
     const next = (currentChordIdxRef.current + 1) % len;
+    if (next === 0 && randomizeRef.current) {
+      const newOrder = shuffle(baseOrderRef.current);
+      practiceOrderRef.current = newOrder;
+      setPracticeOrder(newOrder);
+    }
     currentChordIdxRef.current = next;
     setCurrentChordIdx(next);
   }, []);
@@ -363,6 +398,10 @@ function ChordView() {
   const { bpm, setBpm, running, beating, start, stop } = useMetronome(handleTick);
 
   const handleStart = useCallback(() => {
+    const base = baseOrderRef.current;
+    const order = randomizeRef.current ? shuffle(base) : [...base];
+    practiceOrderRef.current = order;
+    setPracticeOrder(order);
     currentChordIdxRef.current = -1;
     setCurrentChordIdx(-1);
     start();
@@ -379,7 +418,7 @@ function ChordView() {
       prev.includes(name) ? prev.filter((c) => c !== name) : [...prev, name]
     );
 
-  const len = selectedChords.length;
+  const len = practiceOrder.length;
   const showQueue = running && currentChordIdx >= 0 && len > 0;
   const OFFSETS = [-2, -1, 0, 1, 2] as const;
 
@@ -439,10 +478,28 @@ function ChordView() {
       </div>
 
       {/* ── Chord selector ── */}
-      <p className="font-body text-xs text-muted opacity-60 mb-3">
-        Tap to unselect chords - fewer chords make switches easier to master.
-        Only selected chords appear in the practice loop below.
-      </p>
+      <div className="flex items-start justify-between gap-4 mb-3">
+        <p className="font-body text-xs text-muted opacity-60">
+          Tap to unselect chords — fewer chords make switches easier to master.
+          Only selected chords appear in the practice loop below.
+        </p>
+        <div className="flex items-center gap-2 cursor-pointer flex-shrink-0" onClick={() => setRandomize((r) => !r)}>
+          <span className="font-body text-sm text-muted whitespace-nowrap select-none">Randomize</span>
+          <div
+            role="switch"
+            aria-checked={randomize}
+            className={`relative w-9 h-5 rounded-full transition-colors duration-200 flex-shrink-0 ${
+              randomize ? "bg-amber-500" : "bg-border"
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                randomize ? "translate-x-[18px]" : "translate-x-0.5"
+              }`}
+            />
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-4 gap-3 mb-10">
         {CHORD_DEFS.map((chord) => {
           const isSelected = selectedChords.includes(chord.name);
@@ -479,7 +536,7 @@ function ChordView() {
           <div className="flex items-end justify-center gap-3">
             {OFFSETS.map((offset) => {
               const idx = ((currentChordIdx + offset) % len + len) % len;
-              const chordName = selectedChords[idx];
+              const chordName = practiceOrder[idx];
               const def = CHORD_MAP.get(chordName);
               const dist = Math.abs(offset);
 
