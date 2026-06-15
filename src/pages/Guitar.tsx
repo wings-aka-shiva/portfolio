@@ -350,6 +350,12 @@ function shuffle<T>(arr: T[]): T[] {
   return result;
 }
 
+function formatTime(s: number): string {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
+}
+
 // ── ChordView ──────────────────────────────────────────────────────────────
 
 function ChordView() {
@@ -357,6 +363,11 @@ function ChordView() {
   const [currentChordIdx, setCurrentChordIdx] = useState(-1);
   const [randomize, setRandomize] = useState(false);
   const [practiceOrder, setPracticeOrder] = useState<string[]>([...DEFAULT_SELECTED]);
+  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [timerMode, setTimerMode] = useState<"up" | "countdown">("up");
+  const [countdownDuration, setCountdownDuration] = useState<number | null>(null);
+  const [timerOpen, setTimerOpen] = useState(false);
+  const [sessionComplete, setSessionComplete] = useState(false);
 
   const selectedChordsRef = useRef(selectedChords);
   const currentChordIdxRef = useRef(-1);
@@ -364,6 +375,10 @@ function ChordView() {
   const practiceOrderRef = useRef<string[]>([...DEFAULT_SELECTED]);
   // Canonical order: selected chords in CHORD_DEFS definition order — never shuffled
   const baseOrderRef = useRef<string[]>([...DEFAULT_SELECTED]);
+  const timerModeRef = useRef<"up" | "countdown">("up");
+  const runningRef = useRef(false);
+  const countdownDurationRef = useRef<number | null>(null);
+  const timerContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     selectedChordsRef.current = selectedChords;
@@ -404,6 +419,9 @@ function ChordView() {
     setPracticeOrder(order);
     currentChordIdxRef.current = -1;
     setCurrentChordIdx(-1);
+    setTimerSeconds(countdownDurationRef.current ?? 0);
+    setSessionComplete(false);
+    setTimerOpen(false);
     start();
   }, [start]);
 
@@ -412,6 +430,51 @@ function ChordView() {
     currentChordIdxRef.current = -1;
     setCurrentChordIdx(-1);
   }, [stop]);
+
+  // ── Timer effects (placed after handleStop — countdown completion calls it) ──
+  useEffect(() => { timerModeRef.current = timerMode; }, [timerMode]);
+  useEffect(() => { runningRef.current = running; }, [running]);
+  useEffect(() => { countdownDurationRef.current = countdownDuration; }, [countdownDuration]);
+
+  // Tick: increment (count-up) or decrement (countdown) each second while running
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => {
+      setTimerSeconds((s) => {
+        if (timerModeRef.current === "countdown") return s > 0 ? s - 1 : 0;
+        return s + 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [running]);
+
+  // Countdown completion — fires on every timerSeconds change; acts only at zero
+  useEffect(() => {
+    if (timerMode !== "countdown" || timerSeconds !== 0 || !runningRef.current) return;
+    handleStop();
+    setSessionComplete(true);
+    setTimerMode("up");
+    setCountdownDuration(null);
+  }, [timerSeconds]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-clear the session-complete message after 3 s
+  useEffect(() => {
+    if (!sessionComplete) return;
+    const id = setTimeout(() => setSessionComplete(false), 3000);
+    return () => clearTimeout(id);
+  }, [sessionComplete]);
+
+  // Close timer popover on outside click
+  useEffect(() => {
+    if (!timerOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (timerContainerRef.current && !timerContainerRef.current.contains(e.target as Node)) {
+        setTimerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [timerOpen]);
 
   const toggleChord = (name: string) =>
     setSelectedChords((prev) =>
@@ -475,6 +538,62 @@ function ChordView() {
         >
           {running ? "■ Stop" : "▶ Start"}
         </button>
+
+        {/* Practice timer */}
+        <div ref={timerContainerRef} className="relative flex-shrink-0 ml-1">
+          {sessionComplete ? (
+            <span className="font-body text-sm text-amber-400 whitespace-nowrap">
+              Session complete! 🎸
+            </span>
+          ) : (
+            <button
+              onClick={() => setTimerOpen((o) => !o)}
+              className={`font-body text-sm tabular-nums transition-all duration-200 border rounded-lg px-2 py-1 cursor-pointer ${
+                timerMode === "countdown"
+                  ? "text-amber-400 hover:text-amber-300 border-amber-500/30 hover:border-amber-400/60"
+                  : "text-muted hover:text-text border-border hover:border-accent/40"
+              }`}
+            >
+              ⏱ {formatTime(timerSeconds)}
+            </button>
+          )}
+
+          {timerOpen && (
+            <div className="absolute top-full right-0 mt-1 z-10 bg-surface border border-border rounded-xl shadow-lg overflow-hidden min-w-[110px]">
+              {timerMode === "countdown" && (
+                <button
+                  onClick={() => {
+                    setTimerMode("up");
+                    setCountdownDuration(null);
+                    setTimerSeconds(0);
+                    setTimerOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2.5 font-body text-sm text-muted hover:text-text hover:bg-bg transition-colors"
+                >
+                  Count up
+                </button>
+              )}
+              {([5, 10, 15, 20] as const).map((min) => (
+                <button
+                  key={min}
+                  onClick={() => {
+                    setTimerMode("countdown");
+                    setCountdownDuration(min * 60);
+                    setTimerSeconds(min * 60);
+                    setTimerOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2.5 font-body text-sm transition-colors hover:bg-bg ${
+                    countdownDuration === min * 60
+                      ? "text-amber-400"
+                      : "text-muted hover:text-text"
+                  }`}
+                >
+                  {min} min
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── Chord selector ── */}
