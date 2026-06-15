@@ -560,6 +560,16 @@ function ChordView() {
 
           {timerOpen && (
             <div className="absolute top-full right-0 mt-1 z-10 bg-surface border border-border rounded-xl shadow-lg overflow-hidden min-w-[110px]">
+              {/* Reset — returns to 0 in count-up, or back to full duration in countdown */}
+              <button
+                onClick={() => {
+                  setTimerSeconds(countdownDuration ?? 0);
+                  setTimerOpen(false);
+                }}
+                className="w-full text-left px-4 py-2.5 font-body text-sm text-muted hover:text-text hover:bg-bg transition-colors border-b border-border/40"
+              >
+                Reset
+              </button>
               {timerMode === "countdown" && (
                 <button
                   onClick={() => {
