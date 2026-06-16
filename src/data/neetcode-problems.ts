@@ -38,7 +38,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
 
   // Sliding Window
   { id: 15,  topic: "Sliding Window",            title: "Best Time to Buy and Sell Stock",                 difficulty: "Easy",   slug: "best-time-to-buy-and-sell-stock",                 solved: true, leetcodeUrl: lc("best-time-to-buy-and-sell-stock") },
-  { id: 16,  topic: "Sliding Window",            title: "Longest Substring Without Repeating Characters",  difficulty: "Medium", slug: "longest-substring-without-repeating-characters",  solved: false, leetcodeUrl: lc("longest-substring-without-repeating-characters") },
+  { id: 16,  topic: "Sliding Window",            title: "Longest Substring Without Repeating Characters",  difficulty: "Medium", slug: "longest-substring-without-repeating-characters",  solved: true, leetcodeUrl: lc("longest-substring-without-repeating-characters") },
   { id: 17,  topic: "Sliding Window",            title: "Longest Repeating Character Replacement",         difficulty: "Medium", slug: "longest-repeating-character-replacement",         solved: false, leetcodeUrl: lc("longest-repeating-character-replacement") },
   { id: 18,  topic: "Sliding Window",            title: "Permutation in String",                           difficulty: "Medium", slug: "permutation-in-string",                           solved: false, leetcodeUrl: lc("permutation-in-string") },
   { id: 19,  topic: "Sliding Window",            title: "Minimum Window Substring",                        difficulty: "Hard",   slug: "minimum-window-substring",                        solved: false, leetcodeUrl: lc("minimum-window-substring") },
