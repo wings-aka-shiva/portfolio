@@ -41,7 +41,7 @@ export const novels: Novel[] = [
 
   // Waitlist
   { id: "twisted-lies",        title: "Twisted Lies",                author: "Ana Huang",       cover: "TwistedLies",                       status: "waitlist", slug: "twisted-lies"                     },
-  { id: "twisted-hate",        title: "Twisted Hate",                author: "Ana Huang",       cover: "TwistedHate",                       status: "waitlist", slug: "twisted-hate"                     },
+  { id: "twisted-hate",        title: "Twisted Hate",                author: "Ana Huang",       cover: "TwistedHate",                       status: "reading", slug: "twisted-hate"                     },
 
   // Read - Amish Tripathi
   { id: "immortals-of-meluha", title: "The Immortals of Meluha",     author: "Amish Tripathi",  cover: "TheImmortalsOfMeluha",              status: "read",     slug: "the-immortals-of-meluha"          },
