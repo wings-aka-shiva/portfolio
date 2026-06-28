@@ -286,7 +286,7 @@ Production AI engineering is, in large part, designing around this opacity - eva
   `
   },
   {
-  id: 3,
+  id: "3",
   title: "How AI actually learns: the algorithm behind every neural network",
   slug: "how-ai-actually-learns",
   date: "June 2026",
