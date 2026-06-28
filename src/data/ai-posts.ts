@@ -285,4 +285,145 @@ Production AI engineering is, in large part, designing around this opacity - eva
 **The hardware story matters more than people realize.** Neural networks took off in the early 2010s mainly because GPUs - originally designed for video games - turned out to be excellent at the kind of bulk number-multiplication that training requires. It's also why GPU access is a real bottleneck for AI startups today.
   `
   },
+  {
+  id: 3,
+  title: "How AI actually learns: the algorithm behind every neural network",
+  slug: "how-ai-actually-learns",
+  date: "June 2026",
+  tags: ["LLM", "neural networks", "gradient descent", "deep learning", "plain English", "AI engineering"],
+  content: `
+## The short version
+
+In the previous post I wrote about what's inside an AI - billions of numbers called weights, organized into a neural network, multiplied through in a specific pattern to produce output. But I deliberately skipped a question: where do those billions of numbers actually come from?
+
+Nobody types them in. The network learns them. That process is called training, and the algorithm at the heart of it is called gradient descent. It's surprisingly simple. It's also the single most important idea in modern AI - every model you've ever used was trained with some variant of it.
+
+This post is what gradient descent actually is, why it works, and what its limitations mean for anyone building with AI.
+
+## The setup: a network that doesn't know anything yet
+
+Imagine you've just built a brand-new neural network - say, one that's supposed to recognize handwritten digits. The structure is in place: input layer (one neuron per pixel), some hidden layers, output layer (one neuron per digit 0–9).
+
+But every weight in the network is set to a random number. Some are 0.3, some are -1.7, some are 0.05. They're noise.
+
+You feed it an image of a 7. The output is garbage - maybe the "3" neuron lights up at 0.4 and every other neuron is somewhere between 0 and 0.6. The network has no idea what it's looking at, because no weight has any meaningful value yet.
+
+Question: how do we go from "all weights random" to "weights tuned to recognize digits correctly"?
+
+## Step 1: Measure how wrong the network is
+
+For a given input, the network produces 10 output numbers (one per digit). For the image of a 7, the correct output would be: the "7" neuron at 1.0, every other neuron at 0.0.
+
+Compare what we got to what we wanted. For each output neuron, take the difference (actual minus desired) and square it. Add up all 10 squared differences. That single number is called the cost (or loss).
+
+\`\`\`typescript
+function cost(actual: number[], desired: number[]): number {
+  return actual.reduce((total, value, i) => {
+    const diff = value - desired[i];
+    return total + diff * diff;
+  }, 0);
+}
+\`\`\`
+
+Why squared? Two reasons. First, it keeps every difference positive - small negative errors don't cancel out small positive ones. Second, it penalizes large errors much more than small ones - an error of 1.0 contributes 1.0 to the cost, but an error of 2.0 contributes 4.0. The model is encouraged to fix big mistakes first.
+
+Cost is a single number per training example. High cost = very wrong. Low cost = close to right. Training is the search for weight values that drive cost down.
+
+## Step 2: Figure out which way to nudge each weight
+
+Here's the conceptual leap.
+
+Cost isn't a fixed number. It's a function - it depends on every single weight in the network. Change one weight by a tiny amount, and cost changes by a tiny amount.
+
+So for every weight in the network - all 13,000, or 13 billion, however many - we can ask one question:
+
+> "If I increase this weight slightly, does cost go up or down? And by how much?"
+
+The answer to that question, for a single weight, is called the gradient for that weight. It's a number. A signed slope.
+
+- **Positive gradient** → increasing the weight increases the cost → to reduce cost, decrease the weight.
+- **Negative gradient** → increasing the weight decreases the cost → to reduce cost, increase the weight.
+- **Large magnitude** → this weight has a big effect on cost right now → nudge it more aggressively.
+- **Small magnitude** → this weight barely affects cost right now → nudge it gently.
+- **Zero** → this weight is at a flat spot in the cost landscape → don't touch it.
+
+In plain English: for every weight, move it in the opposite direction of its gradient, by an amount proportional to the magnitude of the gradient.
+
+## Step 3: Apply the nudges, then repeat
+
+Compute the gradient for every weight. Apply the nudge to every weight. The network is now very slightly less wrong than before.
+
+Move to the next training example. Compute new gradients. Apply new nudges. Repeat with the next example. And the next. Millions of times, sometimes billions.
+
+The clever algorithm that efficiently computes all these gradients in one sweep through the network is called backpropagation. You don't need to understand its math to work with neural networks. You just need to know it exists, and that it's what makes step 2 computationally tractable.
+
+## The geometric picture: rolling downhill in a high-dimensional landscape
+
+Here's the picture that makes gradient descent click.
+
+Imagine the cost as a landscape - hills and valleys spread across an enormous map. Every possible setting of the network's weights corresponds to one point on the map. The altitude at that point is the cost.
+
+High altitude = bad weight settings. Low altitude = good weight settings.
+
+Training starts at a random point - somewhere on a hillside, since the initial weights are random. The gradient at that point is, geometrically, the steepest uphill direction. Move in the opposite direction. Repeat. You're rolling downhill, step by step, toward lower cost.
+
+Eventually you settle into a valley. The gradients become small. The network has converged.
+
+The catch - and it's a real one - is that the landscape has many valleys. Gradient descent finds a valley. Not necessarily the deepest one. That's called finding a local minimum rather than the global minimum. For decades this worried researchers. In practice, with networks that have millions or billions of weights, most local minima have roughly similar cost, so the network ends up "good enough" almost regardless of where it starts. This is one of the more pleasantly surprising empirical findings in deep learning.
+
+## The learning rate: how big are the steps?
+
+When we nudge a weight based on its gradient, we don't apply the full gradient as the step size. We multiply it by a small number first - typically something like 0.01. This multiplier is called the learning rate.
+
+- **Too low?** Training crawls. Each step barely moves the weights, and it takes forever to reach a useful minimum.
+- **Too high?** The network overshoots. Picture rolling a ball down a hill: a gentle push and it settles into the valley. A rocket-powered push and it flies over the valley, lands on the next hill, gets shoved again, and oscillates wildly without ever settling.
+
+In practice, modern training uses adaptive learning rates - algorithms like Adam that automatically adjust the rate during training, large early when far from a minimum, small later as the network converges. But the fundamental trade-off remains: too small and you waste compute; too large and the network never settles.
+
+## The overfitting trap
+
+Here's the most counterintuitive thing about training neural networks: more training isn't always better.
+
+Train a network on 100 images of handwritten digits. After enough rounds, the network achieves near-perfect performance on those 100 images. Cost is almost zero. Surely we're done?
+
+Then we test it on 100 images it has never seen. Performance is terrible.
+
+What happened is overfitting. Instead of learning the general patterns that distinguish digits, the network memorized the specific quirks of the 100 training images. It got perfect at those examples and learned nothing useful about digits in general.
+
+> Overfitting is like a student who memorizes the textbook answers without understanding the concepts. They ace the textbook test. They fail any new test.
+
+### Common causes
+
+- **Not enough training data.** With too few examples, the network can only memorize, not generalize.
+- **Too much training.** Even with good data, training beyond a certain point starts to fit the noise.
+- **Too much model capacity.** A network with vastly more weights than the task requires has the room to memorize when it should be generalizing.
+
+### Common fixes
+
+- **More data.** Diverse examples force the network toward general patterns.
+- **Early stopping.** Track performance on a separate validation set during training. Stop when validation performance peaks, even if training performance keeps improving.
+- **Regularization.** Mathematical penalties that discourage the network from getting too "specific."
+- **Simpler architectures.** Fewer weights, less capacity to memorize.
+
+Recognising overfitting in production is one of the most important skills in applied AI engineering. If your model performs great in development and fails in the real world, this is almost always why.
+
+## Why this matters when you're building with AI
+
+You're unlikely to train neural networks from scratch in most AI engineering roles - that's done by labs with the budgets for it. But understanding what training is reshapes how you think about everything downstream.
+
+**Fine-tuning is just continued training.** When you fine-tune a model on your own data, you're doing exactly the gradient descent process described here - starting from the pretrained weights rather than random ones, and nudging them based on your examples. This is why fine-tuning can shift behavior, but also why it can overfit if you're not careful.
+
+**Evaluation isn't optional.** Because overfitting is real and silent, the only honest way to know if a model works is to test it on data it has never seen. This is why production AI engineering involves building eval harnesses, not just chatting with the model and judging vibes.
+
+**Hyperparameters matter.** Learning rate, training duration, regularization strength - these aren't magic knobs that ML engineers fiddle with for fun. They're the levers that control whether your model learns the right thing or memorizes the wrong thing.
+
+**The opacity is fundamental.** Training adjusts billions of weights, all coordinated through gradients. The result is a network where the meaning is smeared across the structure. You can't inspect the model and say "this is where it learned about cats." You can only test it on new examples and see what comes out. This is why interpretability is a real research field, and why production AI systems need guardrails and monitoring.
+
+## What's next
+
+Next up I'll write about attention - the trick that lets language models stay coherent across long conversations, and the architectural choice that made modern LLMs possible. Everything we've covered so far (neurons, weights, training, gradient descent) is the foundation; attention is what's built on top.
+
+If something in this post didn't click, message me. I'd rather know what's still murky than write the next post in the dark.
+`
+}
 ];
