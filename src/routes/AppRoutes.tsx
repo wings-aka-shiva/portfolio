@@ -8,12 +8,15 @@ import ComingSoon  from "../pages/ComingSoon";
 import NeetCodeMap from "../pages/NeetCodeMap";
 import Novels      from "../pages/Novels";
 import AIBlog      from "../pages/AIBlog";
+import BeKind      from "../pages/BeKind";
 import Liminal     from "../pages/Liminal";
 import Guitar      from "../pages/Guitar";
 
 function AppRoutes() {
   return (
     <Routes>
+      <Route path="/be-kind" element={<BeKind />} />
+
       <Route path="/" element={<Layout />}>
         <Route index element={<Portfolio />} />
         <Route path="/my-world"  element={<MyWorld />} />
