@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { aiPosts, type AIPost } from "../data/ai-posts";
 import { Badge } from "../components/ui/Badge";
 import KofiPanel from "../components/ui/KofiPanel";
+import ThoughtButton from "../components/ui/ThoughtButton";
 
 // ── Content parser ────────────────────────────────────────────────────────────
 
@@ -69,7 +70,7 @@ function parseContent(raw: string): Block[] {
       continue;
     }
 
-    // Paragraph — collect until blank line or a block-starting line
+    // Paragraph - collect until blank line or a block-starting line
     let text = t;
     i++;
     while (i < lines.length) {
@@ -299,7 +300,7 @@ function AIBlog() {
       {topBar}
 
       {selectedPost === null ? (
-        /* ── Grid view (no slug) — both breakpoints ─────────── */
+        /* ── Grid view (no slug) - both breakpoints ─────────── */
         <div className={`overflow-y-auto ${SCROLLBAR_CLASSES}`} style={{ height: PANEL_H }}>
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             {aiPosts.map((post) => (
@@ -350,6 +351,8 @@ function AIBlog() {
           </div>
         </>
       )}
+
+      {selectedPost && <ThoughtButton />}
     </div>
   );
 }

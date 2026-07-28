@@ -2,7 +2,7 @@ import leetcodeIcon  from "../assets/leetcode.svg";
 import hackerrankIcon from "../assets/hackerrank.svg";
 import codechefIcon   from "../assets/codechef.svg";
 
-// Codeforces has no local asset — using the same source as the original component
+// Codeforces has no local asset - using the same source as the original component
 const codeforcesIcon =
   "https://img.icons8.com/external-tal-revivo-color-tal-revivo/48/external-codeforces-programming-competitions-and-contests-programming-community-logo-color-tal-revivo.png";
 
@@ -43,7 +43,7 @@ export const codingProfiles: CodingProfile[] = [
   {
     id: "codechef",
     platform: "CodeChef",
-    username: "—",
+    username: "-",
     tagline: "Coming soon",
     icon: codechefIcon,
     profileUrl: null,

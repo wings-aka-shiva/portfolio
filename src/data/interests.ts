@@ -30,16 +30,15 @@ export const interests: Interest[] = [
     emoji: "⚽",
     category: "Football",
     headline: "Weekend warrior, local club regular.",
-    detail: "Playing for Redbacks FC — left foot still a work in progress.",
+    detail: "Playing for Redbacks FC - left foot still a work in progress.",
     glowColor: "#22c55e",
   },
   {
     id: "guitar",
     emoji: "🎸",
     category: "Guitar",
-    headline: "On a creative pause.",
-    detail:
-      "Learning guitar when life allows. The strings aren't going anywhere.",
+    headline: "Six strings, zero calluses.",
+    detail: "Learning one chord at a time. Literally.",
     glowColor: "#f59e0b",
   },
   {
@@ -47,7 +46,7 @@ export const interests: Interest[] = [
     emoji: "🍜",
     category: "Food & Cultures",
     headline: "One cuisine at a time.",
-    detail: "Embracing cultures through food — every new dish is a new world.",
+    detail: "Embracing cultures through food - every new dish is a new world.",
     glowColor: "#f59e0b",
   },
   {

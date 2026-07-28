@@ -135,13 +135,13 @@ function Layout() {
                 >
                   Shiva Kumar <span className="text-accent ml-[0.3em]">Tirupathi</span>
                 </span>
-                {/* invisible sizer — keeps button width stable */}
+                {/* invisible sizer - keeps button width stable */}
                 <span className="invisible whitespace-nowrap tracking-[0.05em]">Shiva Kumar Tirupathi</span>
               </button>
             );
           })()}
 
-          {/* Desktop nav — sm and above */}
+          {/* Desktop nav - sm and above */}
           <ul className="hidden sm:flex items-center gap-5">
             {NAV_ITEMS.map(({ label, sectionId }) => {
               const isActive = resolvedActiveId === sectionId;
@@ -165,7 +165,7 @@ function Layout() {
             })}
           </ul>
 
-          {/* Hamburger — below sm only */}
+          {/* Hamburger - below sm only */}
           <button
             onClick={() => setMenuOpen((o) => !o)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
