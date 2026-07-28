@@ -182,7 +182,7 @@ export default function BeKind() {
                       message: `Shreya clicked: "${pill.label}" 🌿`,
                     },
                     import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-                  ).catch(() => {});
+                  ).catch((err) => console.error("emailjs send failed:", err));
 
                   if (pill.isYes) {
                     setSuccess(true);
