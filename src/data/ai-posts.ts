@@ -9,6 +9,7 @@ export interface AIPost {
 
 export const aiPosts: AIPost[] = [
   {
+    
     id: "1",
     title: "Intro to LLMs - How AI Actually Works",
     slug: "intro-to-llms",

@@ -10,13 +10,19 @@ import Novels      from "../pages/Novels";
 import AIBlog      from "../pages/AIBlog";
 import Liminal     from "../pages/Liminal";
 import Guitar      from "../pages/Guitar";
+import Between     from "../pages/Between";
+import Now         from "../pages/Now";
 
 function AppRoutes() {
   return (
     <Routes>
+      {/* Standalone full-screen experience — no Layout wrapper */}
+      <Route path="/blog/between" element={<Between />} />
+
       <Route path="/" element={<Layout />}>
         <Route index element={<Portfolio />} />
         <Route path="/my-world"  element={<MyWorld />} />
+        <Route path="/now"       element={<Now />} />
 
         {/* Blog routes */}
         <Route path="/blog"          element={<BlogLanding />} />

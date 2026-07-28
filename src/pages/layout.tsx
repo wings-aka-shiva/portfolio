@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
 
 const NAV_ITEMS = [
   { label: "Experience", sectionId: "experience" },
@@ -8,9 +8,14 @@ const NAV_ITEMS = [
   { label: "Coding",     sectionId: "coding"     },
   { label: "Repos",      sectionId: "repos"      },
   { label: "Blog",       sectionId: "blog"       },
+  { label: "Now",        path: "/now"            },
   { label: "About",      sectionId: "about"      },
   { label: "Contact",    sectionId: "contact"    },
 ] as const;
+
+function PulseDot() {
+  return <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] pulse-dot shrink-0" />;
+}
 
 function Layout() {
   const [scrolled,     setScrolled]     = useState(false);
@@ -43,7 +48,12 @@ function Layout() {
 
   // Highlight whichever section is mid-screen
   useEffect(() => {
-    const ids = ["hero", ...NAV_ITEMS.map((n) => n.sectionId)];
+    const ids = [
+      "hero",
+      ...NAV_ITEMS.filter(
+        (n): n is typeof n & { sectionId: string } => "sectionId" in n
+      ).map((n) => n.sectionId),
+    ];
     const observers: IntersectionObserver[] = [];
     ids.forEach((id) => {
       const el = document.getElementById(id);
@@ -143,7 +153,21 @@ function Layout() {
 
           {/* Desktop nav - sm and above */}
           <ul className="hidden sm:flex items-center gap-5">
-            {NAV_ITEMS.map(({ label, sectionId }) => {
+            {NAV_ITEMS.map((item) => {
+              if ("path" in item) {
+                return (
+                  <li key={item.label}>
+                    <Link
+                      to={item.path}
+                      className="font-body text-sm text-muted hover:text-text transition-colors duration-200 inline-flex items-center gap-2"
+                    >
+                      <PulseDot />
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              }
+              const { label, sectionId } = item;
               const isActive = resolvedActiveId === sectionId;
               return (
                 <li key={sectionId}>
@@ -208,7 +232,22 @@ function Layout() {
           aria-hidden={!menuOpen}
         >
           <ul className="border-t border-border px-6 py-2">
-            {NAV_ITEMS.map(({ label, sectionId }) => {
+            {NAV_ITEMS.map((item) => {
+              if ("path" in item) {
+                return (
+                  <li key={item.label} className="border-b border-border/40 last:border-0">
+                    <Link
+                      to={item.path}
+                      className="w-full text-left font-body text-sm py-4 flex items-center gap-2.5 transition-colors duration-150 text-muted hover:text-text"
+                      tabIndex={menuOpen ? 0 : -1}
+                    >
+                      <PulseDot />
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              }
+              const { label, sectionId } = item;
               const isActive = resolvedActiveId === sectionId;
               return (
                 <li key={sectionId} className="border-b border-border/40 last:border-0">
