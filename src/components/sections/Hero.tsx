@@ -1,95 +1,88 @@
 import { EmailLink } from "../ui/EmailLink";
 import { ResumeRequestTrigger } from "../ui/ResumeRequest";
+import { btnGhost, btnPrimary, container } from "../ui/styles";
 
-const PROOF = [
-  "Founding developer, KEKA Marketplace",
-  "Above & Beyond Award",
-  "Hackathon Team Lead",
-];
+// ─── Terminal card ────────────────────────────────────────────────────────────
 
-const ghostLink =
-  "inline-flex items-center gap-2 rounded-lg px-5 py-3 font-body font-medium text-sm text-text border border-border hover:border-accent/60 transition-colors duration-200";
+const Key = ({ children }: { children: string }) => <span className="text-accent-text">"{children}"</span>;
+const Str = ({ children }: { children: string }) => <span className="text-code-string">"{children}"</span>;
+const Prompt = () => <span className="text-cyan-text">$</span>;
+
+function TerminalCard() {
+  return (
+    <figure
+      aria-label="Profile summary as JSON"
+      className="bg-surface border border-border rounded-[14px] overflow-hidden"
+    >
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+        {/* macOS window controls: close, minimise, zoom */}
+        {["#ff5f57", "#febc2e", "#28c840"].map((color) => (
+          <span key={color} className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }} aria-hidden />
+        ))}
+        <span className="ml-2 font-mono text-xs text-muted">shiva.json</span>
+      </div>
+      <pre className="px-5 py-4 font-mono text-[13px] lg:text-sm leading-[1.85] text-muted overflow-x-auto">
+        <Prompt /> <span className="text-text">cat shiva.json</span>{"\n"}
+        {"{\n"}
+        {"  "}<Key>role</Key>: <Str>Software Engineer</Str>,{"\n"}
+        {"  "}<Key>based_in</Key>: <Str>Melbourne, AU</Str>,{"\n"}
+        {"  "}<Key>industry</Key>: <Str>2 years</Str>,{"\n"}
+        {"  "}<Key>stack</Key>: [<Str>TypeScript</Str>, <Str>React</Str>,{"\n"}
+        {"            "}<Str>Angular</Str>, <Str>Next.js</Str>,{"\n"}
+        {"            "}<Str>Node.js</Str>, <Str>Python</Str>, <Str>AWS</Str>],{"\n"}
+        {"  "}<Key>building_with</Key>: <Str>RAG, LLM APIs, MCP</Str>,{"\n"}
+        {"  "}<Key>graduating</Key>: <Str>RMIT, Dec 2026</Str>{"\n"}
+        {"}\n"}
+        <Prompt /> <span className="caret-blink text-text" aria-hidden>_</span>
+      </pre>
+    </figure>
+  );
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 
 function Hero() {
-  const scrollToWork = () => {
-    document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <section
-      id="hero"
-      aria-labelledby="hero-name"
-      className="relative min-h-screen flex items-center overflow-hidden"
-    >
-      {/* Ambient gradient orbs */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-accent/8 blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-cyan/6 blur-3xl" />
-      </div>
+    <section id="hero" aria-labelledby="hero-name">
+      <div className={`${container} pt-24 pb-12 md:pt-32 md:pb-20 flex flex-wrap items-center gap-x-14 gap-y-12`}>
+        {/* Text */}
+        <div className="flex-[999_1_520px] min-w-0">
+          <p className="font-mono text-[13px] text-cyan-text">// hello, world</p>
 
-      {/* Monogram - faint depth layer on the right half */}
-      <span
-        className="absolute top-1/2 -right-16 -translate-y-1/2 hidden md:block font-display font-black text-[20rem] leading-none tracking-tighter text-white/3 select-none pointer-events-none"
-        aria-hidden
-      >
-        SKT
-      </span>
-
-      {/* Content */}
-      <div className="relative max-w-5xl mx-auto px-4 pt-28 pb-24 w-full">
-        <div className="max-w-2xl text-center md:text-left mx-auto md:mx-0">
-          {/* Eyebrow */}
-          <p className="font-body text-xs text-muted tracking-widest uppercase mb-6">
-            Software Engineer <span className="text-faint mx-1" aria-hidden>·</span> Melbourne
-          </p>
-
-          {/* Name */}
           <h1
             id="hero-name"
-            className="font-display font-black leading-none tracking-tight text-text"
-            style={{ fontSize: "clamp(2.8rem, 6vw, 4.5rem)" }}
+            className="mt-4 font-display font-extrabold text-[42px] md:text-[72px] leading-[1.02] tracking-[-0.02em] text-text"
           >
-            Shiva Kumar <span className="text-accent">Tirupathi</span>
+            Shiva Kumar
+            <br />
+            <span className="text-accent-text">Tirupathi</span>
           </h1>
 
-          {/* Summary */}
-          <p className="font-body text-lg text-muted max-w-xl mt-5 mx-auto md:mx-0 leading-relaxed">
-            Software engineer with 2 years in industry, building AI features
-            with React, Python and AWS. Graduating from RMIT in Dec 2026.
+          <p className="mt-5 max-w-[560px] font-body text-base md:text-[19px] leading-relaxed text-body">
+            From solving sudokus to solving real problems, I levelled up one problem at a time. Angular or Node,
+            fine-tuning a model or stopping a prompt injection, I learnt every skill chasing a problem.
+          </p>
+          <p className="mt-3 max-w-[560px] font-body font-medium text-base md:text-[19px] leading-relaxed text-text">
+            Hi, I'm a software engineer. Nice to meet you ;)
           </p>
 
-          {/* Proof line */}
-          <p className="font-body text-sm text-faint mt-4">
-            {PROOF.map((item, i) => (
-              <span key={item}>
-                {/* Real spaces around the dot give the line somewhere to wrap */}
-                {i > 0 && <> <span className="mx-1" aria-hidden>·</span> </>}
-                <span className="whitespace-nowrap">{item}</span>
-              </span>
-            ))}
-          </p>
-
-          {/* CTAs */}
-          <div className="mt-8 flex flex-wrap items-center justify-center md:justify-start gap-3">
-            <ResumeRequestTrigger className="inline-flex items-center gap-2 rounded-lg px-6 py-3 font-body font-medium text-sm text-white bg-accent hover:bg-accent/90 transition-colors duration-200 cursor-pointer" />
-            <EmailLink className={ghostLink}>Email</EmailLink>
-            <a href="https://github.com/wings-aka-shiva" target="_blank" rel="noopener noreferrer" className={ghostLink}>
-              GitHub
-            </a>
-            <a href="https://www.linkedin.com/in/shiva4836/" target="_blank" rel="noopener noreferrer" className={ghostLink}>
-              LinkedIn
-            </a>
+          <div className="mt-7 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+            <ResumeRequestTrigger className={`${btnPrimary} w-full sm:w-auto`} />
+            <div className="grid grid-cols-3 sm:flex gap-3">
+              <EmailLink className={btnGhost}>Email</EmailLink>
+              <a href="https://github.com/wings-aka-shiva" target="_blank" rel="noopener noreferrer" className={btnGhost}>
+                GitHub
+              </a>
+              <a href="https://www.linkedin.com/in/shiva4836/" target="_blank" rel="noopener noreferrer" className={btnGhost}>
+                LinkedIn
+              </a>
+            </div>
           </div>
+        </div>
 
-          <button
-            onClick={scrollToWork}
-            className="group mt-6 inline-flex items-center gap-2 py-2 font-body text-sm text-muted hover:text-text transition-colors duration-200 cursor-pointer"
-          >
-            <span className="inline-block transition-transform duration-300 group-hover:translate-y-1" aria-hidden>
-              ↓
-            </span>
-            See my work
-          </button>
+        {/* Terminal: hidden on phones so the hero stays one screen tall */}
+        <div className="hidden sm:block flex-[1_1_400px] min-w-0">
+          <TerminalCard />
         </div>
       </div>
     </section>

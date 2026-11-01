@@ -1,0 +1,22 @@
+# Shiva Kumar Tirupathi
+
+> Software engineer in Melbourne, Australia. Builds AI features that ship, from React frontends to RAG pipelines on AWS. 2 years in industry. Master of IT at RMIT University, graduating Dec 2026.
+
+## Experience
+
+- Software Engineer, Food Systems Collective (FSANZ Regulatory Assistant, RMIT industry project), Jul 2026 - Nov 2026. Retrieval pipeline over 3,163 citation-ready chunks of the Food Standards Code: multi-query expansion, Reciprocal Rank Fusion, Pinecone, AWS Bedrock. Cognito sign-in in React 18.
+- Team Lead, Team ULTRON, RMIT Hackathon 2026, 22-23 Oct 2026. TideCloak approval prototype; team-best 0.96660 Kaggle score with fine-tuned XLM-RoBERTa and mmBERT.
+- IT Developer Intern, International Film Festival of Australia, Mar 2025 - Jun 2025. Led 4 frontend developers building React sites for 3 IFFA Awards clients.
+- Associate Software Engineer, KEKA Technologies, May 2023 - Dec 2024. Founding engineer and only frontend engineer on the KEKA Marketplace (Angular). Above & Beyond Award.
+- Team Member, Woolworths, Oct 2026 - now. Stocktake, Coles, Jul 2025 - Sep 2026.
+- Board Committee, CodeChef Chapter SNIST, Jul 2021 - May 2023.
+
+## Links
+
+- Portfolio: https://wings-aka-shiva.github.io/portfolio/
+- Case study: https://wings-aka-shiva.github.io/portfolio/work/fsanz-regulatory-assistant
+- Experience: https://wings-aka-shiva.github.io/portfolio/experience
+- Projects: https://wings-aka-shiva.github.io/portfolio/projects
+- GitHub: https://github.com/wings-aka-shiva
+- LinkedIn: https://www.linkedin.com/in/shiva4836
+- Resume: available on request via the portfolio

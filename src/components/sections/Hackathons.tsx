@@ -4,7 +4,7 @@ import { TechChipList } from "../ui/TechChip";
 import { DateText } from "../ui/DateText";
 import { hackathons, type Hackathon } from "../../data/hackathons";
 
-function FeaturedCard({ hackathon }: { hackathon: Hackathon }) {
+export function FeaturedCard({ hackathon }: { hackathon: Hackathon }) {
   const { ref, inView } = useInView(0.1);
 
   return (
@@ -15,9 +15,6 @@ function FeaturedCard({ hackathon }: { hackathon: Hackathon }) {
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
       ].join(" ")}
     >
-      {/* Soft cyan glow behind the card */}
-      <div className="absolute inset-6 rounded-full bg-cyan/5 blur-3xl pointer-events-none" aria-hidden />
-
       <article className="relative bg-surface border border-border rounded-2xl p-6 md:p-8">
         {/* Header + stat */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
@@ -36,7 +33,7 @@ function FeaturedCard({ hackathon }: { hackathon: Hackathon }) {
 
           {hackathon.stat && (
             <div className="shrink-0 md:text-right">
-              <p className="font-mono text-4xl md:text-5xl font-bold text-cyan leading-none">
+              <p className="font-mono text-4xl md:text-5xl font-bold text-cyan-text leading-none">
                 {hackathon.stat.value}
               </p>
               <p className="font-body text-xs text-muted mt-2 md:max-w-[12rem] md:ml-auto">
@@ -53,7 +50,7 @@ function FeaturedCard({ hackathon }: { hackathon: Hackathon }) {
               key={build.title}
               className={i > 0 ? "md:border-l md:border-border md:pl-8" : "md:pr-8"}
             >
-              <p className="font-display text-xs uppercase tracking-[0.2em] text-accent mb-2">
+              <p className="font-mono text-xs uppercase tracking-[0.08em] text-accent-text mb-2">
                 {build.challenge}
               </p>
               <h4 className="font-display text-base font-semibold text-text leading-snug">
@@ -73,7 +70,7 @@ function FeaturedCard({ hackathon }: { hackathon: Hackathon }) {
   );
 }
 
-function CompactRow({ hackathon }: { hackathon: Hackathon }) {
+export function CompactRow({ hackathon }: { hackathon: Hackathon }) {
   const { ref, inView } = useInView(0.1);
 
   return (
@@ -95,7 +92,7 @@ function CompactRow({ hackathon }: { hackathon: Hackathon }) {
           </p>
         </div>
         <div className="shrink-0 flex items-baseline gap-4 font-body text-xs text-muted">
-          {hackathon.stat && <span className="font-mono text-sm text-cyan">{hackathon.stat.value}</span>}
+          {hackathon.stat && <span className="font-mono text-sm text-cyan-text">{hackathon.stat.value}</span>}
           <span><DateText value={hackathon.date} /></span>
         </div>
       </div>

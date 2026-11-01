@@ -2,7 +2,7 @@ import { useInView } from "../../hooks/useInView";
 import { Section } from "../ui/Section";
 import { TechChipList } from "../ui/TechChip";
 import { EmailLink } from "../ui/EmailLink";
-import { projects, type Project } from "../../data/projects";
+import { projectsPublicFirst, type Project } from "../../data/projects";
 
 function LockIcon() {
   return (
@@ -22,7 +22,7 @@ function RepoFooter({ project }: { project: Project }) {
         href={repo.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="font-body text-sm text-accent hover:text-text transition-colors duration-200"
+        className="font-body text-sm text-accent-text hover:text-text transition-colors duration-200"
         aria-label={`${project.title} source code`}
       >
         Code ↗
@@ -43,7 +43,7 @@ function RepoFooter({ project }: { project: Project }) {
       </span>
       <EmailLink
         query={`subject=${subject}`}
-        className="font-body text-xs text-accent hover:text-text transition-colors duration-200"
+        className="font-body text-xs text-accent-text hover:text-text transition-colors duration-200"
       >
         Ask me for a walkthrough →
       </EmailLink>
@@ -51,21 +51,22 @@ function RepoFooter({ project }: { project: Project }) {
   );
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+export function ProjectCard({ project, index }: { project: Project; index: number }) {
   const { ref, inView } = useInView(0.1);
 
   return (
     <div
       ref={ref}
+      id={project.id}
       className={[
-        "transition-all duration-500 ease-out",
+        "scroll-mt-24 transition-all duration-500 ease-out",
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
       ].join(" ")}
       style={{ transitionDelay: `${index * 75}ms` }}
     >
       <article className="h-full bg-surface border border-border rounded-xl p-6 flex flex-col transition duration-300 hover:border-accent/40 hover:-translate-y-0.5">
         <div className="flex items-baseline justify-between gap-4">
-          <p className="font-display text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="font-mono text-xs uppercase tracking-[0.08em] text-accent-text">
             {project.category}
           </p>
           <time dateTime={project.year} className="font-mono text-xs text-muted">
@@ -83,7 +84,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <ul className="mt-4 space-y-2.5">
           {project.highlights.map((point, i) => (
             <li key={i} className="flex gap-3 font-body text-sm text-text/80 leading-relaxed">
-              <span className="mt-[0.55em] shrink-0 w-1.5 h-1.5 bg-accent" aria-hidden />
+              <span className="mt-[0.55em] shrink-0 w-1.5 h-1.5 bg-accent-dot" aria-hidden />
               {point}
             </li>
           ))}
@@ -103,7 +104,7 @@ function Projects() {
   return (
     <Section id="projects" label="Things I've built" title="Projects">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {projects.map((project, index) => (
+        {projectsPublicFirst.map((project, index) => (
           <ProjectCard key={project.id} project={project} index={index} />
         ))}
       </div>

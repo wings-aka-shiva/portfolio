@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://wings-aka-shiva.github.io/portfolio/</loc></url>
+  <url><loc>https://wings-aka-shiva.github.io/portfolio/experience</loc></url>
+  <url><loc>https://wings-aka-shiva.github.io/portfolio/projects</loc></url>
+  <url><loc>https://wings-aka-shiva.github.io/portfolio/about</loc></url>
+  <url><loc>https://wings-aka-shiva.github.io/portfolio/hackathons</loc></url>
+  <url><loc>https://wings-aka-shiva.github.io/portfolio/work/fsanz-regulatory-assistant</loc></url>
   <url><loc>https://wings-aka-shiva.github.io/portfolio/my-world</loc></url>
   <url><loc>https://wings-aka-shiva.github.io/portfolio/blog</loc></url>
   <url><loc>https://wings-aka-shiva.github.io/portfolio/blog/neetcode</loc></url>

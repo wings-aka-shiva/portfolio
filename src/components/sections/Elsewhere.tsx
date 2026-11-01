@@ -24,7 +24,7 @@ const pills: Pill[] = [
     id: p.id,
     name: p.platform,
     handle: p.profileUrl ? p.username : "Coming soon",
-    icon: p.icon,
+    icon: p.icon ?? "",
     url: p.profileUrl,
   })),
 ];

@@ -29,15 +29,21 @@ export function DateText({ value }: { value: string }) {
     );
   }
 
+  // A range end without a year ("Jul - Nov 2026") borrows the year of the other end
   const ends = value.split(" - ");
+  const rangeYear = ends.map((e) => e.match(/\d{4}/)?.[0]).find(Boolean);
   return (
     <>
-      {ends.map((end, i) => (
-        <span key={i}>
-          {i > 0 && " - "}
-          <time dateTime={toDateTime(end)}>{end}</time>
-        </span>
-      ))}
+      {ends.map((end, i) => {
+        const isBareMonth = !/\d{4}/.test(end) && MONTHS.includes(end.slice(0, 3).toLowerCase());
+        const dateTime = toDateTime(isBareMonth && rangeYear ? `${end} ${rangeYear}` : end);
+        return (
+          <span key={i}>
+            {i > 0 && " - "}
+            {dateTime ? <time dateTime={dateTime}>{end}</time> : end}
+          </span>
+        );
+      })}
     </>
   );
 }

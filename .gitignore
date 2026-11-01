@@ -17,6 +17,7 @@ dist-ssr
 .env.*
 # Allow the example file so others know what vars are needed
 !.env.example
+emailjs.txt
 
 # Editor directories and files
 .vscode/*

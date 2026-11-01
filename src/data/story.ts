@@ -23,7 +23,7 @@ export const story: StoryParagraph[] = [
   },
   {
     chapter: "KEKA",
-    text: "Then KEKA, my first job. I was one of the founding developers of the KEKA Marketplace, a product built to launch across countries. My primary role was frontend, but I got the privilege to sit and discuss in the big meetings with product, design, team leads and managers, and learned how a real product gets built. Quick fixes and permanent ones. A strict reviewer who wouldn't let anything slide. Late deployment nights, table tennis breaks, and security staff I became friends with while waiting for pipelines to pass. The Marketplace earned me the Above & Beyond Award, but what I kept was knowing how much a team can do when everyone owns what they're building.",
+    text: "Then KEKA, my first job. I was one of the founding engineers of the KEKA Marketplace, a product built to launch across countries. My primary role was frontend, but I got the privilege to sit and discuss in the big meetings with product, design, team leads and managers, and learned how a real product gets built. Quick fixes and permanent ones. A strict reviewer who wouldn't let anything slide. Late deployment nights, table tennis breaks, and security staff I became friends with while waiting for pipelines to pass. The Marketplace earned me the Above & Beyond Award, but what I kept was knowing how much a team can do when everyone owns what they're building.",
   },
   {
     chapter: "The move",
@@ -52,3 +52,9 @@ export const story: StoryParagraph[] = [
     text: "Every big step has meant becoming the version of me who could pull it off. I'm still that kid drawing a login page out of dashes. I just have better tools now.",
   },
 ];
+
+const WORDS_PER_MINUTE = 230;
+
+export const readMinutes = Math.ceil(
+  story.reduce((n, p) => n + p.text.trim().split(/\s+/).length, 0) / WORDS_PER_MINUTE
+);

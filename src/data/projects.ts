@@ -42,7 +42,7 @@ export const projects: Project[] = [
       "Added retries and error handling so LLM output is safe to store and search.",
     ],
     stack: ["Node.js", "TypeScript", "Claude API", "Cheerio", "Commander.js"],
-    repo: { visibility: "private", owner: "Personal" },
+    repo: { visibility: "public", url: "https://github.com/wings-aka-shiva/smart-bookmark" },
   },
   {
     id: "mcba-banking",
@@ -101,3 +101,8 @@ export const projects: Project[] = [
     repo: { visibility: "private", owner: "RMIT org repo" },
   },
 ];
+
+/** Public repos first, then data order (Array.prototype.sort is stable). */
+export const projectsPublicFirst: Project[] = [...projects].sort(
+  (a, b) => Number(a.repo.visibility !== "public") - Number(b.repo.visibility !== "public")
+);

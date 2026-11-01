@@ -74,7 +74,7 @@ export const workExperience: WorkEntry[] = [
     websiteUrl: "https://www.keka.com/",
     tech: ["Angular", "TypeScript", "Azure DevOps", "MySQL"],
     bullets: [
-      "Built the KEKA Marketplace single-handedly as the only FE dev, architecting the standalone Angular app from scratch: ~10-15 listed apps, ~7 live integrations",
+      "Built the KEKA Marketplace single-handedly as the only FE engineer, architecting the standalone Angular app from scratch: ~10-15 listed apps, ~7 live integrations",
       "Part of the 30+ dev frontend team that cut build time from 30+ minutes to under 1 minute (NgModule → Angular Standalone migration)",
       "Reduced post-deployment bugs 30% through code review standards and proactive testing",
     ],

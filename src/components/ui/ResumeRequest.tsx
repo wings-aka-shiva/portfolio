@@ -27,7 +27,7 @@ const inputClass = [
   "bg-surface-2 border border-border rounded-lg px-4 py-3 w-full",
   "font-body text-sm text-text placeholder:text-muted",
   "focus:outline-none transition-colors duration-200",
-  "focus:border-accent/60",
+  "focus:border-accent",
   "disabled:opacity-50 disabled:cursor-not-allowed",
 ].join(" ");
 
@@ -82,7 +82,7 @@ function Field({ id, label, required, error, children }: FieldProps) {
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="font-body text-xs text-muted tracking-wide">
         {label}
-        {required ? <span className="text-accent ml-1">*</span> : <span className="text-faint ml-1">(optional)</span>}
+        {required ? <span className="text-accent-text ml-1">*</span> : <span className="text-muted ml-1">(optional)</span>}
       </label>
       {children({ id, "aria-invalid": !!error, "aria-describedby": error ? errorId : undefined })}
       {error && (
@@ -257,7 +257,7 @@ function ResumeRequestModal({ onClose }: { onClose: () => void }) {
 
               <p className="font-body text-xs text-muted text-center">
                 Prefer email?{" "}
-                <EmailLink query={PREFER_EMAIL_QUERY} className="text-accent hover:text-text transition-colors">
+                <EmailLink query={PREFER_EMAIL_QUERY} className="text-accent-text hover:text-text transition-colors">
                   {EMAIL}
                 </EmailLink>
               </p>

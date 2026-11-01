@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "../../hooks/useInView";
-import { story, STORY_PREVIEW_COUNT, type StoryParagraph } from "../../data/story";
-
-const WORDS_PER_MINUTE = 230;
-
-const readMinutes = Math.ceil(
-  story.reduce((n, p) => n + p.text.trim().split(/\s+/).length, 0) / WORDS_PER_MINUTE
-);
+import { readMinutes, story, STORY_PREVIEW_COUNT, type StoryParagraph } from "../../data/story";
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
@@ -21,9 +15,17 @@ const PHOTO_URL = `${import.meta.env.BASE_URL}shiva.jpg`;
  * "Save image", with right-click, drag and iOS long-press blocked on the photo
  * only. This deters casual saving; the file is still reachable via dev tools.
  */
-function Photo() {
+interface PhotoProps {
+  className?: string;
+  /** Width and height classes */
+  sizeClass?: string;
+  /** v3 look: 2px accent border, no glow or offset ring */
+  plain?: boolean;
+}
+
+export function Photo({ className = "", sizeClass = "w-32 h-32 md:w-40 md:h-40", plain = false }: PhotoProps) {
   const [failed, setFailed] = useState(false);
-  const size = "w-32 h-32 md:w-40 md:h-40 rounded-full";
+  const size = `${sizeClass} rounded-full`;
 
   // Background images don't fire onError, so probe the URL with a hidden Image.
   useEffect(() => {
@@ -38,8 +40,8 @@ function Photo() {
   }, []);
 
   return (
-    <div className="relative shrink-0">
-      <div className="absolute inset-0 rounded-full bg-accent/20 blur-2xl pointer-events-none" aria-hidden />
+    <div className={`relative shrink-0 ${className}`}>
+      {!plain && <div className="absolute inset-0 rounded-full bg-accent/20 blur-2xl pointer-events-none" aria-hidden />}
       {failed ? (
         <div
           className={`relative ${size} bg-surface-2 border border-border flex items-center justify-center`}
@@ -53,7 +55,10 @@ function Photo() {
           aria-label="Shiva Kumar Tirupathi"
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}
-          className={`relative ${size} bg-surface-2 ring-2 ring-accent/40 ring-offset-4 ring-offset-bg select-none`}
+          className={[
+            `relative ${size} bg-surface-2 select-none`,
+            plain ? "border-2 border-accent" : "ring-2 ring-accent/40 ring-offset-4 ring-offset-bg",
+          ].join(" ")}
           style={{
             backgroundImage: `url(${PHOTO_URL})`,
             backgroundSize: "cover",
@@ -76,7 +81,7 @@ interface ParagraphProps {
   isLast: boolean;
 }
 
-function Paragraph({ paragraph, isFirst, isLast }: ParagraphProps) {
+export function Paragraph({ paragraph, isFirst, isLast }: ParagraphProps) {
   const { ref, inView } = useInView(0.2);
 
   return (
@@ -90,7 +95,7 @@ function Paragraph({ paragraph, isFirst, isLast }: ParagraphProps) {
     >
       {/* Chapter label: left margin on lg+, small eyebrow above the paragraph below that */}
       {paragraph.chapter && (
-        <p className="font-display text-xs uppercase tracking-[0.2em] text-muted mb-2 lg:mb-0 lg:text-faint lg:absolute lg:-left-32 lg:w-24 lg:text-right lg:top-1.5">
+        <p className="font-mono text-xs uppercase tracking-[0.08em] text-muted mb-2 lg:mb-0 lg:absolute lg:-left-32 lg:w-24 lg:text-right lg:top-1.5">
           {paragraph.chapter}
         </p>
       )}
@@ -103,7 +108,7 @@ function Paragraph({ paragraph, isFirst, isLast }: ParagraphProps) {
         <p className="font-body text-sm md:text-base leading-7 text-text/85">
           {isFirst ? (
             <>
-              <span className="font-display text-4xl font-black text-accent float-left mr-2 leading-none mt-1">
+              <span className="font-display text-4xl font-black text-accent-text float-left mr-2 leading-none mt-1">
                 {paragraph.text.charAt(0)}
               </span>
               {paragraph.text.slice(1)}
