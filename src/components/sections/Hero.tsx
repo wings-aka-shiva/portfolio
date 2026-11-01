@@ -1,5 +1,14 @@
-import profilePng from "../../assets/profile.png";
-import { Button } from "../ui/Button";
+import { EmailLink } from "../ui/EmailLink";
+import { ResumeRequestTrigger } from "../ui/ResumeRequest";
+
+const PROOF = [
+  "Founding developer, KEKA Marketplace",
+  "Above & Beyond Award",
+  "Hackathon Team Lead",
+];
+
+const ghostLink =
+  "inline-flex items-center gap-2 rounded-lg px-5 py-3 font-body font-medium text-sm text-text border border-border hover:border-accent/60 transition-colors duration-200";
 
 function Hero() {
   const scrollToWork = () => {
@@ -7,131 +16,81 @@ function Hero() {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
-
+    <section
+      id="hero"
+      aria-labelledby="hero-name"
+      className="relative min-h-screen flex items-center overflow-hidden"
+    >
       {/* Ambient gradient orbs */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-1/4 -left-20 w-[560px] h-[560px] rounded-full bg-accent/8 blur-[140px]" />
-        <div className="absolute bottom-1/3 right-0 w-[400px] h-[400px] rounded-full bg-cyan/5 blur-[120px]" />
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-accent/8 blur-3xl" />
+        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-cyan/6 blur-3xl" />
       </div>
 
-      {/* Dot grid */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.025]"
+      {/* Monogram - faint depth layer on the right half */}
+      <span
+        className="absolute top-1/2 -right-16 -translate-y-1/2 hidden md:block font-display font-black text-[20rem] leading-none tracking-tighter text-white/3 select-none pointer-events-none"
         aria-hidden
-        style={{
-          backgroundImage: "radial-gradient(circle, #f1f1f3 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
+      >
+        SKT
+      </span>
 
       {/* Content */}
-      <div className="relative max-w-5xl mx-auto px-6 pt-28 pb-24 w-full">
-        <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16">
+      <div className="relative max-w-5xl mx-auto px-4 pt-28 pb-24 w-full">
+        <div className="max-w-2xl text-center md:text-left mx-auto md:mx-0">
+          {/* Eyebrow */}
+          <p className="font-body text-xs text-muted tracking-widest uppercase mb-6">
+            Software Engineer <span className="text-faint mx-1" aria-hidden>·</span> Melbourne
+          </p>
 
-          {/* ── Image - top on mobile, right on desktop ─────────── */}
-          <div className="md:order-2 md:w-[42%] shrink-0">
-            {/*
-              Tilt wrapper: rotate-2 on desktop, flat on mobile.
-              Hover un-tilts and lifts slightly for an interactive feel.
-            */}
-            <div className="transition-transform duration-500 ease-out md:rotate-2 md:hover:rotate-0 md:hover:scale-[1.02]">
-              {/*
-                Gradient border: 2px gradient ring around the image.
-                Box-shadow creates the ambient glow + deep drop shadow.
-              */}
-              <div
-                className="p-[2px] rounded-2xl"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(79,70,229,0.75) 0%, rgba(6,182,212,0.45) 100%)",
-                  boxShadow:
-                    "0 0 40px rgba(79,70,229,0.2), 0 0 80px rgba(6,182,212,0.08), 0 24px 60px rgba(0,0,0,0.55)",
-                }}
-              >
-                <img
-                  src={profilePng}
-                  alt="Shiva Kumar Tirupathi"
-                  className={[
-                    "rounded-2xl w-full object-cover",
-                    // Mobile: full-width strip, no tilt
-                    "h-[280px]",
-                    // Desktop: tall portrait card
-                    "md:h-[460px]",
-                  ].join(" ")}
-                  // Focus center-left of the cinematic image where the person sits
-                  style={{ objectPosition: "35% center" }}
-                />
-              </div>
-            </div>
+          {/* Name */}
+          <h1
+            id="hero-name"
+            className="font-display font-black leading-none tracking-tight text-text"
+            style={{ fontSize: "clamp(2.8rem, 6vw, 4.5rem)" }}
+          >
+            Shiva Kumar <span className="text-accent">Tirupathi</span>
+          </h1>
+
+          {/* Summary */}
+          <p className="font-body text-lg text-muted max-w-xl mt-5 mx-auto md:mx-0 leading-relaxed">
+            Software engineer with 2 years in industry, building AI features
+            with React, Python and AWS. Graduating from RMIT in Dec 2026.
+          </p>
+
+          {/* Proof line */}
+          <p className="font-body text-sm text-faint mt-4">
+            {PROOF.map((item, i) => (
+              <span key={item}>
+                {/* Real spaces around the dot give the line somewhere to wrap */}
+                {i > 0 && <> <span className="mx-1" aria-hidden>·</span> </>}
+                <span className="whitespace-nowrap">{item}</span>
+              </span>
+            ))}
+          </p>
+
+          {/* CTAs */}
+          <div className="mt-8 flex flex-wrap items-center justify-center md:justify-start gap-3">
+            <ResumeRequestTrigger className="inline-flex items-center gap-2 rounded-lg px-6 py-3 font-body font-medium text-sm text-white bg-accent hover:bg-accent/90 transition-colors duration-200 cursor-pointer" />
+            <EmailLink className={ghostLink}>Email</EmailLink>
+            <a href="https://github.com/wings-aka-shiva" target="_blank" rel="noopener noreferrer" className={ghostLink}>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/shiva4836/" target="_blank" rel="noopener noreferrer" className={ghostLink}>
+              LinkedIn
+            </a>
           </div>
 
-          {/* ── Text - bottom on mobile, left on desktop ─────────── */}
-          <div className="md:order-1 md:flex-1">
-            {/* Eyebrow */}
-            <p className="font-body text-xs text-muted tracking-[0.3em] uppercase mb-6">
-              Hello, I'm
-            </p>
-
-            {/* Name */}
-            <h1 id="hero-name" className="font-display font-bold leading-[1.05] tracking-tight mb-5">
-              <span className="block text-5xl sm:text-6xl text-text">
-                Shiva Kumar
-              </span>
-              <span className="block text-5xl sm:text-6xl text-accent">
-                Tirupathi
-              </span>
-            </h1>
-
-            {/* Title + location */}
-            <p className="font-body text-base text-muted mb-3">
-              Software Engineer{" "}
-              <span className="text-border mx-1">·</span>{" "}
-              Melbourne, AU
-            </p>
-
-            {/* Bio */}
-            <p className="font-body text-sm text-muted/80 leading-relaxed max-w-lg mb-10">
-              Building scalable web applications and solving hard problems with
-              clean code. Previously at{" "}
-              <span className="text-text/70">Keka Technologies</span>.
-              Currently open to new opportunities.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-wrap gap-3">
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() =>
-                  window.open("https://github.com/wings-aka-shiva", "_blank")
-                }
-              >
-                GitHub
-              </Button>
-              <Button
-                variant="ghost"
-                size="lg"
-                onClick={() =>
-                  window.open("https://www.linkedin.com/in/shiva4836/", "_blank")
-                }
-              >
-                LinkedIn
-              </Button>
-              <Button variant="outline" size="lg" onClick={scrollToWork}>
-                See my work ↓
-              </Button>
-            </div>
-          </div>
+          <button
+            onClick={scrollToWork}
+            className="group mt-6 inline-flex items-center gap-2 py-2 font-body text-sm text-muted hover:text-text transition-colors duration-200 cursor-pointer"
+          >
+            <span className="inline-block transition-transform duration-300 group-hover:translate-y-1" aria-hidden>
+              ↓
+            </span>
+            See my work
+          </button>
         </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-        <span className="font-body text-[10px] text-muted tracking-[0.25em] uppercase">
-          Scroll
-        </span>
-        <div className="w-px h-8 bg-gradient-to-b from-muted to-transparent" />
       </div>
     </section>
   );

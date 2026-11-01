@@ -83,7 +83,7 @@ function RepoCard({ repo, index, visible }: RepoCardProps) {
       className={[
         "group block bg-surface border border-border rounded-2xl p-5",
         "transition-all duration-700 ease-out",
-        "hover:border-accent/35 hover:shadow-glow",
+        "hover:border-accent/40 hover:shadow-glow",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5",
       ].join(" ")}
       style={{ transitionDelay: `${index * 80}ms` }}

@@ -3,10 +3,8 @@ import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
 const NAV_ITEMS = [
   { label: "Experience", sectionId: "experience" },
-  { label: "Education",  sectionId: "education"  },
+  { label: "Projects",   sectionId: "projects"   },
   { label: "Skills",     sectionId: "skills"     },
-  { label: "Coding",     sectionId: "coding"     },
-  { label: "Repos",      sectionId: "repos"      },
   { label: "Blog",       sectionId: "blog"       },
   { label: "About",      sectionId: "about"      },
   { label: "Contact",    sectionId: "contact"    },
@@ -136,7 +134,7 @@ function Layout() {
                   Shiva Kumar <span className="text-accent ml-[0.3em]">Tirupathi</span>
                 </span>
                 {/* invisible sizer - keeps button width stable */}
-                <span className="invisible whitespace-nowrap tracking-[0.05em]">Shiva Kumar Tirupathi</span>
+                <span className="invisible whitespace-nowrap tracking-[0.05em]" aria-hidden>Shiva Kumar Tirupathi</span>
               </button>
             );
           })()}

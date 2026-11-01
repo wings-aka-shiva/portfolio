@@ -1,7 +1,9 @@
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
+import { sendContactEmail } from "../../services/contact-email";
 import { Section } from "../ui/Section";
 import { Button } from "../ui/Button";
+import { EmailLink } from "../ui/EmailLink";
+import { ResumeRequestTrigger } from "../ui/ResumeRequest";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -46,10 +48,10 @@ function InputField({
         disabled={disabled}
         required={required}
         className={[
-          "bg-surface border border-border rounded-xl px-4 py-3",
-          "font-body text-sm text-text placeholder:text-faint",
-          "outline-none transition-all duration-200",
-          "focus:border-accent focus:ring-2 focus:ring-accent/15",
+          "bg-surface-2 border border-border rounded-lg px-4 py-3",
+          "font-body text-sm text-text placeholder:text-muted",
+          "focus:outline-none transition-colors duration-200",
+          "focus:border-accent/60",
           "disabled:opacity-50 disabled:cursor-not-allowed",
         ].join(" ")}
       />
@@ -99,7 +101,11 @@ function ContactInfo() {
             <span className="font-body text-xs text-muted/60 w-16 shrink-0 pt-[1px]">
               {label}
             </span>
-            {href ? (
+            {href?.startsWith("mailto:") ? (
+              <EmailLink className="font-body text-sm text-text/80 hover:text-accent transition-colors duration-200 break-all">
+                {value}
+              </EmailLink>
+            ) : href ? (
               <a
                 href={href}
                 target={href.startsWith("http") ? "_blank" : undefined}
@@ -114,6 +120,10 @@ function ContactInfo() {
           </li>
         ))}
       </ul>
+
+      <ResumeRequestTrigger className="self-start font-body text-sm text-accent hover:text-text transition-colors duration-200 cursor-pointer underline-offset-4 hover:underline">
+        Request my resume →
+      </ResumeRequestTrigger>
     </div>
   );
 }
@@ -164,16 +174,11 @@ function Contact() {
     setErrorMsg("");
 
     try {
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        {
-          name:    fields.name,
-          email:   fields.email,
-          message: fields.message,
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      );
+      await sendContactEmail({
+        name:    fields.name,
+        email:   fields.email,
+        message: fields.message,
+      });
       setState("success");
     } catch {
       setErrorMsg("Something went wrong. Please try again or email me directly.");
@@ -230,10 +235,10 @@ function Contact() {
                   required
                   rows={5}
                   className={[
-                    "bg-surface border border-border rounded-xl px-4 py-3",
-                    "font-body text-sm text-text placeholder:text-faint",
-                    "outline-none transition-all duration-200 resize-none",
-                    "focus:border-accent focus:ring-2 focus:ring-accent/15",
+                    "bg-surface-2 border border-border rounded-lg px-4 py-3",
+                    "font-body text-sm text-text placeholder:text-muted",
+                    "focus:outline-none transition-colors duration-200 resize-none",
+                    "focus:border-accent/60",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
                   ].join(" ")}
                 />

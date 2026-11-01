@@ -1,11 +1,12 @@
 import Hero from "../components/sections/Hero";
 import WorkExperience from "../components/sections/WorkExperience";
-import Education from "../components/sections/Education";
+import Hackathons from "../components/sections/Hackathons";
+import Projects from "../components/sections/Projects";
 import Skills from "../components/sections/Skills";
-import CodingProfiles from "../components/sections/CodingProfiles";
-import GitHubRepos from "../components/sections/GitHubRepos";
+import Education from "../components/sections/Education";
+import Elsewhere from "../components/sections/Elsewhere";
 import Blog from "../components/sections/Blog";
-import BeyondTheCode from "../components/sections/BeyondTheCode";
+import AboutMe from "../components/sections/AboutMe";
 import Contact from "../components/sections/Contact";
 
 function Portfolio() {
@@ -13,12 +14,13 @@ function Portfolio() {
     <div>
       <Hero />
       <WorkExperience />
-      <Education />
+      <Hackathons />
+      <Projects />
       <Skills />
-      <CodingProfiles />
-      <GitHubRepos />
+      <Education />
+      <Elsewhere />
       <Blog />
-      <BeyondTheCode />
+      <AboutMe />
       <Contact />
     </div>
   );

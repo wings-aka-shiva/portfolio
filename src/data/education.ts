@@ -8,6 +8,8 @@ export interface Education {
   endYear: number | "Present";
   status: "completed" | "ongoing";
   clubs: string[];
+  /** One-line relevance note shown on the card */
+  note: string;
 }
 
 export const education: Education[] = [
@@ -21,6 +23,7 @@ export const education: Education[] = [
     endYear: 2026,
     status: "ongoing",
     clubs: ["CSIT", "Microsoft Enthusiasts Club", "Matrix"],
+    note: "Relevant: Cloud Computing, Algorithms, Data Mining, AI RAG project, Security",
   },
   {
     id: "sreenidhi",
@@ -32,5 +35,6 @@ export const education: Education[] = [
     endYear: 2023,
     status: "completed",
     clubs: ["CodeChef", "Sports (Football)"],
+    note: "CodeChef Chapter Board · Programming competitions",
   },
 ];
