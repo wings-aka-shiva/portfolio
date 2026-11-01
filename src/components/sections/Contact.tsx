@@ -1,7 +1,10 @@
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
-import { Section } from "../ui/Section";
-import { Button } from "../ui/Button";
+import { sendContactEmail } from "../../services/contact-email";
+import { SectionShell } from "../ui/Section";
+import { SectionLabel } from "../ui/SectionLabel";
+import { EMAIL, EmailLink } from "../ui/EmailLink";
+import { ResumeRequestTrigger } from "../ui/ResumeRequest";
+import { btnGhost, btnPrimary, monoLink } from "../ui/styles";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -36,7 +39,7 @@ function InputField({
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="font-body text-xs text-muted tracking-wide">
         {label}
-        {required && <span className="text-accent ml-1">*</span>}
+        {required && <span className="text-accent-text ml-1">*</span>}
       </label>
       <input
         id={id}
@@ -46,10 +49,10 @@ function InputField({
         disabled={disabled}
         required={required}
         className={[
-          "bg-surface border border-border rounded-xl px-4 py-3",
-          "font-body text-sm text-text placeholder:text-faint",
-          "outline-none transition-all duration-200",
-          "focus:border-accent focus:ring-2 focus:ring-accent/15",
+          "bg-surface-2 border border-border rounded-lg px-4 py-3",
+          "font-body text-sm text-text placeholder:text-muted",
+          "focus:outline-none transition-colors duration-200",
+          "focus:border-accent",
           "disabled:opacity-50 disabled:cursor-not-allowed",
         ].join(" ")}
       />
@@ -57,63 +60,44 @@ function InputField({
   );
 }
 
+// Coding platforms live in the "Where I practice" panel
+const PROFILE_LINKS = [
+  { label: "github", href: "https://github.com/wings-aka-shiva" },
+  { label: "linkedin", href: "https://www.linkedin.com/in/shiva4836/" },
+];
+
 function ContactInfo() {
-  const items = [
-    {
-      label: "Email",
-      value: "shivatirupathi10@gmail.com",
-      href:  "mailto:shivatirupathi10@gmail.com",
-    },
-    {
-      label: "LinkedIn",
-      value: "linkedin.com/in/shiva4836",
-      href:  "https://www.linkedin.com/in/shiva4836/",
-    },
-    {
-      label: "GitHub",
-      value: "github.com/wings-aka-shiva",
-      href:  "https://github.com/wings-aka-shiva",
-    },
-    {
-      label: "Location",
-      value: "Melbourne, AU",
-      href:  null,
-    },
-  ];
+  const focusForm = () => document.getElementById("contact-name")?.focus();
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h3 className="font-display font-semibold text-xl text-text mb-3 leading-snug">
-          Let's build something together.
-        </h3>
-        <p className="font-body text-sm text-muted leading-relaxed">
-          Whether it's a job opportunity, a project, or just a chat about
-          tech - my inbox is open.
-        </p>
+    <div className="flex flex-col gap-5 md:gap-6">
+      <SectionLabel n="08" name="contact" />
+      <h2 id="contact-title" className="font-display font-extrabold text-[30px] md:text-[48px] leading-[1.08] text-text">
+        Hiring, or want to talk shop?
+      </h2>
+
+      <EmailLink className="self-start font-mono text-base sm:text-lg text-cyan-text hover:text-text transition-colors duration-200 break-all">
+        {EMAIL}
+      </EmailLink>
+
+      <div className="flex flex-wrap gap-3">
+        <ResumeRequestTrigger className={btnPrimary} />
+        <button type="button" onClick={focusForm} className={btnGhost}>
+          Send a message
+        </button>
       </div>
 
-      <ul className="flex flex-col gap-3">
-        {items.map(({ label, value, href }) => (
-          <li key={label} className="flex gap-3 items-start">
-            <span className="font-body text-xs text-muted/60 w-16 shrink-0 pt-[1px]">
-              {label}
-            </span>
-            {href ? (
-              <a
-                href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                className="font-body text-sm text-text/80 hover:text-accent transition-colors duration-200 break-all"
-              >
-                {value}
+      <nav aria-label="Profiles">
+        <ul className="flex flex-wrap gap-x-5 gap-y-2">
+          {PROFILE_LINKS.map(({ label, href }) => (
+            <li key={label}>
+              <a href={href} target="_blank" rel="noopener noreferrer" className={monoLink}>
+                {label}
               </a>
-            ) : (
-              <span className="font-body text-sm text-text/80">{value}</span>
-            )}
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 }
@@ -164,16 +148,11 @@ function Contact() {
     setErrorMsg("");
 
     try {
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        {
-          name:    fields.name,
-          email:   fields.email,
-          message: fields.message,
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      );
+      await sendContactEmail({
+        name:    fields.name,
+        email:   fields.email,
+        message: fields.message,
+      });
       setState("success");
     } catch {
       setErrorMsg("Something went wrong. Please try again or email me directly.");
@@ -184,18 +163,18 @@ function Contact() {
   const isLoading = state === "loading";
 
   return (
-    <Section id="contact" label="Get In Touch" title="Contact Me">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
+    <SectionShell id="contact" labelledBy="contact-title" last>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
         {/* ── Left: tagline + contact info ──────────────────────── */}
         <ContactInfo />
 
         {/* ── Right: form ───────────────────────────────────────── */}
-        <div className="bg-surface border border-border rounded-2xl p-6 md:p-8">
+        <div className="bg-surface border border-border rounded-2xl p-5 md:p-8">
           {state === "success" ? (
             <SuccessMessage />
           ) : (
-            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 md:gap-5">
               <InputField
                 label="Name"
                 id="contact-name"
@@ -220,7 +199,7 @@ function Contact() {
                   htmlFor="contact-message"
                   className="font-body text-xs text-muted tracking-wide"
                 >
-                  Message <span className="text-accent">*</span>
+                  Message <span className="text-accent-text">*</span>
                 </label>
                 <textarea
                   id="contact-message"
@@ -228,12 +207,12 @@ function Contact() {
                   onChange={(e) => set("message")(e.target.value)}
                   disabled={isLoading}
                   required
-                  rows={5}
+                  rows={4}
                   className={[
-                    "bg-surface border border-border rounded-xl px-4 py-3",
-                    "font-body text-sm text-text placeholder:text-faint",
-                    "outline-none transition-all duration-200 resize-none",
-                    "focus:border-accent focus:ring-2 focus:ring-accent/15",
+                    "bg-surface-2 border border-border rounded-lg px-4 py-3",
+                    "font-body text-sm text-text placeholder:text-muted",
+                    "focus:outline-none transition-colors duration-200 resize-none",
+                    "focus:border-accent",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
                   ].join(" ")}
                 />
@@ -247,10 +226,9 @@ function Contact() {
               )}
 
               {/* Submit */}
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-full justify-center"
+              <button
+                type="submit"
+                className={`${btnPrimary} w-full disabled:opacity-40 disabled:cursor-not-allowed`}
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -272,17 +250,17 @@ function Contact() {
                         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                       />
                     </svg>
-                    Sending…
+                    Sending...
                   </>
                 ) : (
-                  "Send Message"
+                  "Send message"
                 )}
-              </Button>
+              </button>
             </form>
           )}
         </div>
       </div>
-    </Section>
+    </SectionShell>
   );
 }
 

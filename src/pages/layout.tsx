@@ -1,62 +1,34 @@
-import { useState, useEffect, useRef } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Suspense, useState, useEffect, useRef } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { ResumeRequestTrigger } from "../components/ui/ResumeRequest";
+import { container } from "../components/ui/styles";
+import { useScrollRestoration } from "../hooks/useScrollRestoration";
 
 const NAV_ITEMS = [
-  { label: "Experience", sectionId: "experience" },
-  { label: "Education",  sectionId: "education"  },
-  { label: "Skills",     sectionId: "skills"     },
-  { label: "Coding",     sectionId: "coding"     },
-  { label: "Repos",      sectionId: "repos"      },
-  { label: "Blog",       sectionId: "blog"       },
-  { label: "About",      sectionId: "about"      },
-  { label: "Contact",    sectionId: "contact"    },
+  { label: "experience", to: "/experience", match: "/experience" },
+  { label: "projects",   to: "/projects",   match: "/projects"   },
+  { label: "blog",       to: "/blog",       match: "/blog"       },
+  { label: "about",      to: "/about",      match: "/about"      },
+  { label: "contact",    to: "/#contact",   match: null          },
 ] as const;
 
+const resumeButton =
+  "shrink-0 rounded-lg border border-accent px-3 py-1.5 font-mono text-[13px] text-text hover:bg-accent/20 transition-colors duration-200 cursor-pointer";
+
+function PageFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p className="font-mono text-sm text-muted">Loading...</p>
+    </div>
+  );
+}
+
 function Layout() {
-  const [scrolled,     setScrolled]     = useState(false);
-  const [activeId,     setActiveId]     = useState<string>("");
-  const [menuOpen,     setMenuOpen]     = useState(false);
-  const [heroVisible,  setHeroVisible]  = useState(true);
-  const headerRef   = useRef<HTMLElement>(null);
-  const navigate    = useNavigate();
-  const location    = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const location  = useLocation();
 
-  // Frost header on scroll; also always frost when menu is open
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Show full name in nav when hero name heading scrolls off screen
-  useEffect(() => {
-    setHeroVisible(true); // reset on each route change
-    const heroName = document.getElementById("hero-name");
-    if (!heroName) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setHeroVisible(entry.isIntersecting),
-      { threshold: 0 }
-    );
-    obs.observe(heroName);
-    return () => obs.disconnect();
-  }, [location.pathname]);
-
-  // Highlight whichever section is mid-screen
-  useEffect(() => {
-    const ids = ["hero", ...NAV_ITEMS.map((n) => n.sectionId)];
-    const observers: IntersectionObserver[] = [];
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActiveId(id); },
-        { rootMargin: "-40% 0px -55% 0px" }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach((o) => o.disconnect());
-  }, [location.pathname]);
+  useScrollRestoration();
 
   // Close mobile menu on outside click / tap
   useEffect(() => {
@@ -71,174 +43,132 @@ function Layout() {
   }, [menuOpen]);
 
   // Close mobile menu when route changes
-  useEffect(() => { setMenuOpen(false); }, [location.pathname]);
+  useEffect(() => { setMenuOpen(false); }, [location.pathname, location.hash]);
 
-  const scrollToSection = (sectionId: string) => {
-    const doScroll = () =>
-      document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(doScroll, 150);
-    } else {
-      doScroll();
-    }
-  };
+  const isCurrent = (match: string | null) =>
+    match !== null && (location.pathname === match || location.pathname.startsWith(`${match}/`));
 
-  const handleNavClick = (sectionId: string) => {
-    setMenuOpen(false);
-    scrollToSection(sectionId);
-  };
-
-  // Derive active nav item: pathname-based takes priority over scroll observer
-  const resolvedActiveId = location.pathname.startsWith("/blog")
-    ? "blog"
-    : activeId;
-
-  const isFrosted = scrolled || menuOpen;
+  const subPath = location.pathname === "/" ? "" : location.pathname.replace(/\/$/, "");
 
   return (
     <div className="min-h-screen bg-bg text-text">
+      {/* Fixed rather than sticky so the existing pages keep their own top padding */}
       <header
         ref={headerRef}
-        className={[
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          isFrosted
-            ? "bg-bg/85 backdrop-blur-md border-b border-border"
-            : "bg-transparent",
-        ].join(" ")}
+        className="fixed top-0 left-0 right-0 z-50 bg-[rgba(9,9,15,0.92)] border-b border-border-soft"
       >
-        {/* ── Top bar ─────────────────────────────────────────────── */}
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Monogram / full name */}
-          {(() => {
-            const showFullName = !heroVisible || location.pathname.startsWith("/blog");
-            return (
-              <button
-                onClick={() => handleNavClick("hero")}
-                className="relative h-5 overflow-hidden select-none cursor-pointer font-display font-bold text-sm text-text"
-              >
-                <span
-                  className={[
-                    "absolute inset-0 flex items-center tracking-[0.2em] transition-all duration-300 ease-in-out",
-                    showFullName ? "opacity-0 -translate-y-full" : "opacity-100 translate-y-0",
-                  ].join(" ")}
-                  aria-hidden={showFullName}
-                >
-                  SK<span className="text-accent">T.</span>
-                </span>
-                <span
-                  className={[
-                    "absolute inset-0 flex items-center whitespace-nowrap tracking-[0.05em] transition-all duration-300 ease-in-out",
-                    showFullName ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full",
-                  ].join(" ")}
-                  aria-hidden={!showFullName}
-                >
-                  Shiva Kumar <span className="text-accent ml-[0.3em]">Tirupathi</span>
-                </span>
-                {/* invisible sizer - keeps button width stable */}
-                <span className="invisible whitespace-nowrap tracking-[0.05em]">Shiva Kumar Tirupathi</span>
-              </button>
-            );
-          })()}
-
-          {/* Desktop nav - sm and above */}
-          <ul className="hidden sm:flex items-center gap-5">
-            {NAV_ITEMS.map(({ label, sectionId }) => {
-              const isActive = resolvedActiveId === sectionId;
-              return (
-                <li key={sectionId}>
-                  <button
-                    onClick={() => handleNavClick(sectionId)}
-                    className={[
-                      "font-body text-sm transition-colors duration-200 relative cursor-pointer",
-                      "after:absolute after:-bottom-0.5 after:left-0 after:h-px after:bg-accent",
-                      "after:transition-all after:duration-200",
-                      isActive
-                        ? "text-text after:w-full"
-                        : "text-muted hover:text-text after:w-0 hover:after:w-full",
-                    ].join(" ")}
-                  >
-                    {label}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* Hamburger - below sm only */}
-          <button
-            onClick={() => setMenuOpen((o) => !o)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            className="sm:hidden flex flex-col justify-center items-center w-8 h-8 gap-[5px] cursor-pointer shrink-0"
+        <div className={`${container} h-16 flex items-center justify-between gap-4`}>
+          {/* Logo: ~/shiva, plus the current path on sub-pages */}
+          <Link
+            to="/"
+            aria-label="Shiva Kumar Tirupathi, home"
+            className="min-w-0 truncate font-mono text-[15px] font-semibold text-text"
           >
-            <span
-              className={[
-                "block w-5 h-[1.5px] bg-text rounded-full",
-                "transition-all duration-300 origin-center",
-                menuOpen ? "rotate-45 translate-y-[6.5px]" : "",
-              ].join(" ")}
-            />
-            <span
-              className={[
-                "block w-5 h-[1.5px] bg-text rounded-full",
-                "transition-all duration-300",
-                menuOpen ? "opacity-0 scale-x-0" : "",
-              ].join(" ")}
-            />
-            <span
-              className={[
-                "block w-5 h-[1.5px] bg-text rounded-full",
-                "transition-all duration-300 origin-center",
-                menuOpen ? "-rotate-45 -translate-y-[6.5px]" : "",
-              ].join(" ")}
-            />
-          </button>
+            ~/shiva
+            {subPath && <span className="text-muted font-normal">{subPath}</span>}
+            <span className="text-cyan-text" aria-hidden>_</span>
+          </Link>
+
+          {/* Desktop nav */}
+          <nav aria-label="Main" className="hidden md:flex items-center gap-7">
+            <ul className="flex items-center gap-6">
+              {NAV_ITEMS.map(({ label, to, match }) => {
+                const current = isCurrent(match);
+                return (
+                  <li key={label}>
+                    <Link
+                      to={to}
+                      aria-current={current ? "page" : undefined}
+                      className={[
+                        "font-mono text-[13px] transition-colors duration-200",
+                        current ? "text-text" : "text-muted hover:text-text",
+                      ].join(" ")}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <ResumeRequestTrigger className={resumeButton}>resume</ResumeRequestTrigger>
+          </nav>
+
+          {/* Mobile: resume button + hamburger */}
+          <div className="md:hidden flex items-center gap-3 shrink-0">
+            <ResumeRequestTrigger className={resumeButton}>resume</ResumeRequestTrigger>
+            <button
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
+              className="flex flex-col justify-center items-center w-10 h-10 gap-[5px] cursor-pointer shrink-0 rounded-lg"
+            >
+              <span
+                className={[
+                  "block w-5 h-[1.5px] bg-text rounded-full",
+                  "transition-all duration-300 origin-center",
+                  menuOpen ? "rotate-45 translate-y-[6.5px]" : "",
+                ].join(" ")}
+              />
+              <span
+                className={[
+                  "block w-5 h-[1.5px] bg-text rounded-full",
+                  "transition-all duration-300",
+                  menuOpen ? "opacity-0 scale-x-0" : "",
+                ].join(" ")}
+              />
+              <span
+                className={[
+                  "block w-5 h-[1.5px] bg-text rounded-full",
+                  "transition-all duration-300 origin-center",
+                  menuOpen ? "-rotate-45 -translate-y-[6.5px]" : "",
+                ].join(" ")}
+              />
+            </button>
+          </div>
         </div>
 
-        {/* ── Mobile dropdown ─────────────────────────────────────── */}
-        <div
+        {/* Mobile dropdown */}
+        <nav
           id="mobile-nav"
+          aria-label="Main"
           className={[
-            "sm:hidden overflow-hidden",
+            "md:hidden overflow-hidden",
             "transition-[max-height,opacity] duration-300 ease-in-out",
-            menuOpen ? "max-h-[360px] opacity-100" : "max-h-0 opacity-0",
+            menuOpen ? "max-h-[360px] opacity-100" : "max-h-0 opacity-0 invisible",
           ].join(" ")}
-          aria-hidden={!menuOpen}
         >
-          <ul className="border-t border-border px-6 py-2">
-            {NAV_ITEMS.map(({ label, sectionId }) => {
-              const isActive = resolvedActiveId === sectionId;
+          <ul className="border-t border-border-soft px-4 py-2">
+            {NAV_ITEMS.map(({ label, to, match }) => {
+              const current = isCurrent(match);
               return (
-                <li key={sectionId} className="border-b border-border/40 last:border-0">
-                  <button
-                    onClick={() => handleNavClick(sectionId)}
+                <li key={label} className="border-b border-border-soft last:border-0">
+                  <Link
+                    to={to}
+                    onClick={() => setMenuOpen(false)}
+                    aria-current={current ? "page" : undefined}
                     className={[
-                      "w-full text-left font-body text-sm py-4 flex items-center gap-2.5",
-                      "transition-colors duration-150 cursor-pointer",
-                      isActive ? "text-text" : "text-muted hover:text-text",
+                      "w-full font-mono text-sm py-4 flex items-center gap-2.5",
+                      "transition-colors duration-150",
+                      current ? "text-text" : "text-muted hover:text-text",
                     ].join(" ")}
-                    tabIndex={menuOpen ? 0 : -1}
                   >
-                    {/* Active dot */}
-                    <span
-                      className={[
-                        "shrink-0 w-1.5 h-1.5 rounded-full transition-all duration-200",
-                        isActive ? "bg-accent scale-100" : "bg-transparent scale-0",
-                      ].join(" ")}
-                    />
+                    <span className={current ? "text-cyan-text" : "text-transparent"} aria-hidden>
+                      &gt;
+                    </span>
                     {label}
-                  </button>
+                  </Link>
                 </li>
               );
             })}
           </ul>
-        </div>
+        </nav>
       </header>
 
       <main className="min-w-[360px]">
-        <Outlet />
+        <Suspense fallback={<PageFallback />}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   );

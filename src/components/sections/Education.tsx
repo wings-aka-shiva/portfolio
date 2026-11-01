@@ -1,77 +1,49 @@
 import { useInView } from "../../hooks/useInView";
 import { Badge } from "../ui/Badge";
-import { Card } from "../ui/Card";
 import { Section } from "../ui/Section";
+import { DateText } from "../ui/DateText";
 import { education, type Education } from "../../data/education";
 
-interface EducationCardProps {
-  entry: Education;
-  index: number;
-}
-
-function EducationCard({ entry, index }: EducationCardProps) {
+function EducationCard({ entry }: { entry: Education }) {
   const { ref, inView } = useInView(0.1);
+  const ongoing = entry.status === "ongoing";
 
   return (
     <div
       ref={ref}
       className={[
-        "transition-all duration-700 ease-out",
-        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
+        "bg-surface border border-border rounded-xl p-5 h-full",
+        "transition-all duration-500 ease-out hover:border-accent/30",
+        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
       ].join(" ")}
-      style={{ transitionDelay: `${index * 80}ms` }}
     >
-      <Card hover className="p-6 h-full flex flex-col gap-5">
-        {/* Header */}
-        <div>
-          <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
-            <h3 className="font-display font-bold text-lg text-text leading-tight">
-              {entry.institution}
-            </h3>
-            <Badge variant={entry.status === "ongoing" ? "cyan" : "muted"}>
-              {entry.status === "ongoing" ? "Ongoing" : "Completed"}
-            </Badge>
-          </div>
-          <p className="font-display text-base text-accent mb-1">
-            {entry.degree}
-          </p>
-          <p className="font-body text-sm text-muted mb-2">{entry.field}</p>
-          <div className="flex items-center gap-3 font-body text-xs text-faint">
-            <span>📍 {entry.location}</span>
-            <span className="text-border">·</span>
-            <span>
-              {entry.startYear} - {entry.endYear}
-            </span>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-border" />
-
-        {/* Clubs */}
-        <div>
-          <p className="font-body text-xs text-faint uppercase tracking-wider mb-3">
-            Clubs &amp; Activities
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {entry.clubs.map((club) => (
-              <Badge key={club} variant="muted">
-                {club}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      </Card>
+      <h3 className="font-display text-base font-semibold text-text leading-snug">
+        {entry.degree}
+      </h3>
+      <p className="font-body text-sm text-muted mt-0.5">
+        {entry.institution}
+        <span className="mx-1.5 text-faint">·</span>
+        {entry.location}
+      </p>
+      <div className="flex flex-wrap items-center gap-2 mt-3">
+        <span className="font-body text-xs text-muted">
+          <DateText value={`${entry.startYear} - ${ongoing ? `Dec ${entry.endYear}` : entry.endYear}`} />
+        </span>
+        <Badge variant={ongoing ? "cyan" : "muted"}>
+          {ongoing ? "Ongoing" : "Completed"}
+        </Badge>
+      </div>
+      <p className="font-body text-xs text-muted/80 mt-2">{entry.note}</p>
     </div>
   );
 }
 
 function Education() {
   return (
-    <Section id="education" label="Academic Background" title="Education">
+    <Section id="education" label="Background" title="Education">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {education.map((entry, index) => (
-          <EducationCard key={entry.id} entry={entry} index={index} />
+        {education.map((entry) => (
+          <EducationCard key={entry.id} entry={entry} />
         ))}
       </div>
     </Section>

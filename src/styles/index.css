@@ -1,29 +1,48 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap");
 @import "tailwindcss";
 
 @theme {
   /* Backgrounds */
   --color-bg:        #09090f;
-  --color-surface:   #0f0f1a;
-  --color-surface-2: #16162a;
+  --color-surface:   #111119;
+  --color-surface-2: #16161f;
 
   /* Accent */
-  --color-accent:      #4f46e5;
+  --color-accent:      #4f46e5; /* fills and buttons only */
   --color-accent-dark: #4338ca;
   --color-accent-dim:  #312e81;
+  --color-accent-dot:  #6366f1;
+  --color-accent-text: #a5b4fc; /* indigo used as text */
   --color-cyan:        #06b6d4;
+  --color-cyan-text:   #22d3ee;
+  --color-code-string: #67e8f9;
 
   /* Text */
   --color-text:  #f1f1f3;
-  --color-muted: #6b7280;
+  --color-body:  #c4c4cc;
+  --color-muted: #9ca3af;
   --color-faint: #374151;
 
   /* Borders */
-  --color-border: #252545;
+  --color-border:      #252545;
+  --color-border-soft: #1c1c30;
+
+  /* Timeline: engineering track */
+  --color-tech-panel: #0e0e1c;
+  --color-tech-grid:  #2a2a4f;
+
+  /* Timeline: personal growth track */
+  --color-life-panel:  #0f0e0c;
+  --color-life-text:   #cfc4b2;
+  --color-life-strong: #e6dccb;
+  --color-life-date:   #a8946f;
+  --color-life-accent: #c99a52;
 
   /* Typography */
   --font-display: "Montserrat", sans-serif;
   --font-body:    "Poppins", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+  --font-serif:   "Lora", Georgia, serif;
 
   /* Shadows */
   --shadow-card: 0 4px 32px rgba(0, 0, 0, 0.4);
@@ -42,9 +61,31 @@
   * {
     scroll-behavior: smooth;
   }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent-text);
+    outline-offset: 2px;
+  }
 }
 
 @layer utilities {
+  /* Dot grid behind the engineering side of the timelines */
+  .tech-grid {
+    background-color: var(--color-tech-panel);
+    background-image: radial-gradient(var(--color-tech-grid) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  /* Terminal caret */
+  .caret-blink {
+    animation: caret-blink 1s steps(1) infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .caret-blink {
+      animation: none;
+    }
+  }
+
   .no-scrollbar {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -82,5 +123,11 @@
     );
     box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     border-radius: 0 0 2px 2px;
+  }
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
   }
 }

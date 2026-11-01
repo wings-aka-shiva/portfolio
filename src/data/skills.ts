@@ -1,5 +1,7 @@
 export interface Skill {
   name: string;
+  /** What I reach for first; highlighted on the homepage */
+  core?: boolean;
 }
 
 export interface SkillCategory {
@@ -31,11 +33,12 @@ export const skillCategories: SkillCategory[] = [
     id: "languages",
     label: "Languages",
     skills: [
-      { name: "TypeScript" },
+      { name: "TypeScript", core: true },
+      { name: "Python", core: true },
+      { name: "SQL", core: true },
       { name: "JavaScript" },
-      { name: "C#" },
-      { name: "Java" },
-      { name: "Python" },
+      { name: "C#", core: true },
+      { name: "Java", core: true },
       { name: "C" },
       { name: "C++" },
     ],
@@ -44,58 +47,126 @@ export const skillCategories: SkillCategory[] = [
     id: "frontend",
     label: "Frontend",
     skills: [
-      { name: "React" },
+      { name: "React", core: true },
+      { name: "Angular", core: true },
+      { name: "Next.js", core: true },
+      { name: "Tailwind CSS", core: true },
+      { name: "React Router" },
+      { name: "Vite" },
       { name: "HTML" },
       { name: "CSS" },
-      { name: "Tailwind CSS" },
-      { name: "Bootstrap" },
-      { name: "SignalR" },
+      { name: "JavaFX" },
     ],
   },
   {
     id: "backend",
-    label: "Backend",
+    label: "Backend and APIs",
     skills: [
-      { name: ".NET 9" },
-      { name: "REST API" },
+      { name: "Node.js", core: true },
+      { name: "FastAPI", core: true },
+      { name: "Flask", core: true },
+      { name: "ASP.NET Core", core: true },
+      { name: "Express.js" },
+      { name: "Entity Framework Core" },
+      { name: "REST API design" },
       { name: "JWT" },
-      { name: "BCrypt" },
+      { name: "gunicorn" },
+    ],
+  },
+  {
+    id: "cloud-devops",
+    label: "Cloud and DevOps",
+    skills: [
+      { name: "AWS", core: true },
+      { name: "Docker", core: true },
+      { name: "DynamoDB" },
+      { name: "S3" },
+      { name: "Lambda" },
+      { name: "API Gateway" },
+      { name: "EC2" },
+      { name: "ECS Fargate" },
+      { name: "ECR" },
+      { name: "Cognito" },
+      { name: "Bedrock" },
+      { name: "CodeBuild" },
+      { name: "GitHub Actions" },
+      { name: "Linux" },
+      { name: "Git" },
+      { name: "Azure DevOps" },
+    ],
+  },
+  {
+    id: "ai-llm",
+    label: "AI / LLM",
+    skills: [
+      { name: "RAG", core: true },
+      { name: "Embeddings", core: true },
+      { name: "Pinecone", core: true },
+      { name: "Claude API", core: true },
+      { name: "MCP", core: true },
+      { name: "Fine-tuning", core: true },
+      { name: "LangChain.js" },
+      { name: "Deep learning" },
+      { name: "Chunking" },
+      { name: "Semantic search" },
+      { name: "Reciprocal Rank Fusion" },
+      { name: "LLM evaluation" },
+      { name: "Multimodal (vision)" },
+      { name: "Prompt engineering" },
+      { name: "Structured output" },
+      { name: "XLM-RoBERTa" },
+      { name: "mmBERT" },
+      { name: "Classical ML (Weka)" },
     ],
   },
   {
     id: "databases",
     label: "Databases",
     skills: [
-      { name: "PostgreSQL" },
+      { name: "PostgreSQL", core: true },
       { name: "MySQL" },
+      { name: "DynamoDB" },
+      { name: "SQL Server / Azure SQL" },
+      { name: "SQLite" },
+      { name: "Pinecone (vector)" },
     ],
   },
   {
-    id: "cloud-devops",
-    label: "Cloud & DevOps",
+    id: "practices",
+    label: "Practices",
     skills: [
-      { name: "AWS" },
-      { name: "Azure" },
-      { name: "Docker" },
-      { name: "Git" },
-      { name: "Linux" },
+      { name: "System design" },
+      { name: "Unit testing (JUnit)" },
+      { name: "Automated test suites" },
+      { name: "Code review" },
+      { name: "Agile/Scrum" },
+      { name: "Jira" },
+      { name: "Azure Boards" },
+      { name: "AI-assisted development (Claude Code)" },
     ],
   },
   {
-    id: "ai-ml",
-    label: "AI / ML",
+    id: "security",
+    label: "Security",
     skills: [
-      { name: "Claude API" },
-      { name: "Prompt Engineering" },
-      { name: "RAG" },
-      { name: "LLM Integration" },
-      { name: "Agents" },
-      { name: "MCP" },
-      { name: "LangChain.js" },
-      { name: "Vercel AI SDK" },
+      { name: "Cognito SRP" },
+      { name: "JWT" },
+      { name: "PBKDF2 hashing" },
+      { name: "iptables" },
+      { name: "Wireshark" },
+      { name: "OpenSSL" },
+      { name: "OWASP web vulnerabilities" },
     ],
   },
 ];
+
+/**
+ * Unique skill count across categories. Parenthetical notes are ignored, so
+ * "Pinecone (vector)" counts as Pinecone; JWT and DynamoDB appear twice by name.
+ */
+export const uniqueSkillCount = new Set(
+  skillCategories.flatMap((c) => c.skills.map((s) => s.name.replace(/\s*\(.*\)$/, "").toLowerCase()))
+).size;
 
 export const certifications: Certification[] = [
   {
@@ -143,7 +214,7 @@ export const awards: Award[] = [
     emoji: "📌",
     title: "CodeChef Chapter SNIST - Board Member",
     issuer: "Sreenidhi Institute of Science & Technology",
-    date: "Jul 2021 – May 2023",
+    date: "Jul 2021 - May 2023",
     description: "Problem setter, tester and board member - promoted coding culture through workshops and competitions.",
   },
 ];

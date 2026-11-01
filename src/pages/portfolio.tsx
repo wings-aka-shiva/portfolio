@@ -1,24 +1,25 @@
 import Hero from "../components/sections/Hero";
-import WorkExperience from "../components/sections/WorkExperience";
-import Education from "../components/sections/Education";
-import Skills from "../components/sections/Skills";
-import CodingProfiles from "../components/sections/CodingProfiles";
-import GitHubRepos from "../components/sections/GitHubRepos";
-import Blog from "../components/sections/Blog";
-import BeyondTheCode from "../components/sections/BeyondTheCode";
+import HomeExperience from "../components/sections/HomeExperience";
+import DeepDives from "../components/sections/DeepDives";
+import HomeProjects from "../components/sections/HomeProjects";
+import WritingAndPractice from "../components/sections/WritingAndPractice";
+import Stack from "../components/sections/Stack";
+import HomeEducation from "../components/sections/HomeEducation";
+import AboutTeaser from "../components/sections/AboutTeaser";
 import Contact from "../components/sections/Contact";
 
+// Each section shows its single best fact and links to its own page.
 function Portfolio() {
   return (
     <div>
       <Hero />
-      <WorkExperience />
-      <Education />
-      <Skills />
-      <CodingProfiles />
-      <GitHubRepos />
-      <Blog />
-      <BeyondTheCode />
+      <HomeExperience />
+      <DeepDives />
+      <HomeProjects />
+      <WritingAndPractice />
+      <Stack />
+      <HomeEducation />
+      <AboutTeaser />
       <Contact />
     </div>
   );

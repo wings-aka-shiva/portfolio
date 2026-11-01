@@ -11,19 +11,17 @@ export interface CodingProfile {
   platform: string;
   username: string;
   tagline: string;
-  icon: string;
+  /** Optional until a local asset exists */
+  icon?: string;
   profileUrl: string | null; // null = coming soon
+  /** Kept in the data but not shown anywhere */
+  hidden?: boolean;
+  /** Shown as "[ coming soon ]" until the username and URL are filled in */
+  comingSoon?: boolean;
 }
 
+// Order: LeetCode, HackerRank, then the rest. Fill in Kaggle's username and URL when ready.
 export const codingProfiles: CodingProfile[] = [
-  {
-    id: "hackerrank",
-    platform: "HackerRank",
-    username: "@wingsAkaShiva",
-    tagline: "Where it all started",
-    icon: hackerrankIcon,
-    profileUrl: "https://www.hackerrank.com/profile/wingsAkaShiva",
-  },
   {
     id: "leetcode",
     platform: "LeetCode",
@@ -33,12 +31,21 @@ export const codingProfiles: CodingProfile[] = [
     profileUrl: "https://leetcode.com/u/shiva_flyin/",
   },
   {
+    id: "hackerrank",
+    platform: "HackerRank",
+    username: "@wingsAkaShiva",
+    tagline: "Where it all started",
+    icon: hackerrankIcon,
+    profileUrl: "https://www.hackerrank.com/profile/wingsAkaShiva",
+  },
+  {
     id: "codeforces",
     platform: "Codeforces",
     username: "@wings_tales",
     tagline: "Competitive rounds",
     icon: codeforcesIcon,
     profileUrl: "https://codeforces.com/profile/wings_tales",
+    hidden: true,
   },
   {
     id: "codechef",
@@ -47,5 +54,13 @@ export const codingProfiles: CodingProfile[] = [
     tagline: "Coming soon",
     icon: codechefIcon,
     profileUrl: null,
+  },
+  {
+    id: "kaggle",
+    platform: "Kaggle",
+    username: "-",
+    tagline: "Coming soon",
+    profileUrl: null,
+    comingSoon: true,
   },
 ];

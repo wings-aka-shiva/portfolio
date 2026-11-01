@@ -18,7 +18,7 @@ function ProfileCard({ profile, index, inView }: ProfileCardProps) {
         "flex flex-col items-center gap-3 text-center h-full",
         "transition-all duration-700 ease-out",
         isLive
-          ? "hover:border-accent/35 hover:shadow-glow cursor-pointer"
+          ? "hover:border-accent/40 hover:shadow-glow cursor-pointer"
           : "opacity-60 cursor-default",
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5",
         // restore opacity for coming-soon after animation

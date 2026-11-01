@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Layout      from "../pages/layout";
@@ -12,6 +13,13 @@ import BeKind      from "../pages/BeKind";
 import Liminal     from "../pages/Liminal";
 import Guitar      from "../pages/Guitar";
 
+// v3 sub-pages, loaded on demand (Layout wraps the outlet in Suspense)
+const ExperiencePage = lazy(() => import("../pages/ExperiencePage"));
+const ProjectsPage   = lazy(() => import("../pages/ProjectsPage"));
+const AboutPage      = lazy(() => import("../pages/AboutPage"));
+const HackathonsPage = lazy(() => import("../pages/HackathonsPage"));
+const CaseStudyFsanz = lazy(() => import("../pages/CaseStudyFsanz"));
+
 function AppRoutes() {
   return (
     <Routes>
@@ -20,6 +28,12 @@ function AppRoutes() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Portfolio />} />
         <Route path="/my-world"  element={<MyWorld />} />
+
+        <Route path="/experience" element={<ExperiencePage />} />
+        <Route path="/projects"   element={<ProjectsPage />} />
+        <Route path="/about"      element={<AboutPage />} />
+        <Route path="/hackathons" element={<HackathonsPage />} />
+        <Route path="/work/fsanz-regulatory-assistant" element={<CaseStudyFsanz />} />
 
         {/* Blog routes */}
         <Route path="/blog"          element={<BlogLanding />} />
