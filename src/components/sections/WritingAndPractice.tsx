@@ -36,7 +36,6 @@ function Notebook() {
     <div className="blog-grid border border-blog-border rounded-[14px] px-6 py-5">
       <p className="pb-3 border-b border-blog-border font-serif">
         <span className="italic text-[15px] text-blog-accent">The notebook</span>
-        <span className="text-[13px] text-blog-muted"> · {collections.length} collections</span>
       </p>
       <ul>
         {homeCollections.map((c) => (
@@ -84,14 +83,15 @@ function PracticeTerminal() {
         </span>
         <span className="caret-blink inline-block w-2 h-3.5 bg-term-accent" aria-hidden />
       </p>
-      <ul>
+      {/* Lines only between rows: the last row closes the panel */}
+      <ul className="divide-y divide-term-border">
         {onlineProfiles.map((p) => (
-          <li key={p.id} className="border-b border-term-border">
+          <li key={p.id}>
             <a
               href={p.profileUrl!}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group flex items-center gap-3 px-5 py-3 min-h-[56px] font-mono hover:bg-term-hover transition-colors duration-200 ${termFocus}`}
+              className={`group flex items-center gap-3 px-5 py-3 min-h-[56px] font-mono [li:last-child>&]:rounded-b-[13px] hover:bg-term-hover transition-colors duration-200 ${termFocus}`}
             >
               <span className="text-term-accent self-start sm:self-auto" aria-hidden>&gt;</span>
               <span className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
@@ -110,7 +110,7 @@ function PracticeTerminal() {
         {pendingProfiles.map((p) => (
           <li
             key={p.id}
-            className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3 min-h-[56px] content-center border-b border-term-border font-mono"
+            className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3 min-h-[56px] content-center font-mono"
           >
             <span>
               <span className="text-term-accent" aria-hidden>&gt; </span>
@@ -120,9 +120,6 @@ function PracticeTerminal() {
           </li>
         ))}
       </ul>
-      <p className="px-5 py-3 font-mono text-xs text-term-muted">
-        {onlineProfiles.length} online · {pendingProfiles.length} pending
-      </p>
     </div>
   );
 }

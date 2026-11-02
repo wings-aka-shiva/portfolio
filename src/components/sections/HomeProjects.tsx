@@ -44,7 +44,7 @@ function HomeProjects() {
       n="03"
       label="projects"
       title="Things I've built"
-      more={{ to: "/projects", label: `all ${projectsPublicFirst.length} projects →` }}
+      more={{ to: "/projects", label: "all projects →" }}
     >
       <ul className="border-t border-border">
         {projectsPublicFirst.slice(0, SHOWN).map((project) => (
