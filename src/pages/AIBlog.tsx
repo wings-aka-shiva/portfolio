@@ -1,4 +1,6 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { BlogBackLink } from "../components/ui/BlogBackLink";
+import { useFromHomeState } from "../hooks/useFromHome";
 import { aiPosts, type AIPost } from "../data/ai-posts";
 import { Badge } from "../components/ui/Badge";
 import KofiPanel from "../components/ui/KofiPanel";
@@ -264,14 +266,15 @@ const SCROLLBAR_CLASSES = [
 function AIBlog() {
   const { slug }     = useParams<{ slug?: string }>();
   const navigate     = useNavigate();
+  const blogState    = useFromHomeState();
   const selectedPost = slug ? (aiPosts.find((p) => p.slug === slug) ?? null) : null;
 
   function selectPost(post: AIPost) {
-    navigate(`/blog/ai/${post.slug}`);
+    navigate(`/blog/ai/${post.slug}`, { state: blogState });
   }
 
   function closePost() {
-    navigate("/blog/ai");
+    navigate("/blog/ai", { state: blogState });
   }
 
   const topBar = (
@@ -280,12 +283,10 @@ function AIBlog() {
       style={{ height: `${TOPBAR_H}px` }}
     >
       <div className="flex items-center gap-4">
-        <Link
-          to="/blog"
+        <BlogBackLink
+          label="← Blog"
           className="inline-flex items-center gap-1.5 font-body text-xs text-muted hover:text-accent transition-colors duration-200"
-        >
-          ← Blog
-        </Link>
+        />
         <div className="h-4 w-px bg-border" />
         <span className="font-display font-bold text-sm text-text">AI Journey</span>
       </div>

@@ -276,6 +276,7 @@ function BlogLanding() {
   return (
     <div className="min-h-screen pt-28 pb-24">
       <div className="max-w-4xl mx-auto px-6">
+        <Link to="/" state={{ restoreHome: true }} className="inline-block mb-8 font-mono text-[13px] text-muted hover:text-text transition-colors">← back to home</Link>
 
         {/* Header */}
         <div className="mb-12">

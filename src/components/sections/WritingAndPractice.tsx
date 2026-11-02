@@ -42,6 +42,7 @@ function Notebook() {
           <li key={c.id} className="border-b border-blog-border">
             <Link
               to={`/blog/${c.slug}`}
+              state={{ fromHome: true }}
               className={`group -mx-6 px-6 flex items-center gap-4 py-4 hover:bg-blog-hover transition-colors duration-200 ${blogFocus}`}
             >
               <span className="flex-1 min-w-0">
@@ -63,6 +64,7 @@ function Notebook() {
       <p className="pt-4 text-right">
         <Link
           to="/blog"
+          state={{ fromHome: true }}
           className={`font-serif italic text-sm text-blog-accent hover:text-blog-title transition-colors duration-200 ${blogFocus}`}
         >
           Read all writing →

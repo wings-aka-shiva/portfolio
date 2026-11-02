@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { liminalPosts, type LiminalPost } from "../data/liminal-posts";
 import ThoughtButton from "../components/ui/ThoughtButton";
+import { BlogBackLink } from "../components/ui/BlogBackLink";
+import { useFromHomeState } from "../hooks/useFromHome";
 
 // ─── colour tokens ────────────────────────────────────────────────────────────
 
@@ -39,10 +41,12 @@ function FadePage({ children }: { children: React.ReactNode }) {
 
 function PostLink({ post }: { post: LiminalPost }) {
   const [hovered, setHovered] = useState(false);
+  const blogState = useFromHomeState();
   return (
     <div className="py-6 text-center">
       <Link
         to={`/blog/liminal/${post.slug}`}
+        state={blogState}
         className="font-display text-lg inline-flex items-center gap-2 transition-all duration-500"
         style={{
           color:                `${C.text}${hovered ? "e6" : "99"}`,
@@ -69,20 +73,26 @@ function PostLink({ post }: { post: LiminalPost }) {
 
 function BackLink({ to, label }: { to: string; label: string }) {
   const [hovered, setHovered] = useState(false);
+  const blogState = useFromHomeState();
+  const linkProps = {
+    className: "font-body text-xs tracking-widest",
+    style: {
+      color:      hovered ? C.muted : C.faint,
+      transition: "color 300ms ease",
+    },
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: () => setHovered(false),
+  };
   return (
     <div className="px-8 pt-24">
-      <Link
-        to={to}
-        className="font-body text-xs tracking-widest"
-        style={{
-          color:      hovered ? C.muted : C.faint,
-          transition: "color 300ms ease",
-        }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        {label}
-      </Link>
+      {/* The top-level link back to /blog becomes "back to home" for visitors from the homepage */}
+      {to === "/blog" ? (
+        <BlogBackLink label={label} {...linkProps} />
+      ) : (
+        <Link to={to} state={blogState} {...linkProps}>
+          {label}
+        </Link>
+      )}
     </div>
   );
 }
@@ -182,6 +192,7 @@ function PostView({ post }: { post: LiminalPost }) {
 
 export default function Liminal() {
   const { slug } = useParams<{ slug: string }>();
+  const blogState = useFromHomeState();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -190,7 +201,7 @@ export default function Liminal() {
   if (!slug) return <Landing />;
 
   const post = liminalPosts.find((p) => p.slug === slug);
-  if (!post) return <Navigate to="/blog/liminal" replace />;
+  if (!post) return <Navigate to="/blog/liminal" replace state={blogState} />;
 
   return <PostView post={post} />;
 }
