@@ -17,7 +17,9 @@ function AboutPage() {
       <div className="max-w-2xl mx-auto flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-8">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h1 className="font-display font-extrabold text-[36px] md:text-[48px] leading-tight text-text">
-            Story time <span className="text-accent-text">{"<3"}</span>
+            Story time
+            {/* Decorative cursor: screen readers hear just "Story time" */}
+            <span className="caret-blink text-accent-text" aria-hidden="true">_</span>
           </h1>
           <p className="font-mono text-[13px] text-muted">
             <span aria-hidden>· </span>

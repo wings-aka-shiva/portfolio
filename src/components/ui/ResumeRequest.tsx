@@ -100,7 +100,7 @@ function ResumeRequestModal({ onClose }: { onClose: () => void }) {
   const [fields, setFields] = useState<Fields>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [state, setState]   = useState<FormState>("idle");
-  const [sentTo, setSentTo] = useState<Pick<Fields, "name" | "role" | "email"> | null>(null);
+  const [sentTo, setSentTo] = useState<Pick<Fields, "name"> | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const uid = useId();
   const titleId = `${uid}-title`;
@@ -167,7 +167,7 @@ function ResumeRequestModal({ onClose }: { onClose: () => void }) {
         email:   fields.email.trim(),
         message: composeMessage(fields),
       });
-      setSentTo({ name: fields.name.trim(), role: fields.role.trim(), email: fields.email.trim() });
+      setSentTo({ name: fields.name.trim() });
       setState("success");
     } catch {
       setState("error");
@@ -205,7 +205,7 @@ function ResumeRequestModal({ onClose }: { onClose: () => void }) {
         {state === "success" && sentTo ? (
           <div role="status" className="mt-4">
             <p className="font-body text-sm text-text/85 leading-relaxed">
-              Thanks, {sentTo.name}. I'll send a resume tailored to the {sentTo.role} role to {sentTo.email} soon.
+              Thanks, {sentTo.name}. Got it, I'll be in touch soon.
             </p>
             <button
               type="button"
@@ -218,7 +218,7 @@ function ResumeRequestModal({ onClose }: { onClose: () => void }) {
         ) : (
           <>
             <p className="font-body text-sm text-muted leading-relaxed mt-2">
-              I tailor my resume to each role. Tell me a little about it and I'll send it over.
+              Happy to share it. Tell me a bit about the role and I'll get it to you.
             </p>
 
             <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 mt-5">

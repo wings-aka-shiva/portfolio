@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { EmailLink } from "../ui/EmailLink";
 import { ResumeRequestTrigger } from "../ui/ResumeRequest";
 import { btnGhost, btnPrimary, container } from "../ui/styles";
@@ -63,7 +64,15 @@ function Hero() {
             fine-tuning a model or stopping a prompt injection, I learnt every skill chasing a problem.
           </p>
           <p className="mt-3 max-w-[560px] font-body font-medium text-base md:text-[19px] leading-relaxed text-text">
-            Hi, I'm a software engineer. Nice to meet you ;)
+            Hi, I'm a software engineer.{" "}
+            {/* Same in-page route as the nav's contact link */}
+            <Link
+              to="/#contact"
+              className="underline decoration-1 decoration-accent-text underline-offset-4 hover:text-accent-text transition-colors duration-200"
+            >
+              Got a problem for me to solve?
+            </Link>{" "}
+            ;)
           </p>
 
           <div className="mt-7 flex flex-col sm:flex-row sm:flex-wrap gap-3">

@@ -23,29 +23,36 @@ const tidyCaption = (text: string) => {
   return t.charAt(0).toUpperCase() + t.slice(1);
 };
 
+/** Focus rings in each panel's own accent */
+const blogFocus = "focus-visible:outline-2 focus-visible:outline-blog-accent focus-visible:outline-offset-2";
+const termFocus = "focus-visible:outline-2 focus-visible:outline-term-accent focus-visible:outline-offset-2";
+
 const panelTitle = "mb-4 font-display font-extrabold text-[28px] leading-tight text-text";
 
 // ─── Left: the blogger's notebook ─────────────────────────────────────────────
 
 function Notebook() {
   return (
-    <div className="bg-life-panel border border-[#2a251d] rounded-[14px] px-6 py-5">
-      <p className="pb-3 border-b border-[#2a251d] font-serif">
-        <span className="italic text-[15px] text-life-accent">The notebook</span>
-        <span className="text-[13px] text-life-date"> · {collections.length} collections</span>
+    <div className="blog-grid border border-blog-border rounded-[14px] px-6 py-5">
+      <p className="pb-3 border-b border-blog-border font-serif">
+        <span className="italic text-[15px] text-blog-accent">The notebook</span>
+        <span className="text-[13px] text-blog-muted"> · {collections.length} collections</span>
       </p>
       <ul>
         {homeCollections.map((c) => (
-          <li key={c.id} className="border-b border-[#2a251d]">
-            <Link to={`/blog/${c.slug}`} className="group flex items-center gap-4 py-4">
+          <li key={c.id} className="border-b border-blog-border">
+            <Link
+              to={`/blog/${c.slug}`}
+              className={`group -mx-6 px-6 flex items-center gap-4 py-4 hover:bg-blog-hover transition-colors duration-200 ${blogFocus}`}
+            >
               <span className="flex-1 min-w-0">
-                <span className="block font-serif text-[17px] font-semibold text-life-strong group-hover:text-[#fff7ea] transition-colors duration-200">
+                <span className="block font-serif text-[17px] font-semibold text-blog-title">
                   {c.name}
                 </span>
-                <span className="block mt-0.5 font-serif italic text-sm text-life-text">{tidyCaption(c.caption)}</span>
+                <span className="block mt-0.5 font-serif italic text-sm text-blog-text">{tidyCaption(c.caption)}</span>
               </span>
               <span
-                className="shrink-0 font-serif text-life-accent transition-transform duration-200 group-hover:translate-x-1"
+                className="shrink-0 font-serif text-blog-accent transition-transform duration-200 group-hover:translate-x-1"
                 aria-hidden
               >
                 →
@@ -55,7 +62,10 @@ function Notebook() {
         ))}
       </ul>
       <p className="pt-4 text-right">
-        <Link to="/blog" className="font-serif italic text-sm text-life-accent hover:text-life-strong transition-colors duration-200">
+        <Link
+          to="/blog"
+          className={`font-serif italic text-sm text-blog-accent hover:text-blog-title transition-colors duration-200 ${blogFocus}`}
+        >
           Read all writing →
         </Link>
       </p>
@@ -67,45 +77,50 @@ function Notebook() {
 
 function PracticeTerminal() {
   return (
-    <div className="tech-grid border border-border rounded-[14px] overflow-hidden">
-      <p className="flex items-center gap-1 px-5 py-3.5 border-b border-border-soft font-mono text-[13px] text-muted">
+    <div className="term-grid border border-term-border rounded-[14px]">
+      <p className="flex items-center gap-1 px-5 py-3.5 border-b border-term-border font-mono text-[13px] text-term-text">
         <span>
-          <span className="text-cyan-text">~</span> $ ls ~/practice
+          <span className="text-term-accent">~</span> $ ls ~/practice
         </span>
-        <span className="caret-blink inline-block w-2 h-3.5 bg-cyan-text" aria-hidden />
+        <span className="caret-blink inline-block w-2 h-3.5 bg-term-accent" aria-hidden />
       </p>
       <ul>
         {onlineProfiles.map((p) => (
-          <li key={p.id} className="border-b border-border-soft">
+          <li key={p.id} className="border-b border-term-border">
             <a
               href={p.profileUrl!}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-5 py-3 min-h-[56px] font-mono hover:bg-surface transition-colors duration-200"
+              className={`group flex items-center gap-3 px-5 py-3 min-h-[56px] font-mono hover:bg-term-hover transition-colors duration-200 ${termFocus}`}
             >
-              <span className="text-cyan-text self-start sm:self-auto" aria-hidden>&gt;</span>
+              <span className="text-term-accent self-start sm:self-auto" aria-hidden>&gt;</span>
               <span className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
-                <span className="text-[15px] font-semibold text-text">{p.platform.toLowerCase()}</span>
-                <span className="text-[13px] text-accent-text break-all">{p.username}</span>
+                <span className="text-[15px] font-semibold text-term-text">{p.platform.toLowerCase()}</span>
+                <span className="text-[13px] text-term-handle break-all">{p.username}</span>
               </span>
-              <span className="shrink-0 text-cyan-text" aria-hidden>↗</span>
+              <span
+                className="shrink-0 text-term-accent transition-transform duration-200 group-hover:translate-x-1"
+                aria-hidden
+              >
+                ↗
+              </span>
             </a>
           </li>
         ))}
         {pendingProfiles.map((p) => (
           <li
             key={p.id}
-            className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3 min-h-[56px] content-center border-b border-border-soft font-mono"
+            className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3 min-h-[56px] content-center border-b border-term-border font-mono"
           >
             <span>
-              <span className="text-cyan-text" aria-hidden>&gt; </span>
-              <span className="text-[15px] font-semibold text-text">{p.platform.toLowerCase()}</span>
+              <span className="text-term-accent" aria-hidden>&gt; </span>
+              <span className="text-[15px] font-semibold text-term-text">{p.platform.toLowerCase()}</span>
             </span>
-            <span className="text-xs text-muted">[ coming soon ]</span>
+            <span className="text-xs text-term-muted">[ coming soon ]</span>
           </li>
         ))}
       </ul>
-      <p className="px-5 py-3 font-mono text-xs text-muted">
+      <p className="px-5 py-3 font-mono text-xs text-term-muted">
         {onlineProfiles.length} online · {pendingProfiles.length} pending
       </p>
     </div>

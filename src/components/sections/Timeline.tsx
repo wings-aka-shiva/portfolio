@@ -49,7 +49,7 @@ export function TimelineFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative rounded-[18px] overflow-hidden border border-border-soft bg-tech-panel">
       <div className="hidden md:block absolute inset-y-0 left-0 w-1/2 tech-grid" aria-hidden />
-      <div className="hidden md:block absolute inset-y-0 right-0 w-1/2 bg-life-panel" aria-hidden />
+      <div className="hidden md:block absolute inset-y-0 right-0 w-1/2 life-grid" aria-hidden />
       <div className="absolute inset-y-0 left-[17px] md:left-[calc(50%-1px)] w-0.5 bg-[#2e2e52]" aria-hidden />
       <div className="relative">{children}</div>
     </div>
