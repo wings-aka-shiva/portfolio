@@ -19,8 +19,9 @@ function AboutTeaser() {
             <div>
               <SectionLabel n="07" name="about me" className="mb-3" />
               <h2 id="about-title" className="font-display font-extrabold text-[26px] md:text-[32px] leading-tight text-text">
-                Story time{" "}
-                <span className="text-accent-text">{"<3"}</span>
+                Story time
+                {/* Decorative cursor: screen readers hear just "Story time" */}
+                <span className="caret-blink text-accent-text" aria-hidden="true">_</span>
               </h2>
             </div>
           </div>

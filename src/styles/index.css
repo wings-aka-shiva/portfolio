@@ -29,14 +29,36 @@
 
   /* Timeline: engineering track */
   --color-tech-panel: #0e0e1c;
-  --color-tech-grid:  #2a2a4f;
+  --color-tech-grid:  rgba(255, 255, 255, 0.07); /* faded white */
 
   /* Timeline: personal growth track */
-  --color-life-panel:  #0f0e0c;
-  --color-life-text:   #cfc4b2;
-  --color-life-strong: #e6dccb;
-  --color-life-date:   #a8946f;
-  --color-life-accent: #c99a52;
+  --color-life-panel:  #0b130f;
+  --color-life-grid:   rgba(255, 236, 170, 0.08); /* faded warm yellow */
+  --color-life-border: #1d3328;
+  --color-life-text:   #c3dccf;
+  --color-life-strong: #e6f4ec;
+  --color-life-date:   #7fb89c;
+  --color-life-accent: #34d399;
+
+  /* Homepage blog notebook only: lemon yellow on dark */
+  --color-blog-panel:  #0e0e0b;
+  --color-blog-border: rgba(253, 230, 138, 0.18);
+  --color-blog-grid:   rgba(253, 230, 138, 0.06);
+  --color-blog-title:  #fef3a0;
+  --color-blog-text:   #d9d2a6;
+  --color-blog-muted:  #a9a27a;
+  --color-blog-accent: #fde047;
+  --color-blog-hover:  rgba(253, 230, 138, 0.05);
+
+  /* Homepage practice terminal only: warm white and light orange on dark */
+  --color-term-panel:  #0f0d0c;
+  --color-term-border: rgba(253, 186, 116, 0.16);
+  --color-term-grid:   rgba(255, 237, 213, 0.05);
+  --color-term-text:   #fbefe3;
+  --color-term-muted:  #b8a999;
+  --color-term-accent: #fdba74;
+  --color-term-handle: #fed7aa;
+  --color-term-hover:  rgba(253, 186, 116, 0.05);
 
   /* Typography */
   --font-display: "Montserrat", sans-serif;
@@ -73,6 +95,25 @@
   .tech-grid {
     background-color: var(--color-tech-panel);
     background-image: radial-gradient(var(--color-tech-grid) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  /* Dot grid behind the personal-growth side of the timelines */
+  .life-grid {
+    background-color: var(--color-life-panel);
+    background-image: radial-gradient(var(--color-life-grid) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  /* Dot grids for the homepage blog notebook and practice terminal */
+  .blog-grid {
+    background-color: var(--color-blog-panel);
+    background-image: radial-gradient(var(--color-blog-grid) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .term-grid {
+    background-color: var(--color-term-panel);
+    background-image: radial-gradient(var(--color-term-grid) 1px, transparent 1px);
     background-size: 18px 18px;
   }
 

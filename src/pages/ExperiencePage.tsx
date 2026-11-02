@@ -72,7 +72,7 @@ function LifeCard({ entry }: { entry: TimelineEntry }) {
   return (
     <article
       id={entry.id}
-      className="relative w-full max-w-[500px] bg-life-panel border border-[#2a251d] rounded-[14px] px-5 py-[18px] scroll-mt-24"
+      className="relative w-full max-w-[500px] bg-life-panel border border-life-border rounded-[14px] px-5 py-[18px] scroll-mt-24"
     >
       <LifeMarker className={mobileMarker} />
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
