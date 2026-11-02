@@ -1,5 +1,5 @@
 import { HomeSection } from "../ui/Section";
-import { skillCategories, uniqueSkillCount } from "../../data/skills";
+import { skillCategories } from "../../data/skills";
 
 /** The full skills list. The hero's shiva.json card already shows the core stack. */
 function Stack() {
@@ -30,9 +30,6 @@ function Stack() {
           </section>
         ))}
       </div>
-      <p className="mt-8 font-mono text-xs text-muted">
-        {uniqueSkillCount} skills · highlighted ones are what I reach for first
-      </p>
     </HomeSection>
   );
 }
