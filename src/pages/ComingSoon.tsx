@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { BlogBackLink } from "../components/ui/BlogBackLink";
 
 interface Props {
   emoji: string;
@@ -10,12 +10,10 @@ function ComingSoon({ emoji, category }: Props) {
     <div className="min-h-screen flex flex-col pt-24 pb-20">
       {/* Back link */}
       <div className="max-w-4xl mx-auto px-6 w-full mb-12">
-        <Link
-          to="/blog"
+        <BlogBackLink
+          label="← Back to Blog"
           className="inline-flex items-center gap-1.5 font-body text-xs text-muted hover:text-accent transition-colors duration-200"
-        >
-          ← Back to Blog
-        </Link>
+        />
       </div>
 
       {/* Centered content */}

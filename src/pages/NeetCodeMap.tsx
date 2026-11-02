@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { BlogBackLink } from "../components/ui/BlogBackLink";
+import { useFromHomeState } from "../hooks/useFromHome";
 import KofiPanel from "../components/ui/KofiPanel";
 import ThoughtButton from "../components/ui/ThoughtButton";
 import {
@@ -2186,6 +2188,7 @@ const SCROLLBAR_CLASSES = [
 
 function NeetCodeMap() {
   const navigate = useNavigate();
+  const blogState = useFromHomeState();
   const { slug } = useParams<{ slug?: string }>();
 
   const isMobile = useIsMobile();
@@ -2324,7 +2327,7 @@ function NeetCodeMap() {
     if (expandedTopic === topic) {
       setExpandedTopic(null);
       setSelectedProblem(null);
-      navigate("/blog/neetcode");
+      navigate("/blog/neetcode", { state: blogState });
     } else {
       const hasAnySolved = neetcodeProblems.some(
         (p) => p.topic === topic && p.solved,
@@ -2336,7 +2339,7 @@ function NeetCodeMap() {
       setChildrenVisible(false);
       setExpandedTopic(topic);
       setSelectedProblem(null);
-      navigate("/blog/neetcode");
+      navigate("/blog/neetcode", { state: blogState });
       requestAnimationFrame(() => {
         listRef.current
           ?.querySelector(`[data-topic="${topic}"]`)
@@ -2348,12 +2351,12 @@ function NeetCodeMap() {
   function handleProblemClickOnMap(p: NeetCodeProblem) {
     if (!p.solved) {
       setSelectedProblem(null);
-      navigate("/blog/neetcode");
+      navigate("/blog/neetcode", { state: blogState });
       showLockedToast();
       return;
     }
     setSelectedProblem(p);
-    navigate(`/blog/neetcode/${p.slug}`);
+    navigate(`/blog/neetcode/${p.slug}`, { state: blogState });
     if (isMobile) {
       setSheetState("peek");
     } else {
@@ -2368,12 +2371,12 @@ function NeetCodeMap() {
   function selectFromList(p: NeetCodeProblem) {
     if (!p.solved) {
       setSelectedProblem(null);
-      navigate("/blog/neetcode");
+      navigate("/blog/neetcode", { state: blogState });
       showLockedToast();
       return;
     }
     setSelectedProblem(p);
-    navigate(`/blog/neetcode/${p.slug}`);
+    navigate(`/blog/neetcode/${p.slug}`, { state: blogState });
     if (expandedTopic !== p.topic) {
       setChildrenVisible(false);
       setExpandedTopic(p.topic);
@@ -2382,7 +2385,7 @@ function NeetCodeMap() {
 
   function selectFromAccordion(p: NeetCodeProblem) {
     setSelectedProblem(p);
-    navigate(`/blog/neetcode/${p.slug}`);
+    navigate(`/blog/neetcode/${p.slug}`, { state: blogState });
     setSheetState("peek");
     if (expandedTopic !== p.topic) {
       setChildrenVisible(false);
@@ -2392,7 +2395,7 @@ function NeetCodeMap() {
 
   function closeProblem() {
     setSelectedProblem(null);
-    navigate("/blog/neetcode");
+    navigate("/blog/neetcode", { state: blogState });
     if (isMobile) setSheetState("half");
   }
 
@@ -2444,12 +2447,10 @@ function NeetCodeMap() {
       style={{ height: `${TOPBAR_H}px` }}
     >
       <div className="flex items-center gap-4">
-        <Link
-          to="/blog"
+        <BlogBackLink
+          label="← Blog"
           className="inline-flex items-center gap-1.5 font-body text-xs text-muted hover:text-accent transition-colors duration-200"
-        >
-          ← Blog
-        </Link>
+        />
         <div className="h-4 w-px bg-border" />
         <span className="font-display font-bold text-sm text-text">
           NeetCode 150

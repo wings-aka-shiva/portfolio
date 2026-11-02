@@ -37,10 +37,17 @@ export function useScrollRestoration() {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   }, []);
 
-  // Remember the latest position for the current history entry
+  // Remember the latest position for the current history entry. The listener
+  // can still fire once after navigating away (the next page scrolls to top),
+  // so only save while this entry is still the browser's current one.
   useEffect(() => {
     const key = location.key;
-    const save = () => positions.current.set(key, window.scrollY);
+    const save = () => {
+      // The first entry after a page load has no history state; the router calls it "default"
+      const current = (history.state as { key?: string } | null)?.key ?? "default";
+      if (current !== key) return;
+      positions.current.set(key, window.scrollY);
+    };
     window.addEventListener("scroll", save, { passive: true });
     return () => window.removeEventListener("scroll", save);
   }, [location.key]);
@@ -54,6 +61,15 @@ export function useScrollRestoration() {
       return retryUntil(() => {
         window.scrollTo({ top: saved, behavior: "instant" });
         return Math.abs(window.scrollY - saved) < 2;
+      });
+    }
+
+    const restoreHome = (location.state as { restoreHome?: boolean } | null)?.restoreHome;
+    if (location.pathname === "/" && restoreHome) {
+      const y = Number(sessionStorage.getItem("homeScroll") ?? 0);
+      return retryUntil(() => {
+        window.scrollTo({ top: y, behavior: "instant" });
+        return Math.abs(window.scrollY - y) < 2;
       });
     }
 

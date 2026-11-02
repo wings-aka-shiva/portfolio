@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { novels, getCover, type Novel } from "../data/novels";
+import { BlogBackLink } from "../components/ui/BlogBackLink";
 
 // ─── Derived data ────────────────────────────────────────────────────────────
 
@@ -333,13 +333,11 @@ export default function Novels() {
 
       {/* Back link */}
       <div className="max-w-6xl mx-auto px-6 mb-10">
-        <Link
-          to="/blog"
+        <BlogBackLink
+          label="← Back to Blog"
           className="inline-flex items-center gap-1.5 font-body text-xs transition-colors duration-200
                      text-[#a08060] hover:text-[#c8922a]"
-        >
-          ← Back to Blog
-        </Link>
+        />
       </div>
 
       {/* Header */}

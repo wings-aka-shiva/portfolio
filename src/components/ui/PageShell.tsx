@@ -4,7 +4,7 @@ import { btnPrimary, monoLink } from "./styles";
 
 function BackLink() {
   return (
-    <Link to="/" className={monoLink}>
+    <Link to="/" state={{ restoreHome: true }} className={monoLink}>
       ← back to home
     </Link>
   );
