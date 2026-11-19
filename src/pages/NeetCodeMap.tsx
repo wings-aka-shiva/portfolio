@@ -5,6 +5,9 @@ import { useFromHomeState } from "../hooks/useFromHome";
 import KofiPanel from "../components/ui/KofiPanel";
 import ThoughtButton from "../components/ui/ThoughtButton";
 import PythonSwitchNotice from "../components/ui/PythonSwitchNotice";
+import SolutionWriteup from "../components/neetcode/SolutionWriteup";
+import CodeBlock from "../components/neetcode/CodeBlock";
+import { getSolution } from "../data/neetcode-solutions";
 import {
   neetcodeProblems,
   getTopicGroups,
@@ -601,6 +604,7 @@ function DetailPanel({
   problem: NeetCodeProblem;
   onClose: () => void;
 }) {
+  const solution = getSolution(problem.id);
   return (
     <div className="flex flex-col">
       <div className="flex items-start justify-between gap-4 mb-6">
@@ -627,6 +631,11 @@ function DetailPanel({
             {problem.title}
           </h2>
           <p className="font-body text-xs text-faint mt-1">{problem.topic}</p>
+          {solution && (
+            <p className="font-mono text-[11px] text-muted mt-1">
+              Day {solution.day} · LC #{solution.lcNumber} · TC {solution.tc}
+            </p>
+          )}
           <div className="mt-3">
             <p className="font-body text-xs text-text italic mb-1.5">
               Want to read the full problem statement first?
@@ -666,7 +675,9 @@ function DetailPanel({
 
       <div className="flex flex-col gap-5">
         {
-          problem.solved && problem.id === 16 ? (
+          solution ? (
+            <SolutionWriteup solution={solution} />
+          ) : problem.solved && problem.id === 16 ? (
             <>
               {/* Problem Summary */}
               <div className="flex flex-col gap-1.5">
@@ -707,7 +718,7 @@ function DetailPanel({
               {/* Code */}
               <div className="flex flex-col gap-1.5">
                 <JavaSolutionLabel />
-                <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                <CodeBlock language="java" code={`class Solution {
     public int lengthOfLongestSubstring(String s) {
         if (s.length() == 0) return 0;
 
@@ -732,7 +743,7 @@ function DetailPanel({
 
         return length;
     }
-}`}</pre>
+}`} />
               </div>
 
               {/* What I Learned */}
@@ -803,7 +814,7 @@ function DetailPanel({
                 {/* Code */}
                 <div className="flex flex-col gap-1.5">
                   <JavaSolutionLabel />
-                  <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                  <CodeBlock language="java" code={`class Solution {
     public int maxProfit(int[] prices) {
         int maxProfit = 0;
         int minLeft = prices[0];
@@ -815,7 +826,7 @@ function DetailPanel({
 
         return maxProfit;
     }
-}`}</pre>
+}`} />
                 </div>
 
                 {/* What I Learned */}
@@ -885,7 +896,7 @@ function DetailPanel({
                   {/* Code */}
                   <div className="flex flex-col gap-1.5">
                     <JavaSolutionLabel />
-                    <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                    <CodeBlock language="java" code={`class Solution {
     public int trap(int[] height) {
         int max = 0;
         int hLength = height.length;
@@ -908,7 +919,7 @@ function DetailPanel({
         }
         return totalRainWater;
     }
-}`}</pre>
+}`} />
                   </div>
 
                   {/* What I Learned */}
@@ -975,7 +986,7 @@ function DetailPanel({
                     {/* Code */}
                     <div className="flex flex-col gap-1.5">
                       <JavaSolutionLabel />
-                      <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                      <CodeBlock language="java" code={`class Solution {
     public int maxArea(int[] height) {
         int left = 0;
         int right = height.length - 1;
@@ -989,7 +1000,7 @@ function DetailPanel({
         }
         return maxWater;
     }
-}`}</pre>
+}`} />
                     </div>
 
                     {/* What I Learned */}
@@ -1055,7 +1066,7 @@ function DetailPanel({
                       {/* Code */}
                       <div className="flex flex-col gap-1.5">
                         <JavaSolutionLabel />
-                        <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                        <CodeBlock language="java" code={`class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
         Arrays.sort(nums);
@@ -1080,7 +1091,7 @@ function DetailPanel({
         }
         return result;
     }
-}`}</pre>
+}`} />
                       </div>
 
                       {/* What I Learned */}
@@ -1148,7 +1159,7 @@ function DetailPanel({
                         {/* Code */}
                         <div className="flex flex-col gap-1.5">
                           <JavaSolutionLabel />
-                          <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                          <CodeBlock language="java" code={`class Solution {
     public int[] twoSum(int[] numbers, int target) {
         int left = 0, right = numbers.length-1;
         while(left < right) {
@@ -1158,7 +1169,7 @@ function DetailPanel({
         }
         return new int[]{};
     }
-}`}</pre>
+}`} />
                         </div>
 
                         {/* What I Learned */}
@@ -1225,7 +1236,7 @@ function DetailPanel({
                           {/* Code */}
                           <div className="flex flex-col gap-1.5">
                     <JavaSolutionLabel />
-                            <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                            <CodeBlock language="java" code={`class Solution {
     public boolean isPalindrome(String s) {
         int left = 0, right = s.length() - 1;
         while(left <= right) {
@@ -1237,7 +1248,7 @@ function DetailPanel({
         }
         return true;
     }
-}`}</pre>
+}`} />
                           </div>
 
                           {/* What I Learned */}
@@ -1306,7 +1317,7 @@ function DetailPanel({
                             {/* Code */}
                             <div className="flex flex-col gap-1.5">
                               <JavaSolutionLabel />
-                              <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                              <CodeBlock language="java" code={`class Solution {
     public int longestConsecutive(int[] nums) {
         if(nums.length == 0)
             return 0;
@@ -1329,7 +1340,7 @@ function DetailPanel({
         }
         return longestSubSequence;
     }
-}`}</pre>
+}`} />
                             </div>
 
                             {/* What I Learned */}
@@ -1397,7 +1408,7 @@ function DetailPanel({
                               {/* Code */}
                               <div className="flex flex-col gap-1.5">
                                 <JavaSolutionLabel />
-                                <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                                <CodeBlock language="java" code={`class Solution {
     public boolean isValidSudoku(char[][] board) {
         Set<Character>[] rowSet = new HashSet[9];
         Set<Character>[] colSet = new HashSet[9];
@@ -1417,7 +1428,7 @@ function DetailPanel({
         }
         return true;
     }
-}`}</pre>
+}`} />
                               </div>
 
                               {/* What I Learned */}
@@ -1490,7 +1501,7 @@ function DetailPanel({
                                 {/* Code */}
                                 <div className="flex flex-col gap-1.5">
                                   <JavaSolutionLabel />
-                                  <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                                  <CodeBlock language="java" code={`class Solution {
     public int[] productExceptSelf(int[] nums) {
         int numsLength = nums.length, product = 1;
         int[] leftProduct = new int[numsLength];
@@ -1511,7 +1522,7 @@ function DetailPanel({
         }
         return productES;
     }
-}`}</pre>
+}`} />
                                 </div>
 
                                 {/* What I Learned */}
@@ -1590,7 +1601,7 @@ function DetailPanel({
                                   {/* Code */}
                                   <div className="flex flex-col gap-1.5">
                                     <JavaSolutionLabel />
-                                    <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                                    <CodeBlock language="java" code={`class Solution {
     public int[] topKFrequent(int[] nums, int k) {
         HashMap<Integer, Integer> frequencyElements = new HashMap<>();
         int[] result = new int[k];
@@ -1617,7 +1628,7 @@ function DetailPanel({
         }
         return result;
     }
-}`}</pre>
+}`} />
                                   </div>
 
                                   {/* What I Learned */}
@@ -1689,7 +1700,7 @@ function DetailPanel({
                                     {/* Code */}
                                     <div className="flex flex-col gap-1.5">
                                       <JavaSolutionLabel />
-                                      <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                                      <CodeBlock language="java" code={`class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         HashMap<String, List<String>> map = new HashMap<>();
         for (String s : strs) {
@@ -1700,7 +1711,7 @@ function DetailPanel({
         }
         return new ArrayList<>(map.values());
     }
-}`}</pre>
+}`} />
                                     </div>
 
                                     {/* What I Learned */}
@@ -1777,7 +1788,7 @@ function DetailPanel({
                                       {/* Code */}
                                       <div className="flex flex-col gap-1.5">
                                         <JavaSolutionLabel />
-                                        <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
+                                        <CodeBlock language="java" code={`class Solution {
     public int[] twoSum(int[] nums, int target) {
         HashMap<Integer, Integer> numsIndices = new HashMap<>();
         for(int i=0; i<nums.length; ++i) {
@@ -1790,7 +1801,7 @@ function DetailPanel({
         }
         return new int[] {};
     }
-}`}</pre>
+}`} />
                                       </div>
 
                                       {/* What I Learned */}
@@ -1822,182 +1833,6 @@ function DetailPanel({
 
                                       <KofiPanel firstLine="Enjoyed the breakdown?" />
                                     </>
-                                  ) : problem.solved && problem.id === 2 ? (
-                                    <>
-                                      {/* Problem Summary */}
-                                      <div className="flex flex-col gap-1.5">
-                                        <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                          Problem Summary
-                                        </p>
-                                        <p className="font-body text-sm text-text/80 leading-relaxed">
-                                          Given two strings, return true if they are anagrams of each
-                                          other - meaning both strings contain the same characters with
-                                          the same frequencies.
-                                        </p>
-                                      </div>
-
-                                        {/* Approach */}
-                                        <div className="flex flex-col gap-1.5">
-                                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                            Approach
-                                          </p>
-                                          <p className="font-body text-sm text-text/80 leading-relaxed">
-                                            Two strings are anagrams when their character counts match
-                                            exactly. My first thought was two HashMaps - one per string -
-                                            but comparing them felt tedious since HashMaps don't preserve
-                                            order and the code got long. The problem constraints mentioned
-                                            lowercase letters only, so just 26 possible characters. That
-                                            meant I could use a fixed-size int array of 26 instead. I
-                                            iterate both strings simultaneously: for each index I increment
-                                            the counter for the character in s and decrement for the
-                                            character in t. If the strings are true anagrams, every slot
-                                            cancels out to zero. A final pass checks for any non-zero value
-                                            - if found, the counts were unbalanced and it's not an anagram.
-                                          </p>
-                                        </div>
-
-                                        {/* The Insight */}
-                                        <div className="border-l-2 border-accent pl-3">
-                                          <p className="font-body text-sm text-accent italic leading-relaxed">
-                                            Imagine writing out all letters of s, then crossing them off one
-                                            by one as you read t - a true anagram leaves nothing uncrossed.
-                                            The +1/-1 counter array mimics exactly that striking-off
-                                            process.
-                                          </p>
-                                        </div>
-
-                                        {/* Code */}
-                                        <div className="flex flex-col gap-1.5">
-                                          <JavaSolutionLabel />
-                                          <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
-    public boolean isAnagram(String s, String t) {
-        if(s.length() != t.length())
-            return false;
-        int[] counter = new int[26];
-        for(int i=0; i<s.length(); ++i){
-            counter[s.charAt(i)-'a']++;
-            counter[t.charAt(i)-'a']--;
-        }
-        for(int val: counter)
-            if(val!=0)
-                return false;
-        return true;
-    }
-}`}</pre>
-                                        </div>
-
-                                        {/* What I Learned */}
-                                        <div className="flex flex-col gap-1.5">
-                                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                            What I Learned
-                                          </p>
-                                          <p className="font-body text-sm text-text/80 leading-relaxed">
-                                            When the input is constrained to a known alphabet (e.g. 26
-                                            lowercase letters), a fixed-size count array is cleaner and
-                                            faster than a HashMap - O(1) space effectively, no hashing
-                                            overhead.
-                                          </p>
-                                        </div>
-
-                                        {/* Gotchas */}
-                                        <div className="flex flex-col gap-1.5">
-                                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                            Gotchas
-                                          </p>
-                                          <p className="font-body text-sm text-text/80 leading-relaxed">
-                                            The early length check is a smart short-circuit - different
-                                            lengths can never be anagrams, no need to even build the
-                                            counter. Making it work for mixed characters or Unicode is
-                                            straightforward - resize the array to cover the full character
-                                            range and replace the 'a' offset with the actual char value to
-                                            calculate the index. Same logic, wider alphabet.
-                                          </p>
-                                        </div>
-
-                                        <KofiPanel firstLine="Enjoyed the breakdown?" />
-                                      </>
-                                    ) : problem.solved && problem.id === 1 ? (
-                                      <>
-                                        {/* Problem Summary */}
-                                        <div className="flex flex-col gap-1.5">
-                                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                            Problem Summary
-                                          </p>
-                                          <p className="font-body text-sm text-text/80 leading-relaxed">
-                                            Given an integer array, return true if any value appears at
-                                            least twice, and false if every element is distinct.
-                                          </p>
-                                        </div>
-
-                                          {/* Approach */}
-                                          <div className="flex flex-col gap-1.5">
-                                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                              Approach
-                                            </p>
-                                            <p className="font-body text-sm text-text/80 leading-relaxed">
-                                              My first instinct was to pick each number and scan the rest of
-                                              the array for a match - but that's O(n²). To get it down to
-                                              O(n), I needed a data structure where membership checks are
-                                              O(1). A HashSet fits perfectly: before inserting each number I
-                                              check whether it already exists. If it does, I've found a
-                                              duplicate and return true immediately.
-                                            </p>
-                                          </div>
-
-                                          {/* The Insight */}
-                                          <div className="border-l-2 border-accent pl-3">
-                                            <p className="font-body text-sm text-accent italic leading-relaxed">
-                                              A HashSet enforces uniqueness for free - checking membership
-                                              before insert gives you early-exit duplicate detection in a
-                                              single linear pass.
-                                            </p>
-                                          </div>
-
-                                          {/* Code */}
-                                          <div className="flex flex-col gap-1.5">
-                                            <JavaSolutionLabel />
-                                            <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
-    public boolean containsDuplicate(int[] nums) {
-        if(nums.length == 1)
-            return false;
-        HashSet<Integer> numbers = new HashSet<>();
-        for(int num: nums) {
-            if(numbers.contains(num))
-                return true;
-            numbers.add(num);
-        }
-        return false;
-    }
-}`}</pre>
-                                          </div>
-
-                                          {/* What I Learned */}
-                                          <div className="flex flex-col gap-1.5">
-                                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                              What I Learned
-                                            </p>
-                                            <p className="font-body text-sm text-text/80 leading-relaxed">
-                                              HashSet is the go-to when you need O(1) average-case lookup and
-                                              only care about existence, not counts or order. It's the
-                                              building block for a huge number of "have I seen this before?"
-                                              problems.
-                                            </p>
-                                          </div>
-
-                                          {/* Gotchas */}
-                                          <div className="flex flex-col gap-1.5">
-                                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                              Gotchas
-                                            </p>
-                                            <p className="font-body text-sm text-text/80 leading-relaxed">
-                                              An alternative is comparing nums.length vs the size of a HashSet
-                                              built from the array, but the early-exit loop is faster in
-                                              practice when duplicates appear early.
-                                            </p>
-                                          </div>
-
-                                          <KofiPanel firstLine="Enjoyed the breakdown?" />
-                                        </>
                                       ) : problem.solved ? (
                                         <>
                                           <p className="font-body text-sm text-text/80 leading-relaxed">
