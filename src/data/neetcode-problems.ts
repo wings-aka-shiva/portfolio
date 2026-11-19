@@ -238,3 +238,32 @@ export function getTopicGroups(): NeetCodeTopic[] {
 export function getSolvedCount(): number {
   return neetcodeProblems.filter((p) => p.solved).length;
 }
+
+export type ProblemStatus = "solved" | "unlocked" | "locked";
+
+const statusById: Map<number, ProblemStatus> = (() => {
+  const map = new Map<number, ProblemStatus>();
+  const prevSolvedByTopic = new Map<string, boolean>();
+  for (const p of neetcodeProblems) {
+    let status: ProblemStatus;
+    if (p.solved) status = "solved";
+    else if (!prevSolvedByTopic.has(p.topic)) status = "unlocked";
+    else if (prevSolvedByTopic.get(p.topic)) status = "unlocked";
+    else status = "locked";
+    map.set(p.id, status);
+    prevSolvedByTopic.set(p.topic, p.solved);
+  }
+  return map;
+})();
+
+/**
+ * Within each topic (in data order): solved problems are "solved"; the first
+ * problem, or one whose predecessor is solved, is "unlocked"; the rest are "locked".
+ */
+export function getProblemStatus(p: NeetCodeProblem): ProblemStatus {
+  return statusById.get(p.id) ?? "locked";
+}
+
+export function getUnlockedCount(): number {
+  return neetcodeProblems.filter((p) => getProblemStatus(p) === "unlocked").length;
+}
