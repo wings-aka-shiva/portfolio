@@ -4,16 +4,60 @@ import { BlogBackLink } from "../components/ui/BlogBackLink";
 import { useFromHomeState } from "../hooks/useFromHome";
 import KofiPanel from "../components/ui/KofiPanel";
 import ThoughtButton from "../components/ui/ThoughtButton";
+import PythonSwitchNotice from "../components/ui/PythonSwitchNotice";
 import {
   neetcodeProblems,
   getTopicGroups,
   getSolvedCount,
+  getUnlockedCount,
+  getProblemStatus,
   type NeetCodeProblem,
   type NeetCodeTopic,
   type Difficulty,
 } from "../data/neetcode-problems";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const LOCKED_TOAST_TEXT =
+  "Still locked. Each topic opens one question at a time - solve the one before it first. 🔒";
+
+/** Open padlock (shackle swung open), stroke style. */
+function OpenLockIcon({ className = "w-3.5 h-3.5 shrink-0 text-accent-text" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+      role="img"
+      aria-label="Unlocked"
+    >
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 11V7a4 4 0 0 1 7.75-1.4" />
+    </svg>
+  );
+}
+
+function StatusLegend({ className = "" }: { className?: string }) {
+  return (
+    <p className={`font-mono text-[11px] text-muted flex items-center gap-1 ${className}`}>
+      <span>✓ solved ·</span>
+      <OpenLockIcon className="w-3 h-3 shrink-0 text-accent-text" />
+      <span>unlocked · 🔒 locked</span>
+    </p>
+  );
+}
+
+/** "Solution - Java" label plus a note that it predates the Python switch. */
+function JavaSolutionLabel() {
+  return (
+    <div className="mb-2">
+      <p className="font-body text-xs uppercase tracking-wider text-muted">Solution - Java</p>
+      <p className="font-mono text-[11px] text-muted mt-0.5">written before the switch to Python</p>
+    </div>
+  );
+}
 
 const DIFF_COLOR: Record<Difficulty, string> = {
   Easy: "#22c55e",
@@ -160,6 +204,7 @@ interface ProblemRowProps {
 }
 
 function ProblemRow({ problem, selected, onClick }: ProblemRowProps) {
+  const status = getProblemStatus(problem);
   return (
     <button
       data-problem={problem.id}
@@ -170,7 +215,7 @@ function ProblemRow({ problem, selected, onClick }: ProblemRowProps) {
         selected
           ? "bg-accent/15 border border-accent/30"
           : "hover:bg-white/4 border border-transparent",
-        !problem.solved ? "opacity-40" : "",
+        status === "locked" ? "opacity-40" : "",
       ].join(" ")}
     >
       <span
@@ -180,18 +225,22 @@ function ProblemRow({ problem, selected, onClick }: ProblemRowProps) {
       <span
         className={[
           "font-body text-xs leading-snug flex-1 min-w-0 truncate",
-          problem.solved
+          status === "solved"
             ? selected
               ? "text-text"
               : "text-muted"
-            : selected
-              ? "text-text/70"
-              : "text-muted/50",
+            : status === "unlocked"
+              ? "text-text"
+              : selected
+                ? "text-text/70"
+                : "text-muted/50",
         ].join(" ")}
       >
         {problem.title}
       </span>
-      {problem.solved ? (
+      {status === "unlocked" ? (
+        <OpenLockIcon />
+      ) : status === "solved" ? (
         <svg
           className="w-3.5 h-3.5 shrink-0 text-green-400"
           fill="none"
@@ -433,6 +482,7 @@ function SVGMap({
         expandedProblems.map((problem, i) => {
           const cp = childPos[i];
           const isSelected = selectedProblemId === problem.id;
+          const status = getProblemStatus(problem);
 
           return (
             <g
@@ -445,7 +495,7 @@ function SVGMap({
                 cursor: "pointer",
                 transformOrigin: `${expandedNode.x}px ${expandedNode.y}px`,
                 transform: `scale(${childrenVisible ? 1 : 0})`,
-                opacity: childrenVisible ? (problem.solved ? 1 : 0.45) : 0,
+                opacity: childrenVisible ? (status === "locked" ? 0.45 : 1) : 0,
                 transition: [
                   `transform 320ms cubic-bezier(0.34,1.56,0.64,1) ${i * 42}ms`,
                   `opacity 220ms ease ${i * 42}ms`,
@@ -474,9 +524,24 @@ function SVGMap({
                 }
                 stroke={DIFF_COLOR[problem.difficulty]}
                 strokeWidth={isSelected ? 2.5 : 1.5}
-                opacity={problem.solved ? 1 : 0.65}
+                strokeDasharray={status === "unlocked" ? "3 2" : undefined}
+                opacity={status === "locked" ? 0.65 : 1}
               />
-              {problem.solved ? (
+              {status === "unlocked" ? (
+                <g
+                  transform={`translate(${cp.x - 5} ${cp.y - 5}) scale(${10 / 24})`}
+                  fill="none"
+                  stroke="var(--color-accent-text, #a5b4fc)"
+                  strokeWidth={2.4}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ pointerEvents: "none" }}
+                  aria-label="Unlocked"
+                >
+                  <rect x="5" y="11" width="14" height="10" rx="2" />
+                  <path d="M8 11V7a4 4 0 0 1 7.75-1.4" />
+                </g>
+              ) : status === "solved" ? (
                 <text
                   x={cp.x}
                   y={cp.y + 1}
@@ -508,9 +573,9 @@ function SVGMap({
                 dominantBaseline="hanging"
                 fontSize="7"
                 fill={
-                  problem.solved
-                    ? "rgba(209,213,219,0.8)"
-                    : "rgba(107,114,128,0.65)"
+                  status === "locked"
+                    ? "rgba(107,114,128,0.65)"
+                    : "rgba(209,213,219,0.8)"
                 }
                 fontFamily="Poppins, sans-serif"
                 style={{ userSelect: "none" }}
@@ -641,7 +706,7 @@ function DetailPanel({
 
               {/* Code */}
               <div className="flex flex-col gap-1.5">
-                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                <JavaSolutionLabel />
                 <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int lengthOfLongestSubstring(String s) {
         if (s.length() == 0) return 0;
@@ -737,7 +802,7 @@ function DetailPanel({
 
                 {/* Code */}
                 <div className="flex flex-col gap-1.5">
-                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                  <JavaSolutionLabel />
                   <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int maxProfit(int[] prices) {
         int maxProfit = 0;
@@ -819,7 +884,7 @@ function DetailPanel({
 
                   {/* Code */}
                   <div className="flex flex-col gap-1.5">
-                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                    <JavaSolutionLabel />
                     <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int trap(int[] height) {
         int max = 0;
@@ -909,7 +974,7 @@ function DetailPanel({
 
                     {/* Code */}
                     <div className="flex flex-col gap-1.5">
-                      <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                      <JavaSolutionLabel />
                       <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int maxArea(int[] height) {
         int left = 0;
@@ -989,7 +1054,7 @@ function DetailPanel({
 
                       {/* Code */}
                       <div className="flex flex-col gap-1.5">
-                        <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                        <JavaSolutionLabel />
                         <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
@@ -1082,7 +1147,7 @@ function DetailPanel({
 
                         {/* Code */}
                         <div className="flex flex-col gap-1.5">
-                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                          <JavaSolutionLabel />
                           <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int[] twoSum(int[] numbers, int target) {
         int left = 0, right = numbers.length-1;
@@ -1159,7 +1224,7 @@ function DetailPanel({
 
                           {/* Code */}
                           <div className="flex flex-col gap-1.5">
-                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                    <JavaSolutionLabel />
                             <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public boolean isPalindrome(String s) {
         int left = 0, right = s.length() - 1;
@@ -1240,7 +1305,7 @@ function DetailPanel({
 
                             {/* Code */}
                             <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                              <JavaSolutionLabel />
                               <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int longestConsecutive(int[] nums) {
         if(nums.length == 0)
@@ -1331,7 +1396,7 @@ function DetailPanel({
 
                               {/* Code */}
                               <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Solution - Java</p>
+                                <JavaSolutionLabel />
                                 <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public boolean isValidSudoku(char[][] board) {
         Set<Character>[] rowSet = new HashSet[9];
@@ -1424,9 +1489,7 @@ function DetailPanel({
 
                                 {/* Code */}
                                 <div className="flex flex-col gap-1.5">
-                                  <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                    Solution - Java
-                                  </p>
+                                  <JavaSolutionLabel />
                                   <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int[] productExceptSelf(int[] nums) {
         int numsLength = nums.length, product = 1;
@@ -1526,9 +1589,7 @@ function DetailPanel({
 
                                   {/* Code */}
                                   <div className="flex flex-col gap-1.5">
-                                    <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                      Solution - Java
-                                    </p>
+                                    <JavaSolutionLabel />
                                     <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int[] topKFrequent(int[] nums, int k) {
         HashMap<Integer, Integer> frequencyElements = new HashMap<>();
@@ -1627,9 +1688,7 @@ function DetailPanel({
 
                                     {/* Code */}
                                     <div className="flex flex-col gap-1.5">
-                                      <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                        Solution - Java
-                                      </p>
+                                      <JavaSolutionLabel />
                                       <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         HashMap<String, List<String>> map = new HashMap<>();
@@ -1717,9 +1776,7 @@ function DetailPanel({
 
                                       {/* Code */}
                                       <div className="flex flex-col gap-1.5">
-                                        <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                          Solution - Java
-                                        </p>
+                                        <JavaSolutionLabel />
                                         <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public int[] twoSum(int[] nums, int target) {
         HashMap<Integer, Integer> numsIndices = new HashMap<>();
@@ -1811,9 +1868,7 @@ function DetailPanel({
 
                                         {/* Code */}
                                         <div className="flex flex-col gap-1.5">
-                                          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                            Solution - Java
-                                          </p>
+                                          <JavaSolutionLabel />
                                           <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public boolean isAnagram(String s, String t) {
         if(s.length() != t.length())
@@ -1900,9 +1955,7 @@ function DetailPanel({
 
                                           {/* Code */}
                                           <div className="flex flex-col gap-1.5">
-                                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">
-                                              Solution - Java
-                                            </p>
+                                            <JavaSolutionLabel />
                                             <pre className="bg-surface-2 border border-border rounded-xl p-4 font-mono text-xs text-text overflow-x-auto leading-relaxed">{`class Solution {
     public boolean containsDuplicate(int[] nums) {
         if(nums.length == 1)
@@ -1957,11 +2010,17 @@ function DetailPanel({
                                           </div>
                                           <KofiPanel firstLine="Enjoyed the breakdown?" />
                                         </>
+                                      ) : getProblemStatus(problem) === "unlocked" ? (
+                                        <>
+                                          <p className="font-body text-sm text-text/80 leading-relaxed">
+                                            Unlocked and on my list. I'll be solving this one in Python.
+                                            The write-up lands here once it's done.
+                                          </p>
+                                        </>
                                       ) : (
                                         <>
                                           <p className="font-body text-sm text-muted/60 italic leading-relaxed">
-                                            Still locked. Working through these one at a time - check back
-                                            soon. 🔒
+                                            {LOCKED_TOAST_TEXT}
                                           </p>
                                         </>
             )
@@ -1991,9 +2050,10 @@ interface MobileBottomSheetProps {
   setSheetState: (s: SheetState) => void;
   topicGroups: NeetCodeTopic[];
   totalSolved: number;
+  totalUnlocked: number;
   expandedTopic: string | null;
   onTopicToggle: (topic: string) => void;
-  onSolvedProblemSelect: (p: NeetCodeProblem) => void;
+  onOpenProblemSelect: (p: NeetCodeProblem) => void;
   onLockedProblemSelect: () => void;
 }
 
@@ -2002,9 +2062,10 @@ function MobileBottomSheet({
   setSheetState,
   topicGroups,
   totalSolved,
+  totalUnlocked,
   expandedTopic,
   onTopicToggle,
-  onSolvedProblemSelect,
+  onOpenProblemSelect,
   onLockedProblemSelect,
 }: MobileBottomSheetProps) {
   const startY = useRef(0);
@@ -2068,10 +2129,11 @@ function MobileBottomSheet({
           if (sheetState === "peek") setSheetState("half");
         }}
       >
-        <div className="w-10 h-1 bg-border rounded-full mb-3" />
+        <div className="w-10 h-1 bg-border rounded-full mb-2" />
         <p className="font-body text-xs text-muted">
-          {totalSolved}/150 solved · {topicGroups.length} topics
+          {totalSolved}/150 solved · {totalUnlocked} unlocked · {topicGroups.length} topics
         </p>
+        <StatusLegend className="mt-0.5" />
       </div>
 
       {/* Accordion list */}
@@ -2111,23 +2173,27 @@ function MobileBottomSheet({
 
               {isOpen && (
                 <div>
-                  {group.problems.map((problem) => (
+                  {group.problems.map((problem) => {
+                    const status = getProblemStatus(problem);
+                    return (
                     <button
                       key={problem.id}
                       className={[
                         "w-full flex items-center gap-3 px-6 py-2.5 border-b border-border/20 text-left",
                         "transition-colors duration-150",
-                        problem.solved ? "hover:bg-white/4" : "opacity-40",
+                        status === "locked" ? "opacity-40" : "hover:bg-white/4",
                       ].join(" ")}
                       onClick={() => {
-                        if (!problem.solved) {
+                        if (status === "locked") {
                           onLockedProblemSelect();
                         } else {
-                          onSolvedProblemSelect(problem);
+                          onOpenProblemSelect(problem);
                         }
                       }}
                     >
-                      {problem.solved ? (
+                      {status === "unlocked" ? (
+                        <OpenLockIcon />
+                      ) : status === "solved" ? (
                         <svg
                           className="w-3.5 h-3.5 shrink-0 text-green-400"
                           fill="none"
@@ -2147,7 +2213,11 @@ function MobileBottomSheet({
                       <span
                         className={[
                           "font-body text-sm",
-                          problem.solved ? "text-muted" : "text-muted/50",
+                          status === "solved"
+                            ? "text-muted"
+                            : status === "unlocked"
+                              ? "text-text"
+                              : "text-muted/50",
                         ].join(" ")}
                       >
                         {problem.title}
@@ -2161,7 +2231,8 @@ function MobileBottomSheet({
                         {problem.difficulty[0]}
                       </span>
                     </button>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -2224,12 +2295,15 @@ function NeetCodeMap() {
 
   const topicGroups = getTopicGroups();
   const totalSolved = getSolvedCount();
+  const totalUnlocked = getUnlockedCount();
   const totalPct = Math.round((totalSolved / 150) * 100);
 
   // Auto-open problem from URL slug on load
   useEffect(() => {
     if (!slug) return;
-    const problem = neetcodeProblems.find((p) => p.slug === slug && p.solved);
+    const problem = neetcodeProblems.find(
+      (p) => p.slug === slug && getProblemStatus(p) !== "locked",
+    );
     if (!problem) return;
     setSelectedProblem(problem);
     setExpandedTopic(problem.topic);
@@ -2329,13 +2403,6 @@ function NeetCodeMap() {
       setSelectedProblem(null);
       navigate("/blog/neetcode", { state: blogState });
     } else {
-      const hasAnySolved = neetcodeProblems.some(
-        (p) => p.topic === topic && p.solved,
-      );
-      if (!hasAnySolved) {
-        showLockedToast();
-        return;
-      }
       setChildrenVisible(false);
       setExpandedTopic(topic);
       setSelectedProblem(null);
@@ -2349,7 +2416,7 @@ function NeetCodeMap() {
   }
 
   function handleProblemClickOnMap(p: NeetCodeProblem) {
-    if (!p.solved) {
+    if (getProblemStatus(p) === "locked") {
       setSelectedProblem(null);
       navigate("/blog/neetcode", { state: blogState });
       showLockedToast();
@@ -2369,7 +2436,7 @@ function NeetCodeMap() {
   }
 
   function selectFromList(p: NeetCodeProblem) {
-    if (!p.solved) {
+    if (getProblemStatus(p) === "locked") {
       setSelectedProblem(null);
       navigate("/blog/neetcode", { state: blogState });
       showLockedToast();
@@ -2384,6 +2451,10 @@ function NeetCodeMap() {
   }
 
   function selectFromAccordion(p: NeetCodeProblem) {
+    if (getProblemStatus(p) === "locked") {
+      showLockedToast();
+      return;
+    }
     setSelectedProblem(p);
     navigate(`/blog/neetcode/${p.slug}`, { state: blogState });
     setSheetState("peek");
@@ -2416,7 +2487,7 @@ function NeetCodeMap() {
       aria-live="polite"
     >
       <span className="font-body text-sm text-text">
-        Still locked. Working through these one at a time - check back soon. 🔒
+        {LOCKED_TOAST_TEXT}
       </span>
       <button
         onClick={() => setLockedToast(false)}
@@ -2456,7 +2527,7 @@ function NeetCodeMap() {
           NeetCode 150
         </span>
         <span className="font-body text-xs text-faint hidden sm:inline">
-          {totalSolved}/150 solved
+          {totalSolved}/150 solved · {totalUnlocked} unlocked
         </span>
       </div>
       <div className="flex items-center gap-3 flex-1 max-w-xs">
@@ -2475,6 +2546,7 @@ function NeetCodeMap() {
 
   return (
     <div style={{ paddingTop: `${NAV_H}px` }}>
+      <PythonSwitchNotice />
       {toastJSX}
       {topBarJSX}
 
@@ -2539,9 +2611,10 @@ function NeetCodeMap() {
             setSheetState={setSheetState}
             topicGroups={topicGroups}
             totalSolved={totalSolved}
+            totalUnlocked={totalUnlocked}
             expandedTopic={expandedTopic}
             onTopicToggle={handleTopicClick}
-            onSolvedProblemSelect={selectFromAccordion}
+            onOpenProblemSelect={selectFromAccordion}
             onLockedProblemSelect={showLockedToast}
           />
         </div>
@@ -2559,6 +2632,7 @@ function NeetCodeMap() {
               }}
           >
             <div ref={listRef} className="p-4">
+              <StatusLegend className="px-1 mb-4" />
               {topicGroups.map((group) => (
                 <div key={group.name} data-topic={group.name}>
                   <TopicGroup
