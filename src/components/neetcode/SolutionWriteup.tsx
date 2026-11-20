@@ -68,9 +68,19 @@ export default function SolutionWriteup({ solution }: { solution: NeetCodeSoluti
       {solution.learned && (
         <div className="flex flex-col gap-1.5">
           <p className={SECTION_LABEL}>What I Learned</p>
-          <p className={BODY}>
-            <InlineText text={solution.learned} />
-          </p>
+          {Array.isArray(solution.learned) ? (
+            <ul className={`${BODY} list-disc pl-5 flex flex-col gap-2`}>
+              {solution.learned.map((item, i) => (
+                <li key={i}>
+                  <InlineText text={item} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={BODY}>
+              <InlineText text={solution.learned} />
+            </p>
+          )}
         </div>
       )}
 

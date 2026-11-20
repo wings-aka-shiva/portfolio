@@ -44,7 +44,7 @@ const LANGS: Record<Language, LanguageSpec> = {
     ),
     constants: words("True False None"),
     builtins: words(
-      "set dict list tuple int str bool float len range enumerate zip sorted min max sum abs map filter any all print self collections defaultdict Counter deque heapq",
+      "set dict list tuple int str bool float len ord range enumerate zip sorted min max sum abs map filter any all print self collections defaultdict Counter deque heapq",
     ),
     definers: words("def class"),
   },
