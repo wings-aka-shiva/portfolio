@@ -5,7 +5,7 @@ export interface ApproachStep {
 
 export interface NeetCodeSolution {
   id: number; // matches NeetCodeProblem.id
-  day: number;
+  date: string; // ISO "YYYY-MM-DD"
   lcNumber: number;
   tc: string; // time complexity, e.g. "O(n)"
   summary: string;
@@ -20,7 +20,7 @@ export interface NeetCodeSolution {
 export const neetcodeSolutions: Record<number, NeetCodeSolution> = {
   1: {
     id: 1,
-    day: 1,
+    date: "2026-11-19",
     lcNumber: 217,
     tc: "O(n)",
     summary:
@@ -64,7 +64,7 @@ export const neetcodeSolutions: Record<number, NeetCodeSolution> = {
   },
   2: {
     id: 2,
-    day: 1,
+    date: "2026-11-19",
     lcNumber: 242,
     tc: "O(n)",
     summary: "Given two strings `s` and `t`, return `True` if `t` is an anagram of `s`.",
@@ -78,8 +78,8 @@ export const neetcodeSolutions: Record<number, NeetCodeSolution> = {
         text: "Sorting is overkill. We don't need order, we need to know if both strings use the exact same characters the exact same number of times.",
       },
       {
-        label: "Counting in 26 slots",
-        text: "The constraint says lowercase English letters only, so there are just 26 possible characters. Create a list of length 26, where each index maps to a character via `ord(char) - ord('a')`. Increment for every character in `s`, decrement for every character in `t`. If everything lands back at zero, they're anagrams.",
+        label: "Think of it as a tally sheet",
+        text: "Walk through `s` and add one tally for each letter. Then walk through `t` and remove one tally for each letter. If the two are truly anagrams, every tally you added gets removed again, so every counter ends back at zero. Any leftover, positive or negative, means the letters didn't line up. Since there are only 26 lowercase letters, a 26-slot list is all we need. We map a letter to its slot with `ord(char) - ord('a')` ('a' → 0, 'b' → 1, and so on).",
       },
       {
         label: "Why not a set?",
@@ -115,7 +115,7 @@ export const neetcodeSolutions: Record<number, NeetCodeSolution> = {
   },
   3: {
     id: 3,
-    day: 2,
+    date: "2026-11-20",
     lcNumber: 1,
     tc: "O(n)",
     summary:
@@ -161,7 +161,7 @@ export const neetcodeSolutions: Record<number, NeetCodeSolution> = {
   },
   4: {
     id: 4,
-    day: 2,
+    date: "2026-11-20",
     lcNumber: 49,
     tc: "O(n · k)",
     summary:
@@ -208,7 +208,7 @@ class Solution:
   },
   5: {
     id: 5,
-    day: 2,
+    date: "2026-11-20",
     lcNumber: 347,
     tc: "O(n)",
     summary: "Given an integer array `nums` and an integer `k`, return the `k` most frequent elements.",
@@ -264,7 +264,7 @@ class Solution:
   },
   7: {
     id: 7,
-    day: 2,
+    date: "2026-11-20",
     lcNumber: 238,
     tc: "O(n)",
     summary:
@@ -275,8 +275,8 @@ class Solution:
         text: "Every idea I had involved division: total product divided by each element. But the constraint explicitly bans division. That leaves prefix and suffix products.",
       },
       {
-        label: "Prefix × suffix",
-        text: "For any index `i`, the answer is `(product of everything left of i) × (product of everything right of i)`. Two independent halves, no division needed.",
+        label: "Picture standing on element i",
+        text: "Everything to your left, multiplied together, is one number. Everything to your right, multiplied together, is another. Multiply those two and you have the product of the whole array except the element you're standing on. No division needed, you just never include yourself.",
       },
       {
         label: "Using the output array",
@@ -284,11 +284,11 @@ class Solution:
       },
       {
         label: "Key detail",
-        text: "When building the suffix, append `prod` before multiplying, because we want the product of everything to the right, excluding the current element. Starting `prod` at 1 handles the last element naturally (nothing to its right).",
+        text: "When building the suffix, store `prod` at index `i` before multiplying, because we want the product of everything to the right, excluding the current element. Starting `prod` at 1 handles the last element naturally (nothing to its right).",
       },
       {
         label: "Complexity",
-        text: "O(n) time. The approach needs only O(1) extra space (output array not counted), but this version uses O(n) extra because `nums[::-1]` and `suffix_prods[::-1]` each make a copy.",
+        text: "O(n) time, O(1) extra space (output array not counted).",
       },
     ],
     insight:
@@ -296,14 +296,13 @@ class Solution:
     language: "python",
     code: `class Solution:
     def productExceptSelf(self, nums: list[int]) -> list[int]:
-        suffix_prods = list()
+        suffix_prods = [1] * len(nums)
         prod = 1
 
-        for num in nums[::-1]:
-            suffix_prods.append(prod)
-            prod *= num
+        for i in range(len(nums) - 1, -1, -1):
+            suffix_prods[i] = prod
+            prod *= nums[i]
 
-        suffix_prods = suffix_prods[::-1]
         prod = 1
 
         for ind in range(len(nums)):
@@ -312,11 +311,129 @@ class Solution:
 
         return suffix_prods`,
     learned: [
-      "`nums[::-1]` reverses a list in one line without mutating the original, unlike `.reverse()`.",
-      "Append before multiply vs after multiply changes whether the current element is included. That matters a lot for prefix/suffix problems.",
+      "`range(len(nums) - 1, -1, -1)` walks the indices backwards without copying the list.",
+      "Storing before multiplying vs after multiplying changes whether the current element is included. That matters a lot for prefix/suffix problems.",
+    ],
+    gotchas: [],
+  },
+  8: {
+    id: 8,
+    date: "2026-11-21",
+    lcNumber: 36,
+    tc: "O(1)",
+    summary:
+      "You're handed a Sudoku board, partly filled. You're not solving it, you're just the referee. Your only job: check that nobody has broken the rules so far. No repeated digit in any row, any column, or any 3×3 box.",
+    approach: [
+      {
+        label: "Where most people start (and get stuck)",
+        text: "The obvious instinct is \"let me check all the rows, then go back and check all the columns, then go back again for the boxes.\" That works, but you're walking the whole board three times. The moment you feel yourself scanning the same grid again and again, that's your signal there's a smarter way.",
+      },
+      {
+        label: "The shift in thinking",
+        text: "Every cell belongs to exactly one row, one column, and one box at the same time. So why not check all three the moment you land on a cell? Visit each cell once, and ask three questions right there: \"Have I seen this digit in this row before? This column? This box?\" If any answer is yes, the board's already broken, stop. If all three are no, remember this digit for its row, column, and box, then move on.",
+      },
+      {
+        label: "What you need to remember things",
+        text: "For each of the 9 rows you need a memory of \"digits seen so far.\" Same for the 9 columns, and the 9 boxes. A set is perfect for this: it's built to answer \"have I seen this already?\" instantly.",
+      },
+      {
+        label: "The one genuinely tricky bit",
+        text: "Rows and columns are easy: the cell at `(row, col)` obviously belongs to row `row` and column `col`. But which box? The boxes are numbered 0 to 8, left to right, top to bottom. The pattern that cracks it: divide the row and column by 3. `row // 3` tells you which band of boxes you're in (top, middle, bottom), and `col // 3` tells you which column of boxes. Stitch them together with `(row // 3) * 3 + (col // 3)` and you get the box number. Don't just memorize this: sketch the 9 boxes on paper and plug in a few cells until it clicks. That \"aha\" is worth more than the formula.",
+      },
+      {
+        label: "Complexity",
+        text: "The board is always 9×9, so this is effectively constant time and space.",
+      },
+    ],
+    insight:
+      "Every cell belongs to exactly one row, one column and one box, so check all three the moment you land on it: one pass, three sets of memory.",
+    language: "python",
+    code: `class Solution:
+    def isValidSudoku(self, board: list[list[str]]) -> bool:
+        rows_set = [set() for _ in range(9)]
+        cols_set = [set() for _ in range(9)]
+        sqrs_set = [set() for _ in range(9)]
+
+        for row in range(len(board)):
+            for col in range(len(board)):
+                if board[row][col] == ".":
+                    continue
+
+                if board[row][col] in rows_set[row]:
+                    return False
+                rows_set[row].add(board[row][col])
+
+                if board[row][col] in sqrs_set[(row // 3) * 3 + (col // 3)]:
+                    return False
+                sqrs_set[(row // 3) * 3 + (col // 3)].add(board[row][col])
+
+                if board[row][col] in cols_set[col]:
+                    return False
+                cols_set[col].add(board[row][col])
+
+        return True`,
+    learned: ["`//` is integer division, the quiet hero behind the box-index formula."],
+    gotchas: [
+      "`set()` makes an empty set. Watch out: `{}` makes an empty dict, not a set.",
+      "Sets use `.add()`, lists use `.append()`, but checking membership with `in` works the same for both.",
+    ],
+  },
+  9: {
+    id: 9,
+    date: "2026-11-21",
+    lcNumber: 128,
+    tc: "O(n)",
+    summary:
+      "Given an unsorted array, return the length of the longest run of consecutive integers. Must run in O(n) time.",
+    approach: [
+      {
+        label: "First thought",
+        text: "Sort the array and scan for runs. But sorting is O(n log n), and the problem explicitly demands O(n). So sorting is off the table.",
+      },
+      {
+        label: "Put everything in a set",
+        text: "We need instant \"does this number exist?\" lookups. A set gives that in O(1). Convert the whole array to a set first, which also drops duplicates for free.",
+      },
+      {
+        label: "The naive trap",
+        text: "Now walk through and for each number keep checking `num + 1`, `num + 2`, and so on, counting the run. This works, but it's wasteful. If the array has `12, 13, 14, 15`, you'd count the full run starting from 13, then count almost the same run again starting from 12. For a long chain you re-walk the same numbers over and over, which can blow up toward O(n²).",
+      },
+      {
+        label: "The fix that makes it O(n)",
+        text: "Only start counting from the beginning of a sequence. How do you know a number is the beginning? If `num - 1` is not in the set, nothing comes before it, so it's a starting point. If `num - 1` is in the set, skip this number entirely, because its run will be counted when we reach the real start. This way each sequence is counted exactly once, and every number is touched at most twice overall.",
+      },
+    ],
+    insight:
+      "The whole game is \"only count from the start of a run.\" Checking `num - 1` is how you spot a start, and it's what turns a potential O(n²) into a clean O(n).",
+    language: "python",
+    code: `class Solution:
+    def longestConsecutive(self, nums: list[int]) -> int:
+        nums_set = set(nums)
+        max_conseq = 0
+
+        for num in nums_set:
+            if num - 1 in nums_set:
+                continue
+
+            temp = num
+            conseq = 0
+
+            while temp in nums_set:
+                temp += 1
+                conseq += 1
+
+            max_conseq = max(max_conseq, conseq)
+
+        return max_conseq`,
+    learned: [
+      "`set(nums)` converts a whole list to a set in one line and drops duplicates for free.",
+      "Iterate the set, not the list. Looping over `nums` re-processes every duplicate, and for an array full of repeats that pushes the work toward O(n²) and times out. Looping over `nums_set` visits each distinct value exactly once. Since the algorithm treats each number independently (it only queries the set by value, never by position), the set's lack of ordering doesn't matter at all.",
+      "O(n) doesn't mean \"touch each element once.\" Here each number can be visited twice (once in the outer loop, once while walking a run), and that's still O(n) overall.",
     ],
     gotchas: [
-      "Slicing copies. `nums[::-1]` builds a whole new list, so it costs O(n) memory. For true O(1) extra space, loop with `reversed(nums)` (a lazy iterator, no copy) and fill the output by index instead of appending and reversing.",
+      "The \"only start from a sequence head\" check is doing all the heavy lifting. Without it, the inner `while` loop re-counts overlapping runs and the solution silently degrades to O(n²).",
+      "Iterating over the raw list instead of the set passes small cases but hits Time Limit Exceeded on inputs with heavy duplication. The set collapses those repeats.",
+      "Empty array: the loop never runs, `max_conseq` stays 0, which is the correct answer.",
     ],
   },
 };

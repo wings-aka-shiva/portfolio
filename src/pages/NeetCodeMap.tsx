@@ -8,6 +8,7 @@ import PythonSwitchNotice from "../components/ui/PythonSwitchNotice";
 import SolutionWriteup from "../components/neetcode/SolutionWriteup";
 import CodeBlock from "../components/neetcode/CodeBlock";
 import { getSolution } from "../data/neetcode-solutions";
+import PremiumPlaceholder from "../components/neetcode/PremiumPlaceholder";
 import {
   neetcodeProblems,
   getTopicGroups,
@@ -17,6 +18,7 @@ import {
   type NeetCodeProblem,
   type NeetCodeTopic,
   type Difficulty,
+  type ProblemStatus,
 } from "../data/neetcode-problems";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -60,6 +62,48 @@ function JavaSolutionLabel() {
       <p className="font-mono text-[11px] text-muted mt-0.5">written before the switch to Python</p>
     </div>
   );
+}
+
+/** Three stacked up-chevrons that ripple upward (bottom first) in the bottom sheet's peek strip. */
+function PullUpChevrons() {
+  // Top to bottom; the bottom chevron animates first.
+  const delays = ["0.3s", "0.15s", "0s"];
+  return (
+    <div className="flex flex-col items-center" aria-hidden="true">
+      {delays.map((delay, i) => (
+        <svg
+          key={i}
+          width="14"
+          height="6"
+          viewBox="0 0 14 6"
+          fill="none"
+          stroke="var(--color-accent-text)"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={`chevron-wave ${i > 0 ? "-mt-[2px]" : ""}`}
+          style={{ animationDelay: delay }}
+        >
+          <path d="M1 5 L7 1 L13 5" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+/** Premium problems look locked but stay clickable. */
+function looksLocked(status: ProblemStatus): boolean {
+  return status === "locked" || status === "premium";
+}
+
+/** "2026-11-21" -> "Nov 21, 2026", pinned to UTC so it never shifts a day. */
+function formatSolutionDate(iso: string): string {
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 const DIFF_COLOR: Record<Difficulty, string> = {
@@ -218,7 +262,7 @@ function ProblemRow({ problem, selected, onClick }: ProblemRowProps) {
         selected
           ? "bg-accent/15 border border-accent/30"
           : "hover:bg-white/4 border border-transparent",
-        status === "locked" ? "opacity-40" : "",
+        looksLocked(status) ? "opacity-40" : "",
       ].join(" ")}
     >
       <span
@@ -498,7 +542,7 @@ function SVGMap({
                 cursor: "pointer",
                 transformOrigin: `${expandedNode.x}px ${expandedNode.y}px`,
                 transform: `scale(${childrenVisible ? 1 : 0})`,
-                opacity: childrenVisible ? (status === "locked" ? 0.45 : 1) : 0,
+                opacity: childrenVisible ? (looksLocked(status) ? 0.45 : 1) : 0,
                 transition: [
                   `transform 320ms cubic-bezier(0.34,1.56,0.64,1) ${i * 42}ms`,
                   `opacity 220ms ease ${i * 42}ms`,
@@ -528,7 +572,7 @@ function SVGMap({
                 stroke={DIFF_COLOR[problem.difficulty]}
                 strokeWidth={isSelected ? 2.5 : 1.5}
                 strokeDasharray={status === "unlocked" ? "3 2" : undefined}
-                opacity={status === "locked" ? 0.65 : 1}
+                opacity={looksLocked(status) ? 0.65 : 1}
               />
               {status === "unlocked" ? (
                 <g
@@ -576,7 +620,7 @@ function SVGMap({
                 dominantBaseline="hanging"
                 fontSize="7"
                 fill={
-                  status === "locked"
+                  looksLocked(status)
                     ? "rgba(107,114,128,0.65)"
                     : "rgba(209,213,219,0.8)"
                 }
@@ -633,7 +677,7 @@ function DetailPanel({
           <p className="font-body text-xs text-faint mt-1">{problem.topic}</p>
           {solution && (
             <p className="font-mono text-[11px] text-muted mt-1">
-              Day {solution.day} · LC #{solution.lcNumber} · TC {solution.tc}
+              <time dateTime={solution.date}>{formatSolutionDate(solution.date)}</time> · LC #{solution.lcNumber} · TC {solution.tc}
             </p>
           )}
           <div className="mt-3">
@@ -677,6 +721,8 @@ function DetailPanel({
         {
           solution ? (
             <SolutionWriteup solution={solution} />
+          ) : getProblemStatus(problem) === "premium" ? (
+            <PremiumPlaceholder />
           ) : problem.solved && problem.id === 16 ? (
             <>
               {/* Problem Summary */}
@@ -1277,187 +1323,6 @@ function DetailPanel({
 
                           <KofiPanel firstLine="Enjoyed the breakdown?" />
                         </>
-                      ) : problem.solved && problem.id === 9 ? (
-                        <>
-                          {/* Problem Summary */}
-                          <div className="flex flex-col gap-1.5">
-                            <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Problem Summary</p>
-                            <p className="font-body text-sm text-text/80 leading-relaxed">
-                              Given an unsorted array of integers, return the length of the
-                              longest consecutive elements sequence. Must run in O(n).
-                            </p>
-                          </div>
-
-                            {/* Approach */}
-                            <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Approach</p>
-                              <p className="font-body text-sm text-text/80 leading-relaxed">
-                                Since the array is unsorted, sorting was off the table as it would
-                                cost O(n log n). The challenge is that consecutive elements could be
-                                anywhere in the array, so we need a way to check for neighbours without
-                                caring about position - that's a HashSet. First, dump the entire array
-                                into a HashSet so every number is accessible in O(1). Then iterate over
-                                the array and for each value, check if val+1 exists and keep counting
-                                upward. The key optimisation is the val-1 check: if val-1 exists in the
-                                set, the current number is in the middle of a sequence, not the start -
-                                so skip it. This ensures each sequence is only counted once from its
-                                true starting point, keeping the overall complexity at O(n).
-                              </p>
-                            </div>
-
-                            {/* The Insight */}
-                            <div className="border-l-2 border-accent pl-3">
-                              <p className="font-body text-sm text-accent italic leading-relaxed">
-                                Checking val-1 before counting is what makes it O(n) - it guarantees
-                                you only start counting from the beginning of a sequence, never from
-                                the middle.
-                              </p>
-                            </div>
-
-                            {/* Code */}
-                            <div className="flex flex-col gap-1.5">
-                              <JavaSolutionLabel />
-                              <CodeBlock language="java" code={`class Solution {
-    public int longestConsecutive(int[] nums) {
-        if(nums.length == 0)
-            return 0;
-        if(nums.length == 1)
-            return 1;
-        HashSet<Integer> numbers = new HashSet<>();
-        for(int num: nums) {
-            numbers.add(num);
-        }
-        int longestSubSequence = 0;
-        for(int num: numbers) {
-            int count = 0;
-            if(!numbers.contains(num-1)) {
-                do {
-                    count++;
-                    num++;
-                } while(numbers.contains(num));
-            }
-            longestSubSequence = Math.max(longestSubSequence, count);
-        }
-        return longestSubSequence;
-    }
-}`} />
-                            </div>
-
-                            {/* What I Learned */}
-                            <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
-                              <p className="font-body text-sm text-text/80 leading-relaxed">
-                                The smart val-1 lookup is what collapses the complexity from O(n²)
-                                to O(n) - without it you'd recount sequences from every element
-                                within them. A simple check that makes a huge difference.
-                              </p>
-                            </div>
-
-                            {/* Gotchas */}
-                            <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
-                              <p className="font-body text-sm text-text/80 leading-relaxed">
-                                Empty array and single element are handled upfront as early returns.
-                                Iterating over the HashSet rather than the original array avoids
-                                processing duplicates - if the same number appears twice in nums,
-                                the HashSet naturally deduplicates it.
-                              </p>
-                            </div>
-
-                            <KofiPanel firstLine="Enjoyed the breakdown?" />
-                          </>
-                        ) : problem.solved && problem.id === 8 ? (
-                          <>
-                            {/* Problem Summary */}
-                            <div className="flex flex-col gap-1.5">
-                              <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Problem Summary</p>
-                              <p className="font-body text-sm text-text/80 leading-relaxed">
-                                Determine if a 9x9 Sudoku board is valid by checking that each row,
-                                column, and 3x3 sub-box contains no repeated digits. Empty cells
-                                are skipped.
-                              </p>
-                            </div>
-
-                              {/* Approach */}
-                              <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Approach</p>
-                                <p className="font-body text-sm text-text/80 leading-relaxed">
-                                  Since we're validating, HashSet is the right tool - O(1) lookup
-                                  for duplicate detection. A valid Sudoku has exactly 9 rows, 9 columns,
-                                  and 9 quadrants, so I created three arrays of 9 HashSets each - one
-                                  array per constraint. Rows and columns map cleanly to indices i and j.
-                                  The tricky part was mapping any cell [i][j] to its quadrant index.
-                                  It took some experimentation and working through examples on paper,
-                                  but the formula (i/3)*3 + (j/3) does it - integer division narrows
-                                  i and j to their 3x3 block coordinates, and the formula collapses
-                                  them into a single index from 0 to 8. For each cell, if adding its
-                                  value to any of the three sets returns false, a duplicate exists and
-                                  the board is invalid.
-                                </p>
-                              </div>
-
-                              {/* The Insight */}
-                              <div className="border-l-2 border-accent pl-3">
-                                <p className="font-body text-sm text-accent italic leading-relaxed">
-                                  9 rows, 9 columns, 9 quadrants - three arrays of 9 HashSets map
-                                  directly to all three constraints, and (i/3)*3 + (j/3) is the
-                                  formula that links any cell to its quadrant index.
-                                </p>
-                              </div>
-
-                              {/* Code */}
-                              <div className="flex flex-col gap-1.5">
-                                <JavaSolutionLabel />
-                                <CodeBlock language="java" code={`class Solution {
-    public boolean isValidSudoku(char[][] board) {
-        Set<Character>[] rowSet = new HashSet[9];
-        Set<Character>[] colSet = new HashSet[9];
-        Set<Character>[] quadSet = new HashSet[9];
-        for(int i = 0; i < 9; ++i) {
-            rowSet[i] = new HashSet<Character>();
-            colSet[i] = new HashSet<Character>();
-            quadSet[i] = new HashSet<Character>();
-        }
-        for(int i = 0; i < 9; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                if(board[i][j]=='.') continue;
-                if(rowSet[i].add(board[i][j]) == false) return false;
-                if(colSet[j].add(board[i][j]) == false) return false;
-                if(quadSet[((i/3)*3)+(j/3)].add(board[i][j]) == false) return false;
-            }
-        }
-        return true;
-    }
-}`} />
-                              </div>
-
-                              {/* What I Learned */}
-                              <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">What I Learned</p>
-                                <p className="font-body text-sm text-text/80 leading-relaxed">
-                                  Approaching a problem from first principles rather than prior knowledge
-                                  of the game helped here - breaking it down to rows, columns and quadrants
-                                  as separate constraints made the structure clear. Also a good reminder
-                                  that you can derive your own index mapping formulas through
-                                  experimentation - (i/3)*3 + (j/3) wasn't obvious upfront but fell
-                                  into place through working examples.
-                                </p>
-                              </div>
-
-                              {/* Gotchas */}
-                              <div className="flex flex-col gap-1.5">
-                                <p className="font-body text-xs uppercase tracking-wider text-muted mb-2">Gotchas</p>
-                                <p className="font-body text-sm text-text/80 leading-relaxed">
-                                  HashSet.add() returns false if the element already exists - using
-                                  that return value directly as the duplicate check is clean and avoids
-                                  a separate contains() call. Empty cells marked as '.' must be skipped
-                                  - including them would incorrectly flag multiple empty cells in the
-                                  same row as duplicates.
-                                </p>
-                              </div>
-
-                              <KofiPanel firstLine="Enjoyed the breakdown?" />
-                            </>
                                       ) : problem.solved ? (
                                         <>
                                           <p className="font-body text-sm text-text/80 leading-relaxed">
@@ -1503,7 +1368,7 @@ function useIsMobile(): boolean {
 }
 
 type SheetState = "peek" | "half" | "full";
-const PEEK_H = 60;
+const PEEK_H = 84;
 
 interface MobileBottomSheetProps {
   sheetState: SheetState;
@@ -1569,6 +1434,7 @@ function MobileBottomSheet({
   }
 
   const h = dragH ?? resolveH(sheetState);
+  const showPullHint = sheetState === "peek" && dragH === null;
 
   return (
     <div
@@ -1580,16 +1446,38 @@ function MobileBottomSheet({
     >
       {/* Drag handle + peek strip */}
       <div
-        className="flex flex-col items-center pt-3 pb-2 cursor-grab active:cursor-grabbing select-none"
+        className={[
+          "flex flex-col items-center pb-2 cursor-grab active:cursor-grabbing select-none",
+          showPullHint ? "pt-2" : "pt-3",
+        ].join(" ")}
         style={{ height: `${PEEK_H}px` }}
+        role="button"
+        tabIndex={0}
+        aria-expanded={sheetState !== "peek"}
+        aria-label="Show the full problem list"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
         onClick={() => {
           if (sheetState === "peek") setSheetState("half");
         }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            if (sheetState === "peek") setSheetState("half");
+          }
+        }}
       >
-        <div className="w-10 h-1 bg-border rounded-full mb-2" />
+        {showPullHint ? (
+          <>
+            <PullUpChevrons />
+            <p className="font-body text-[11px] leading-tight text-muted mt-0.5 mb-1">
+              Pull up for the full list
+            </p>
+          </>
+        ) : (
+          <div className="w-10 h-1 bg-border rounded-full mb-2" />
+        )}
         <p className="font-body text-xs text-muted">
           {totalSolved}/150 solved · {totalUnlocked} unlocked · {topicGroups.length} topics
         </p>
@@ -1641,7 +1529,7 @@ function MobileBottomSheet({
                       className={[
                         "w-full flex items-center gap-3 px-6 py-2.5 border-b border-border/20 text-left",
                         "transition-colors duration-150",
-                        status === "locked" ? "opacity-40" : "hover:bg-white/4",
+                        looksLocked(status) ? "opacity-40" : "hover:bg-white/4",
                       ].join(" ")}
                       onClick={() => {
                         if (status === "locked") {
