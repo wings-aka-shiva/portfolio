@@ -85,16 +85,18 @@ export default function SolutionWriteup({ solution }: { solution: NeetCodeSoluti
       )}
 
       {/* Gotchas */}
-      <div className="flex flex-col gap-1.5">
-        <p className={SECTION_LABEL}>Gotchas</p>
-        <ul className={`${BODY} list-disc pl-5 flex flex-col gap-2`}>
-          {solution.gotchas.map((g, i) => (
-            <li key={i}>
-              <InlineText text={g} />
-            </li>
-          ))}
-        </ul>
-      </div>
+      {solution.gotchas.length > 0 && (
+        <div className="flex flex-col gap-1.5">
+          <p className={SECTION_LABEL}>Gotchas</p>
+          <ul className={`${BODY} list-disc pl-5 flex flex-col gap-2`}>
+            {solution.gotchas.map((g, i) => (
+              <li key={i}>
+                <InlineText text={g} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <KofiPanel firstLine="Enjoyed the breakdown?" />
     </>

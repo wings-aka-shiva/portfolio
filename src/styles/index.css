@@ -172,3 +172,19 @@
     opacity: 0;
   }
 }
+
+/* NeetCode mobile bottom sheet: pull-up chevrons ripple upward in the peek strip */
+@keyframes chevron-wave {
+  0%, 100% { opacity: 0.2; }
+  50%      { opacity: 1; }
+}
+.chevron-wave {
+  opacity: 0.2;
+  animation: chevron-wave 1.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chevron-wave {
+    animation: none;
+    opacity: 0.7;
+  }
+}

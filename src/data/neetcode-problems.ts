@@ -8,6 +8,8 @@ export interface NeetCodeProblem {
   slug: string;
   solved: boolean;
   leetcodeUrl: string;
+  /** Behind LeetCode Premium: shown as locked but opens a placeholder. */
+  premium?: boolean;
 }
 
 export interface NeetCodeTopic {
@@ -24,7 +26,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
   { id: 3,   topic: "Arrays & Hashing",          title: "Two Sum",                                         difficulty: "Easy",   slug: "two-sum",                                         solved: true,  leetcodeUrl: lc("two-sum") },
   { id: 4,   topic: "Arrays & Hashing",          title: "Group Anagrams",                                  difficulty: "Medium", slug: "group-anagrams",                                  solved: true, leetcodeUrl: lc("group-anagrams") },
   { id: 5,   topic: "Arrays & Hashing",          title: "Top K Frequent Elements",                         difficulty: "Medium", slug: "top-k-frequent-elements",                         solved: true, leetcodeUrl: lc("top-k-frequent-elements") },
-  { id: 6,   topic: "Arrays & Hashing",          title: "Encode and Decode Strings",                       difficulty: "Medium", slug: "encode-and-decode-strings",                       solved: false, leetcodeUrl: lc("encode-and-decode-strings") },
+  { id: 6,   topic: "Arrays & Hashing",          title: "Encode and Decode Strings",                       difficulty: "Medium", slug: "encode-and-decode-strings",                       solved: false, leetcodeUrl: lc("encode-and-decode-strings"), premium: true },
   { id: 7,   topic: "Arrays & Hashing",          title: "Product of Array Except Self",                    difficulty: "Medium", slug: "product-of-array-except-self",                    solved: true, leetcodeUrl: lc("product-of-array-except-self") },
   { id: 8,   topic: "Arrays & Hashing",          title: "Valid Sudoku",                                    difficulty: "Medium", slug: "valid-sudoku",                                    solved: true, leetcodeUrl: lc("valid-sudoku") },
   { id: 9,   topic: "Arrays & Hashing",          title: "Longest Consecutive Sequence",                    difficulty: "Medium", slug: "longest-consecutive-sequence",                    solved: true, leetcodeUrl: lc("longest-consecutive-sequence") },
@@ -239,7 +241,7 @@ export function getSolvedCount(): number {
   return neetcodeProblems.filter((p) => p.solved).length;
 }
 
-export type ProblemStatus = "solved" | "unlocked" | "locked";
+export type ProblemStatus = "solved" | "unlocked" | "locked" | "premium";
 
 const statusById: Map<number, ProblemStatus> = (() => {
   const map = new Map<number, ProblemStatus>();
@@ -247,11 +249,13 @@ const statusById: Map<number, ProblemStatus> = (() => {
   for (const p of neetcodeProblems) {
     let status: ProblemStatus;
     if (p.solved) status = "solved";
+    else if (p.premium) status = "premium";
     else if (!prevSolvedByTopic.has(p.topic)) status = "unlocked";
     else if (prevSolvedByTopic.get(p.topic)) status = "unlocked";
     else status = "locked";
     map.set(p.id, status);
-    prevSolvedByTopic.set(p.topic, p.solved);
+    // A premium problem counts as passed, so the next one in its topic still unlocks.
+    prevSolvedByTopic.set(p.topic, p.solved || !!p.premium);
   }
   return map;
 })();
@@ -259,6 +263,7 @@ const statusById: Map<number, ProblemStatus> = (() => {
 /**
  * Within each topic (in data order): solved problems are "solved"; the first
  * problem, or one whose predecessor is solved, is "unlocked"; the rest are "locked".
+ * Unsolved premium problems are "premium" and count as passed for the chain.
  */
 export function getProblemStatus(p: NeetCodeProblem): ProblemStatus {
   return statusById.get(p.id) ?? "locked";
