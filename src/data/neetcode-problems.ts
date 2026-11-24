@@ -47,7 +47,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
   { id: 20,  topic: "Sliding Window",            title: "Sliding Window Maximum",                          difficulty: "Hard",   slug: "sliding-window-maximum",                          solved: false, leetcodeUrl: lc("sliding-window-maximum") },
 
   // Stack
-  { id: 21,  topic: "Stack",                     title: "Valid Parentheses",                               difficulty: "Easy",   slug: "valid-parentheses",                               solved: false, leetcodeUrl: lc("valid-parentheses") },
+  { id: 21,  topic: "Stack",                     title: "Valid Parentheses",                               difficulty: "Easy",   slug: "valid-parentheses",                               solved: true,  leetcodeUrl: lc("valid-parentheses") },
   { id: 22,  topic: "Stack",                     title: "Min Stack",                                       difficulty: "Medium", slug: "min-stack",                                       solved: false, leetcodeUrl: lc("min-stack") },
   { id: 23,  topic: "Stack",                     title: "Evaluate Reverse Polish Notation",                difficulty: "Medium", slug: "evaluate-reverse-polish-notation",                solved: false, leetcodeUrl: lc("evaluate-reverse-polish-notation") },
   { id: 24,  topic: "Stack",                     title: "Generate Parentheses",                            difficulty: "Medium", slug: "generate-parentheses",                            solved: false, leetcodeUrl: lc("generate-parentheses") },
