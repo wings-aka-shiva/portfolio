@@ -436,6 +436,174 @@ class Solution:
       "Empty array: the loop never runs, `max_conseq` stays 0, which is the correct answer.",
     ],
   },
+  10: {
+    id: 10,
+    date: "2026-11-24",
+    lcNumber: 125,
+    tc: "O(n)",
+    summary:
+      "A phrase is a palindrome if, after lowercasing everything and stripping out all non-alphanumeric characters, it reads the same forwards and backwards. Return `True` if `s` is a palindrome, `False` otherwise.",
+    approach: [
+      {
+        label: "The obvious first move",
+        text: "Clean the string: lowercase it, drop everything that isn't a letter or digit, then check if the cleaned string equals its own reverse. That works, but it builds a whole new string just to throw it away after one comparison.",
+      },
+      {
+        label: "Ask: do we even need the new string?",
+        text: "The cleaning was only ever a means to an end: comparing the two ends. So skip the middleman. Keep two pointers, one at the front and one at the back of the original string, and compare as you walk them inward.",
+      },
+      {
+        label: "Handling the junk characters",
+        text: "The catch is that the original string still has spaces, commas, colons. So before each comparison, nudge each pointer past any non-alphanumeric character. The front pointer moves right, the back pointer moves left, until both land on real characters. Then compare them (lowercased). If they ever disagree, it's not a palindrome, return `False` immediately. Otherwise step both inward and repeat until they meet.",
+      },
+      {
+        label: "The complexity surprise",
+        text: "The nested `while` loops look like they might be O(n²), but they're not. Each pointer only ever moves inward. Across the entire run, they collectively cover the string just once. So it's O(n) time, with the early exit making it even faster on non-palindromes.",
+      },
+      {
+        label: "Complexity",
+        text: "O(n) time, O(1) space. No cleaned-up copy of the string is ever built.",
+      },
+    ],
+    insight:
+      "Cleaning the string was never the goal, comparing the ends was. Two pointers on the raw string do the same job with no extra memory.",
+    language: "python",
+    code: `class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        ind_start, ind_end = 0, len(s) - 1
+
+        while ind_start < ind_end:
+            while ind_start < ind_end and not s[ind_start].isalnum():
+                ind_start += 1
+            while ind_start < ind_end and not s[ind_end].isalnum():
+                ind_end -= 1
+
+            if s[ind_start].lower() != s[ind_end].lower():
+                return False
+
+            ind_start += 1
+            ind_end -= 1
+
+        return True`,
+    learned: [
+      "`.isalnum()` checks if a character is a letter or digit, exactly the \"keep this one\" test the problem describes, no manual ASCII range needed.",
+      "`.lower()` handles the case-insensitive comparison in one call.",
+      "Nested `while` loops aren't automatically O(n²). When the inner loops only ever advance pointers that never reset, the total movement is bounded by the string length, so it's O(n) in disguise.",
+    ],
+    gotchas: [
+      "The `ind_start < ind_end` guard inside both inner loops matters. Without it, a string of all-junk characters (or pointers crossing mid-skip) could run a pointer off the end and compare out of bounds.",
+      "An empty or all-non-alphanumeric string (like `\" \"`) is correctly a palindrome: the pointers skip everything, never find a mismatch, and the outer loop exits returning `True`.",
+    ],
+  },
+  15: {
+    id: 15,
+    date: "2026-11-24",
+    lcNumber: 121,
+    tc: "O(n)",
+    summary:
+      "You're given an array where `prices[i]` is the stock price on day `i`. Buy on one day, sell on a later day, and return the maximum profit. If no profit is possible, return 0.",
+    approach: [
+      {
+        label: "The core rule",
+        text: "You can only sell after you buy. So for any day you're considering as the buy day, the profit depends on the highest price that comes after it. Buy low, sell high, but \"high\" must be to the right.",
+      },
+      {
+        label: "First idea",
+        text: "For each day, look at every later day and find the best sell price. That's a nested loop, O(n²). Too slow.",
+      },
+      {
+        label: "Walk backward, remember the best sell price",
+        text: "Here's the shift. If you move through the days from right to left, you can carry a single value: the highest price seen so far to the right. Standing on any day, that value is the best price you could sell at in the future. Profit for buying today is simply `max_right - price_today`. Track the best such profit as you go.",
+      },
+      {
+        label: "Why one variable is enough",
+        text: "You might reach for an array holding \"max price to the right of every index.\" But you only ever need the single best price to the right at the current step, not the whole history. A running variable replaces the entire array, dropping space from O(n) to O(1).",
+      },
+      {
+        label: "Alternative framing (forward, min-so-far)",
+        text: "The more conventional version sweeps left to right, tracking the cheapest price seen so far and measuring profit as \"today's price minus cheapest buy so far.\" Same O(n) time, O(1) space, just the mirror image of this backward approach. Both are optimal; worth knowing the forward one too, as it's what most interviewers expect.",
+      },
+    ],
+    insight:
+      "The trick is realizing you don't need to store a max-to-the-right for every position. One variable, updated as you sweep backward, carries everything the next step needs.",
+    language: "python",
+    code: `class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        max_profit, max_right = 0, 0
+
+        for index in range(len(prices) - 1, -1, -1):
+            max_profit = max(max_profit, max_right - prices[index])
+            max_right = max(max_right, prices[index])
+
+        return max_profit`,
+    learned: [
+      "When you want to walk an array in reverse by index, use `range(len(prices) - 1, -1, -1)`, not `enumerate` on a reversed slice. `enumerate` always counts `0, 1, 2...` forward regardless of what you feed it, so its index won't match the original positions. Reversing a slice reverses the values, never the index.",
+      "Order of the two lines inside the loop matters: check profit before updating `max_right`. On the current day, `max_right` should still mean \"best price strictly to the right,\" so you compute profit first, then fold today's price into `max_right` for the days further left.",
+      "A whole auxiliary array often collapses into a single running variable once you notice you only ever read one entry of it at a time. (Same lesson as the prefix/suffix problems, in reverse.)",
+    ],
+    gotchas: [
+      "Since `max_right` and `max_profit` both start at 0, a strictly decreasing array (no profit possible) correctly returns 0 without any special case.",
+      "A single-element array needs no guard: the loop runs once, no future price exists, profit stays 0.",
+    ],
+  },
+  21: {
+    id: 21,
+    date: "2026-11-25",
+    lcNumber: 20,
+    tc: "O(n)",
+    summary:
+      "Given a string of just `()`, `{}`, and `[]`, decide if it's valid. Every open bracket must close with the same type, in the correct order, and every close must have a matching open before it.",
+    approach: [
+      {
+        label: "Why plain logic doesn't cut it",
+        text: "Your eye reads the whole string at once and the nesting \"looks\" obviously right or wrong. But a program can't take it in as a whole, it reads one character at a time. So the question becomes: what does the computer need to remember as it walks left to right?",
+      },
+      {
+        label: "The key realization",
+        text: "The moment you hit a closing bracket, the only thing that matters is the most recent unclosed opening bracket. If that one matches, the pair is settled: you can forget it entirely and move on. If it doesn't match, the string is invalid. So at any point you're carrying a pile of \"open brackets I haven't closed yet,\" and you always care about the one on top.",
+      },
+      {
+        label: "That's a stack",
+        text: "A structure where you only ever add to the top and remove from the top (last in, first out) is exactly a stack. Push every opening bracket. On every closing bracket, pop the top and check it's the correct partner. A small dict maps each closing bracket to the opening one it expects.",
+      },
+      {
+        label: "The two failure modes",
+        text: "A closing bracket with an empty stack means there's nothing to match it: invalid. A popped bracket that isn't the right partner (like `)` landing on top of `{`): invalid. And after the whole walk, any brackets still left in the stack are unclosed opens: also invalid. Only a completely empty stack at the end means every pair resolved.",
+      },
+      {
+        label: "Complexity",
+        text: "O(n) time, O(n) space (worst case, all opening brackets pile onto the stack).",
+      },
+    ],
+    insight:
+      "The whole insight is \"I only ever need the latest unmatched open bracket,\" and that only the top matters is what makes a stack the natural fit.",
+    language: "python",
+    code: `from collections import deque
+
+class Solution:
+    def isValid(self, s: str) -> bool:
+        stack = deque()
+        close_to_open = {')': '(', '}': '{', ']': '['}
+
+        for brace in s:
+            if brace in close_to_open:
+                if not stack or stack.pop() != close_to_open[brace]:
+                    return False
+            else:
+                stack.append(brace)
+
+        return not stack`,
+    learned: [
+      "Mapping closing brackets to their opening partner in a dict (`close_to_open`) turns \"is this the right pair?\" into a clean one-line lookup, no chain of if/elif.",
+      "`not stack` is the Pythonic empty-check: it's `True` when the stack is empty. So `return not stack` says \"valid only if nothing is left unmatched.\"",
+      "Checking `not stack` before `stack.pop()` matters: popping an empty stack throws. Python's `or` short-circuits, so if `not stack` is true, the pop never runs. The guard and the pop sit in the right order.",
+      "A `list` works as a stack too (`.append()` / `.pop()`), and both are O(1) at the top. `deque` just makes the intent explicit, and it's also O(1) at the front, which a list isn't.",
+    ],
+    gotchas: [
+      "Forgetting the final `return not stack` and returning `True` instead silently passes strings like `\"(((\"`. The loop finishes without complaint, but the unclosed opens should make it invalid.",
+      "A string starting with a closing bracket (like `\")(\"`) must fail on the empty-stack check, not crash. That's exactly what the `not stack` guard handles.",
+    ],
+  },
 };
 
 export function getSolution(id: number): NeetCodeSolution | undefined {
