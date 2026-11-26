@@ -604,6 +604,127 @@ class Solution:
       "A string starting with a closing bracket (like `\")(\"`) must fail on the empty-stack check, not crash. That's exactly what the `not stack` guard handles.",
     ],
   },
+  22: {
+    id: 22,
+    date: "2026-11-25",
+    lcNumber: 155,
+    tc: "O(1)",
+    summary:
+      "Design a stack supporting `push`, `pop`, `top`, and `getMin`, where `getMin` returns the smallest element currently in the stack, all in O(1) time.",
+    approach: [
+      {
+        label: "The easy part",
+        text: "`push`, `pop`, and `top` are just a normal stack: append to the end, pop from the end, peek the last element. All O(1) already.",
+      },
+      {
+        label: "The catch is getMin",
+        text: "The naive way to find the minimum is to scan the whole stack, but that's O(n), and the problem demands O(1). Scanning on every call is off the table.",
+      },
+      {
+        label: "Remember the min as you go",
+        text: "Since pushes and pops only ever happen at the top, the minimum can only change at the top too. So keep a second stack that runs in lockstep with the main one. Every time you push a value, also push \"the smallest value seen so far up to this point\" onto the min stack. That's `min(new value, current min on top)`.",
+      },
+      {
+        label: "Why this stays correct through pops",
+        text: "Because the min stack grows and shrinks together with the main stack, its top always reflects the minimum of exactly the elements currently present. Pop one off the main stack, pop one off the min stack, and the new top of the min stack is automatically the min of what remains, no recomputation. `getMin` is just \"peek the top of the min stack,\" O(1).",
+      },
+      {
+        label: "Complexity",
+        text: "O(1) for every operation. Space is O(n): the min stack doubles the storage, which is the trade for constant-time minimums.",
+      },
+    ],
+    insight:
+      "The whole trick: the minimum only changes at the top, so a parallel stack of running minimums keeps the answer ready at all times, no searching.",
+    language: "python",
+    code: `class MinStack:
+
+    def __init__(self):
+        self.stack = list()
+        self.min_left = list()
+
+    def push(self, value: int) -> None:
+        self.stack.append(value)
+        if not self.min_left:
+            self.min_left.append(value)
+        else:
+            self.min_left.append(min(self.min_left[-1], value))
+
+    def pop(self) -> None:
+        self.min_left.pop()
+        return self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1]
+
+    def getMin(self) -> int:
+        return self.min_left[-1]`,
+    learned: [
+      "Inside a class method, every attribute needs `self.`: `stack` alone is an undefined name, `self.stack` is the object's data. Python makes this explicit where Java hides it behind `this`.",
+      "The two stacks must push and pop together to stay in sync. If a `pop` only touches one of them, the min stack drifts out of alignment and `getMin` starts lying.",
+      "`self.min_left[-1]` peeks the top without removing it: the running min is always sitting right there.",
+    ],
+    gotchas: [
+      "No empty-guards in `pop`, `top` or `getMin`: the problem guarantees they're only called on a non-empty stack. The one check that stays is in `push`, and it isn't a guard: on the very first push there's no current minimum yet, so `self.min_left[-1]` would crash.",
+    ],
+  },
+  28: {
+    id: 28,
+    date: "2026-11-25",
+    lcNumber: 704,
+    tc: "O(log n)",
+    summary:
+      "Given a sorted ascending array and a target, return the target's index, or `-1` if it's not there. Must run in O(log n).",
+    approach: [
+      {
+        label: "Use what \"sorted\" gives you",
+        text: "In an unsorted array you'd have to check every element, O(n). But sorted means you can make a decision at the middle and throw away half the array in one shot. That's the whole reason the problem hands you a sorted input.",
+      },
+      {
+        label: "Look at the middle, then halve",
+        text: "Check the middle element. If it's the target, done. If the target is smaller, it can only be in the left half, so discard everything from the middle rightward. If it's larger, keep only the right half. Each step the search window shrinks by half.",
+      },
+      {
+        label: "Why that's O(log n)",
+        text: "Halving the window each step means after k steps you're down to n / 2^k elements. The number of halvings before you're left with one element is log₂(n), so the work is O(log n), not O(n).",
+      },
+      {
+        label: "Knowing when to give up",
+        text: "The window is defined by two bounds, `front` and `rear`. Each step moves one of them past the middle (`mid - 1` or `mid + 1`). If the target isn't present, the window keeps shrinking until `front` overtakes `rear`. That crossover means \"nowhere left to look,\" so return `-1`.",
+      },
+      {
+        label: "Complexity",
+        text: "O(log n) time. This recursive version uses O(log n) space for the call stack; an iterative `while front <= rear` loop does the same in O(1) space and is the more common interview form.",
+      },
+    ],
+    insight:
+      "The core move is \"the middle lets me discard half,\" and the whole efficiency comes from halving instead of scanning.",
+    language: "python",
+    code: `class Solution:
+    def search(self, nums: list[int], target: int) -> int:
+        return self.binarySearch(nums, target, 0, len(nums) - 1)
+
+    def binarySearch(self, nums: list[int], target: int, front: int, rear: int) -> int:
+        if front > rear:
+            return -1
+
+        mid = (rear + front) // 2
+
+        if nums[mid] == target:
+            return mid
+        elif target < nums[mid]:
+            return self.binarySearch(nums, target, front, mid - 1)
+        else:
+            return self.binarySearch(nums, target, mid + 1, rear)`,
+    learned: [
+      "The midpoint is `(front + rear) // 2`: the average of the two bounds, giving an absolute index into the array. A tempting mistake is `(rear - front) // 2`, which is a length offset from zero, not a real position. It can land outside the window, and only works by accident when `front` is 0.",
+      "The `front > rear` base case is what makes a missing target terminate instead of recursing forever or running off the array. When the bounds cross, every index has been ruled out.",
+      "Methods calling other methods on the same class need `self.`: the recursive call is `self.binarySearch(...)`, not a bare name.",
+    ],
+    gotchas: [
+      "`front > rear` must be checked first, before computing `mid`. Otherwise on an empty window you'd index into nothing.",
+      "Moving to `mid - 1` / `mid + 1` (not just `mid`) is essential. Recursing with `mid` still inside the window on a missing target would loop forever, since the window would stop shrinking.",
+    ],
+  },
 };
 
 export function getSolution(id: number): NeetCodeSolution | undefined {
