@@ -48,7 +48,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
 
   // Stack
   { id: 21,  topic: "Stack",                     title: "Valid Parentheses",                               difficulty: "Easy",   slug: "valid-parentheses",                               solved: true,  leetcodeUrl: lc("valid-parentheses") },
-  { id: 22,  topic: "Stack",                     title: "Min Stack",                                       difficulty: "Medium", slug: "min-stack",                                       solved: false, leetcodeUrl: lc("min-stack") },
+  { id: 22,  topic: "Stack",                     title: "Min Stack",                                       difficulty: "Medium", slug: "min-stack",                                       solved: true,  leetcodeUrl: lc("min-stack") },
   { id: 23,  topic: "Stack",                     title: "Evaluate Reverse Polish Notation",                difficulty: "Medium", slug: "evaluate-reverse-polish-notation",                solved: false, leetcodeUrl: lc("evaluate-reverse-polish-notation") },
   { id: 24,  topic: "Stack",                     title: "Generate Parentheses",                            difficulty: "Medium", slug: "generate-parentheses",                            solved: false, leetcodeUrl: lc("generate-parentheses") },
   { id: 25,  topic: "Stack",                     title: "Daily Temperatures",                              difficulty: "Medium", slug: "daily-temperatures",                              solved: false, leetcodeUrl: lc("daily-temperatures") },
@@ -56,7 +56,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
   { id: 27,  topic: "Stack",                     title: "Largest Rectangle in Histogram",                  difficulty: "Hard",   slug: "largest-rectangle-in-histogram",                  solved: false, leetcodeUrl: lc("largest-rectangle-in-histogram") },
 
   // Binary Search
-  { id: 28,  topic: "Binary Search",             title: "Binary Search",                                   difficulty: "Easy",   slug: "binary-search",                                   solved: false, leetcodeUrl: lc("binary-search") },
+  { id: 28,  topic: "Binary Search",             title: "Binary Search",                                   difficulty: "Easy",   slug: "binary-search",                                   solved: true,  leetcodeUrl: lc("binary-search") },
   { id: 29,  topic: "Binary Search",             title: "Search a 2D Matrix",                              difficulty: "Medium", slug: "search-a-2d-matrix",                              solved: false, leetcodeUrl: lc("search-a-2d-matrix") },
   { id: 30,  topic: "Binary Search",             title: "Koko Eating Bananas",                             difficulty: "Medium", slug: "koko-eating-bananas",                             solved: false, leetcodeUrl: lc("koko-eating-bananas") },
   { id: 31,  topic: "Binary Search",             title: "Find Minimum in Rotated Sorted Array",            difficulty: "Medium", slug: "find-minimum-in-rotated-sorted-array",            solved: false, leetcodeUrl: lc("find-minimum-in-rotated-sorted-array") },
