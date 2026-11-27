@@ -65,8 +65,8 @@ export const neetcodeProblems: NeetCodeProblem[] = [
   { id: 34,  topic: "Binary Search",             title: "Median of Two Sorted Arrays",                     difficulty: "Hard",   slug: "median-of-two-sorted-arrays",                     solved: false, leetcodeUrl: lc("median-of-two-sorted-arrays") },
 
   // Linked List
-  { id: 35,  topic: "Linked List",               title: "Reverse Linked List",                             difficulty: "Easy",   slug: "reverse-linked-list",                             solved: false, leetcodeUrl: lc("reverse-linked-list") },
-  { id: 36,  topic: "Linked List",               title: "Merge Two Sorted Lists",                          difficulty: "Easy",   slug: "merge-two-sorted-lists",                          solved: false, leetcodeUrl: lc("merge-two-sorted-lists") },
+  { id: 35,  topic: "Linked List",               title: "Reverse Linked List",                             difficulty: "Easy",   slug: "reverse-linked-list",                             solved: true,  leetcodeUrl: lc("reverse-linked-list") },
+  { id: 36,  topic: "Linked List",               title: "Merge Two Sorted Lists",                          difficulty: "Easy",   slug: "merge-two-sorted-lists",                          solved: true,  leetcodeUrl: lc("merge-two-sorted-lists") },
   { id: 37,  topic: "Linked List",               title: "Reorder List",                                    difficulty: "Medium", slug: "reorder-list",                                    solved: false, leetcodeUrl: lc("reorder-list") },
   { id: 38,  topic: "Linked List",               title: "Remove Nth Node From End of List",                difficulty: "Medium", slug: "remove-nth-node-from-end-of-list",                solved: false, leetcodeUrl: lc("remove-nth-node-from-end-of-list") },
   { id: 39,  topic: "Linked List",               title: "Copy List with Random Pointer",                   difficulty: "Medium", slug: "copy-list-with-random-pointer",                   solved: false, leetcodeUrl: lc("copy-list-with-random-pointer") },

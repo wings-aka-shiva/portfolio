@@ -64,6 +64,25 @@ export default function SolutionWriteup({ solution }: { solution: NeetCodeSoluti
         <CodeBlock code={solution.code} language={solution.language} />
       </div>
 
+      {/* Alternative */}
+      {solution.alternative && (
+        <div className="flex flex-col gap-1.5">
+          <p className={SECTION_LABEL}>{solution.alternative.label}</p>
+          <p className={BODY}>
+            <InlineText text={solution.alternative.text} />
+          </p>
+          <p className="font-body text-xs uppercase tracking-wider text-muted mb-2 mt-2">
+            Alternative - Python
+          </p>
+          <CodeBlock code={solution.alternative.code} language={solution.language} />
+          {solution.alternative.footer && (
+            <p className={`${BODY} mt-2`}>
+              <InlineText text={solution.alternative.footer} />
+            </p>
+          )}
+        </div>
+      )}
+
       {/* What I Learned */}
       {solution.learned && (
         <div className="flex flex-col gap-1.5">

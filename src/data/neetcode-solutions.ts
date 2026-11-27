@@ -13,6 +13,7 @@ export interface NeetCodeSolution {
   insight: string;
   language: "python";
   code: string;
+  alternative?: { label: string; text: string; code: string; footer?: string };
   learned?: string | string[];
   gotchas: string[];
 }
@@ -723,6 +724,155 @@ class Solution:
     gotchas: [
       "`front > rear` must be checked first, before computing `mid`. Otherwise on an empty window you'd index into nothing.",
       "Moving to `mid - 1` / `mid + 1` (not just `mid`) is essential. Recursing with `mid` still inside the window on a missing target would loop forever, since the window would stop shrinking.",
+    ],
+  },
+  35: {
+    id: 35,
+    date: "2026-11-26",
+    lcNumber: 206,
+    tc: "O(n)",
+    summary:
+      "Given the head of a singly linked list, reverse it and return the new head. Example: `1 → 2 → 3 → 4 → 5` becomes `5 → 4 → 3 → 2 → 1`.",
+    approach: [
+      {
+        label: "What reversing actually means",
+        text: "In a singly linked list, each node points forward to the next one. Reversing means flipping every one of those arrows to point backward instead. So the real task is: visit each node and make its `next` pointer aim at the node that came before it.",
+      },
+      {
+        label: "The danger of flipping in place",
+        text: "The moment you change `curr.next` to point backward, you've lost your only link to the rest of the list ahead. So before you overwrite that pointer, you must stash where you were about to go.",
+      },
+      {
+        label: "Three pointers do the whole job",
+        text: "Walk the list with `prev` (the node behind you, starting at `None`), `curr` (the node you're on), and a temporary `next_node` (the node ahead). For each node: save `next_node = curr.next`, flip `curr.next = prev`, then slide all three forward: `prev` becomes `curr`, `curr` becomes `next_node`. When `curr` falls off the end (becomes `None`), `prev` is sitting on the last node you processed, which is the new head.",
+      },
+      {
+        label: "Why prev is the answer",
+        text: "The original head becomes the new tail (it ends up pointing at `None`), and the original tail becomes the new head. When the loop ends, `curr` is `None` and `prev` is exactly that final node, so return `prev`.",
+      },
+      {
+        label: "Complexity",
+        text: "O(n) time: each node is visited exactly once. O(1) space: only three pointers, no extra structures.",
+      },
+    ],
+    insight:
+      "The one thing to internalize: save the next pointer before you overwrite it, or you strand the rest of the list.",
+    language: "python",
+    code: `class Solution:
+    def reverseList(self, head: ListNode | None) -> ListNode | None:
+        prev_node = None
+        curr_node = head
+
+        while curr_node:
+            next_node = curr_node.next
+            curr_node.next = prev_node
+            prev_node = curr_node
+            curr_node = next_node
+
+        return prev_node`,
+    learned: [
+      "These three pointers are scratch variables for a single traversal, so they're plain locals, not `self.` attributes. `self.` is only for state that must outlive the method or be shared across calls; temporary bookkeeping stays local.",
+      "`while curr_node:` reads more naturally than an explicit check and does the same thing (a non-`None` node is truthy). If you do write it out, use `while curr_node is not None`, not `!= None`: Python compares to `None` with `is`.",
+      "The order of the four lines inside the loop is not interchangeable: save next, flip, advance prev, advance curr. Flip before you've saved, and you lose the rest of the list.",
+    ],
+    gotchas: [
+      "An empty list (`head = None`) works with no special case: the loop never runs and `prev` stays `None`, which is the correct reversed-empty answer.",
+    ],
+  },
+  36: {
+    id: 36,
+    date: "2026-11-28",
+    lcNumber: 21,
+    tc: "O(n + m)",
+    summary:
+      "Given the heads of two sorted linked lists, splice them into one sorted list and return its head. The merged list should reuse the existing nodes.",
+    approach: [
+      {
+        label: "The core picture",
+        text: "Both lists are already sorted, so the next node in the merged result is always whichever of the two current heads is smaller. The job is to weave the two lists together without building anything new.",
+      },
+      {
+        label: "Handle the empty cases first",
+        text: "If either list is empty, there's nothing to merge: just return the other one.",
+      },
+      {
+        label: "Make list1 the smaller-headed list",
+        text: "The whole method walks `list1` and splices `list2` in. For that to work cleanly, `list1` must start with the smaller head. If it doesn't, swap the two pointers up front (and remember the head is whichever one wins). This guarantees the first walk always makes progress, so the \"previous\" pointer is always set before we use it.",
+      },
+      {
+        label: "Walk, splice, swap",
+        text: "Advance along `list1` as long as its value is ≤ the current `list2` head, keeping a `prev` pointer. The moment `list1`'s value overshoots (or `list1` ends), `prev` is the last node that still belongs before `list2`'s head, so point `prev.next` at `list2`. Then swap the two pointers: the list we were walking becomes the one we hold back, and vice versa. Keep going until one list empties.",
+      },
+      {
+        label: "Why it terminates correctly",
+        text: "When `list1` runs out, the final `prev.next = list2` has already attached the entire remaining sorted tail. After the swap one pointer becomes `None`, and the loop ends. Everything is already linked.",
+      },
+      {
+        label: "Complexity",
+        text: "O(n + m) time: every node is visited once. O(1) space: nodes are relinked in place, nothing is copied.",
+      },
+    ],
+    insight:
+      "As long as the current node's value stays below the other list's head, keep moving; the instant it doesn't, stitch across and switch which list you're advancing.",
+    language: "python",
+    code: `class Solution:
+    def mergeTwoLists(self, list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
+        if list1 is None:
+            return list2
+        if list2 is None:
+            return list1
+
+        if list1.val <= list2.val:
+            head = list1
+        else:
+            head = list2
+            temp = list1
+            list1 = list2
+            list2 = temp
+
+        while list1 is not None and list2 is not None:
+
+            while list1 is not None and list1.val <= list2.val:
+                prev_node = list1
+                list1 = list1.next
+
+            prev_node.next = list2
+            temp = list1
+            list1 = list2
+            list2 = temp
+
+        return head`,
+    alternative: {
+      label: "The standard approach: a dummy node",
+      text: "The more common, interview-expected way uses a dummy node: a throwaway node placed before the result, with a `tail` pointer that always sits at the end of the merged list. You compare the two heads, append the smaller to `tail.next`, and move `tail` forward, with no special-casing of the first node or which list is smaller.",
+      code: `class Solution:
+    def mergeTwoLists(self, list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
+        dummy = ListNode()
+        tail = dummy
+
+        while list1 and list2:
+            if list1.val <= list2.val:
+                tail.next = list1
+                list1 = list1.next
+            else:
+                tail.next = list2
+                list2 = list2.next
+            tail = tail.next
+
+        tail.next = list1 if list1 else list2
+
+        return dummy.next`,
+      footer:
+        "Same O(n + m) time and O(1) space, but far fewer edge cases to trip over. The dummy node absorbs the \"first node\" problem entirely, which is why it's the pattern worth memorizing for linked-list building.",
+    },
+    learned: [
+      "Forcing `list1` to be the smaller-headed list up front is what keeps `prev_node` always defined: the inner loop is guaranteed to run at least once each pass, so we never splice with an unset pointer.",
+      "The outer condition must be `and`, not `or`. When one list empties, the last `prev_node.next = list2` has already attached the rest; with `or` the loop would re-enter and crash reading `.val` on a `None`.",
+      "Swapping the two pointers after each splice is what lets a single inner loop handle \"whichever list is currently smaller\" without duplicating code for `list1` vs `list2`.",
+    ],
+    gotchas: [
+      "The empty-list guards at the top aren't optional here: the swap logic and the inner comparison both assume two real lists to start with.",
+      "Order inside the loop matters: splice (`prev_node.next = list2`) then swap. Swapping first would attach the wrong list.",
     ],
   },
 };
