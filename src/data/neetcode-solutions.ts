@@ -726,6 +726,89 @@ class Solution:
       "Moving to `mid - 1` / `mid + 1` (not just `mid`) is essential. Recursing with `mid` still inside the window on a missing target would loop forever, since the window would stop shrinking.",
     ],
   },
+  29: {
+    id: 29,
+    date: "2026-11-28",
+    lcNumber: 74,
+    tc: "O(log(m·n))",
+    summary:
+      "Given an m x n matrix where each row is sorted and every row's first element is greater than the previous row's last element, decide if a target exists. Must run in O(log(m·n)).",
+    approach: [
+      {
+        label: "What the structure buys you",
+        text: "The two properties together mean the matrix is really one big sorted sequence, just folded into rows. Each row covers a continuous range of values, and the rows don't overlap. So any target can live in at most one row: the one whose range it falls inside.",
+      },
+      {
+        label: "Two binary searches, not one scan",
+        text: "The O(log(m·n)) requirement rules out scanning rows one by one. But a binary search finds the right row in O(log m), and a second binary search finds the target within that row in O(log n). Two logarithmic steps, stacked.",
+      },
+      {
+        label: "Step one: find the candidate row",
+        text: "Binary search over the rows. For the middle row, check whether the target sits between its first element and its last element. If yes, that's the row. If the target is bigger than the row's last element, the row is too low: go down. If it's smaller than the row's first element, go up. If no row contains it, report \"not found.\"",
+      },
+      {
+        label: "Step two: search within the row",
+        text: "Once you have the row, it's a plain sorted array. Standard binary search on that single row finds the target or concludes it's absent.",
+      },
+      {
+        label: "Why it meets the bound",
+        text: "O(log m) to pick the row plus O(log n) to search it is O(log m + log n), and since log m + log n = log(m·n), that's exactly the required complexity: not faster, but precisely on target.",
+      },
+      {
+        label: "Complexity",
+        text: "O(log m + log n) = O(log(m·n)) time. Space is O(log m + log n) for the recursion stacks; an iterative version would be O(1).",
+      },
+    ],
+    insight:
+      "The whole idea rests on the non-overlap guarantee: because rows don't share value ranges, finding the one row a target could belong to is itself a clean binary search.",
+    language: "python",
+    code: `class Solution:
+    def searchMatrix(self, matrix: list[list[int]], target: int) -> bool:
+        m = len(matrix)
+        n = len(matrix[0])
+
+        row = self.getRow(matrix, target, 0, m - 1, n - 1)
+
+        if row != -1:
+            return self.binarySearchRow(matrix, target, 0, n - 1, row)
+
+        return False
+
+    def getRow(self, matrix: list[list[int]], target: int, t: int, b: int, length: int) -> int:
+        if t > b:
+            return -1
+
+        mid = t + (b - t) // 2
+
+        if target >= matrix[mid][0] and target <= matrix[mid][length]:
+            return mid
+        elif target > matrix[mid][length]:
+            return self.getRow(matrix, target, mid + 1, b, length)
+        elif target < matrix[mid][0]:
+            return self.getRow(matrix, target, t, mid - 1, length)
+
+    def binarySearchRow(self, matrix: list[list[int]], target: int, left: int, right: int, row: int) -> bool:
+        if left > right:
+            return False
+
+        mid = left + (right - left) // 2
+
+        if target == matrix[row][mid]:
+            return True
+        elif target > matrix[row][mid]:
+            return self.binarySearchRow(matrix, target, mid + 1, right, row)
+        elif target < matrix[row][mid]:
+            return self.binarySearchRow(matrix, target, left, mid - 1, row)`,
+    learned: [
+      "Binary search bounds must be passed as last indices (`m - 1`, `n - 1`), not lengths. Passing the count reads one slot past the end: `matrix[mid][n]` doesn't exist, the last column is `n - 1`.",
+      "When a function returns an index, you can't use `0` as the \"not found\" signal: `0` is a real row. Use `-1`, and check `if row != -1`, otherwise a target in the very first row gets silently rejected as missing.",
+      "O(log m + log n) and O(log(m·n)) are the same complexity: logs of a product add. Matching the required bound doesn't always mean a single clever pass; two stacked binary searches land on it just as well.",
+    ],
+    gotchas: [
+      "The row-match test needs the right direction: target >= row's first AND target <= row's last. Getting the inequalities backward makes the condition almost never true, sending every search down the wrong branch.",
+      "Methods calling sibling (or themselves recursively) methods need `self.`: a bare name raises `NameError`, which is easy to overlook when the logic looks right.",
+    ],
+  },
   35: {
     id: 35,
     date: "2026-11-26",

@@ -2,6 +2,8 @@ import { Suspense, useState, useEffect, useRef } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { ResumeRequestTrigger } from "../components/ui/ResumeRequest";
 import { container } from "../components/ui/styles";
+import { UpdatesBell } from "../components/ui/UpdatesBell";
+import { useSiteUpdates } from "../hooks/useSiteUpdates";
 import { useScrollRestoration } from "../hooks/useScrollRestoration";
 
 const NAV_ITEMS = [
@@ -27,6 +29,7 @@ function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const location  = useLocation();
+  const siteUpdates = useSiteUpdates();
 
   useScrollRestoration();
 
@@ -90,18 +93,22 @@ function Layout() {
                 );
               })}
             </ul>
-            <ResumeRequestTrigger className={resumeButton}>resume</ResumeRequestTrigger>
+            <div className="flex items-center gap-2">
+              <UpdatesBell {...siteUpdates} />
+              <ResumeRequestTrigger className={resumeButton}>resume</ResumeRequestTrigger>
+            </div>
           </nav>
 
-          {/* Mobile: resume button + hamburger */}
-          <div className="md:hidden flex items-center gap-3 shrink-0">
-            <ResumeRequestTrigger className={resumeButton}>resume</ResumeRequestTrigger>
+          {/* Mobile: resume button + updates bell + hamburger */}
+          <div className="md:hidden flex items-center gap-1.5 shrink-0">
+            <ResumeRequestTrigger className={`${resumeButton} mr-1.5`}>resume</ResumeRequestTrigger>
+            <UpdatesBell {...siteUpdates} onOpen={() => setMenuOpen(false)} />
             <button
               onClick={() => setMenuOpen((o) => !o)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-nav"
-              className="flex flex-col justify-center items-center w-10 h-10 gap-[5px] cursor-pointer shrink-0 rounded-lg"
+              className="flex flex-col justify-center items-center w-11 h-11 gap-[5px] cursor-pointer shrink-0 rounded-lg"
             >
               <span
                 className={[

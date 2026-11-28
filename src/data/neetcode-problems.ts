@@ -57,7 +57,7 @@ export const neetcodeProblems: NeetCodeProblem[] = [
 
   // Binary Search
   { id: 28,  topic: "Binary Search",             title: "Binary Search",                                   difficulty: "Easy",   slug: "binary-search",                                   solved: true,  leetcodeUrl: lc("binary-search") },
-  { id: 29,  topic: "Binary Search",             title: "Search a 2D Matrix",                              difficulty: "Medium", slug: "search-a-2d-matrix",                              solved: false, leetcodeUrl: lc("search-a-2d-matrix") },
+  { id: 29,  topic: "Binary Search",             title: "Search a 2D Matrix",                              difficulty: "Medium", slug: "search-a-2d-matrix",                              solved: true,  leetcodeUrl: lc("search-a-2d-matrix") },
   { id: 30,  topic: "Binary Search",             title: "Koko Eating Bananas",                             difficulty: "Medium", slug: "koko-eating-bananas",                             solved: false, leetcodeUrl: lc("koko-eating-bananas") },
   { id: 31,  topic: "Binary Search",             title: "Find Minimum in Rotated Sorted Array",            difficulty: "Medium", slug: "find-minimum-in-rotated-sorted-array",            solved: false, leetcodeUrl: lc("find-minimum-in-rotated-sorted-array") },
   { id: 32,  topic: "Binary Search",             title: "Search in Rotated Sorted Array",                  difficulty: "Medium", slug: "search-in-rotated-sorted-array",                  solved: false, leetcodeUrl: lc("search-in-rotated-sorted-array") },
